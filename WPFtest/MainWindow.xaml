@@ -13,6 +13,14 @@
    mc:Ignorable="d">
    <Grid>
       <Grid.Resources>
+         <Style TargetType="{x:Type wpFcustomControlsRb:RoundedButton}">
+            <Setter Property="Background" Value="White" />
+            <Setter Property="BorderThickness" Value="3" />
+            <Setter Property="BorderBrush" Value="Black" />
+            <Setter Property="Foreground" Value="Green" />
+            <Setter Property="Margin" Value="20" />
+            <Setter Property="CornerRadius" Value="20" />
+         </Style>
          <Style TargetType="{x:Type wpFcustomControlsRb:RoundedProgressBar}">
             <Setter Property="Background" Value="White" />
             <Setter Property="BorderThickness" Value="3" />
@@ -36,12 +44,6 @@
          <RowDefinition />
          <RowDefinition />
       </Grid.RowDefinitions>
-      <wpFcustomControlsRb:RoundedProgressBar
-         Margin="30"
-         IsIndeterminate="True"
-         Orientation="Horizontal" />
-      <ProgressBar Grid.Row="1" />
-      <ProgressBar Grid.Row="2" />
-
+      <wpFcustomControlsRb:RoundedButton Content="Ciao" />
    </Grid>
 </Window>
