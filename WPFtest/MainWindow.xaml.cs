@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -23,6 +24,19 @@ namespace WPFtest
         public MainWindow()
         {
             InitializeComponent();
+
+            DataContext = new MainWindowViewModel();
+        }
+
+        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is MainWindowViewModel vm)
+            {
+                vm.StartTask();
+                
+
+            }
+
         }
     }
 }

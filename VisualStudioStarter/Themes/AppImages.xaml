@@ -1,7 +1,9 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-  <ImageSource x:Key="refreshPNG">../Images/refresh.png</ImageSource>
-  <ImageSource x:Key="ShieldICO">../Images/Shield.ico</ImageSource>
-  <ImageSource x:Key="Vs2019PNG">../Images/VS2019.png</ImageSource>
-  <ImageSource x:Key="Vs2022PNG">../Images/VS2022.png</ImageSource>
-  <ImageSource x:Key="OpenfolderPNG">../Images/openfolder.png</ImageSource>
+   <ImageSource x:Key="RefreshPNG">../Images/refresh.png</ImageSource>
+   <ImageSource x:Key="ShieldICO">../Images/Shield.ico</ImageSource>
+   <ImageSource x:Key="Vs2019PNG">../Images/VS2019.png</ImageSource>
+   <ImageSource x:Key="Vs2022PNG">../Images/VS2022.png</ImageSource>
+   <ImageSource x:Key="OpenFolderPNG">../Images/openfolder.png</ImageSource>
+   <ImageSource x:Key="SavePNG">../Images/save.png</ImageSource>
+   <ImageSource x:Key="TrashPNG">../Images/trash.png</ImageSource>
 </ResourceDictionary>
