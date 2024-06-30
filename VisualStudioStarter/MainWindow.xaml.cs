@@ -22,8 +22,9 @@ public partial class MainWindow
 
     private void OnLoaded(Object sender, RoutedEventArgs e)
     {
-        Height = 120;
-        Height += Convert.ToDouble(VM.ActiveWorkSpace?.Solutions.Count * 31);
+        VM.SetActiveWorkSpace();
+
+        SetHeight();
 
         var screenHeight = SystemParameters.PrimaryScreenHeight;
         var topFinal = SystemParameters.PrimaryScreenHeight - Height - 45;
@@ -57,11 +58,9 @@ public partial class MainWindow
 
     private void ButtonBase_OnClick(Object sender, RoutedEventArgs e)
     {
-        VM.RefreshSolutions(this);
+        VM.OpenOrAddWorkSpace(this);
 
-
-        Height = 120 + Convert.ToDouble(VM.ActiveWorkSpace?.Solutions.Count * 31);
-        Animate(Top, SystemParameters.PrimaryScreenHeight - Height - 45, new PropertyPath(TopProperty));
+        SetHeight();
     }
 
     private void btnVs_Click(Object sender, RoutedEventArgs e)
@@ -70,5 +69,16 @@ public partial class MainWindow
         {
             Close();
         }
+    }
+
+    public void SetHeight()
+    {
+        Height = 120 + Convert.ToDouble(VM.ActiveWorkSpace?.Solutions.Count * 31);
+        Animate(Top, SystemParameters.PrimaryScreenHeight - Height - 45, new PropertyPath(TopProperty));
+    }
+
+    private void TrashButton_OnClick(object sender, RoutedEventArgs e)
+    {
+        VM.DeleteWorkSpace();
     }
 }

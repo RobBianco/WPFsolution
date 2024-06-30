@@ -117,12 +117,11 @@
                <ColumnDefinition Width="25" />
                <ColumnDefinition />
                <ColumnDefinition Width="25" />
-               <ColumnDefinition Width="25" />
                <ColumnDefinition Width="55" />
             </Grid.ColumnDefinitions>
             <Button Grid.Column="0"
                     Margin="2"
-                    Click="ButtonBase_OnClick"
+                    Click="TrashButton_OnClick"
                     Style="{StaticResource ButtonStyle}">
                <Image Margin="2"
                       Opacity="0.8"
@@ -133,24 +132,18 @@
                       FontSize="11"
                       IsEditable="True"
                       ItemsSource="{Binding WorkSpaces}"
-                      SelectedItem="{Binding ActiveWorkSpace}">
+                      SelectedItem="{Binding ActiveWorkSpace}"
+                      Text="{Binding ActiveWorkSpace.Path}">
                <ComboBox.ItemTemplate>
                   <DataTemplate>
-                     <Border>
-                        <TextBlock VerticalAlignment="Center" Text="{Binding Path}" />
+                     <Border Margin="0,2,0,0">
+                        <TextBlock Margin="10,0,0,0" Text="{Binding Path}" />
                      </Border>
                   </DataTemplate>
                </ComboBox.ItemTemplate>
             </ComboBox>
+
             <Button Grid.Column="2"
-                    Margin="2"
-                    Click="ButtonBase_OnClick"
-                    Style="{StaticResource ButtonStyle}">
-               <Image Margin="2"
-                      Opacity="0.8"
-                      Source="{StaticResource SavePNG}" />
-            </Button>
-            <Button Grid.Column="3"
                     Margin="2"
                     Click="ButtonBase_OnClick"
                     Style="{StaticResource ButtonStyle}">
@@ -158,7 +151,7 @@
                       Opacity="0.8"
                       Source="{StaticResource OpenFolderPNG}" />
             </Button>
-            <ToggleButton Grid.Column="4"
+            <ToggleButton Grid.Column="3"
                           Margin="2"
                           IsChecked="{Binding IsAdmin}">
                <Grid Margin="5">

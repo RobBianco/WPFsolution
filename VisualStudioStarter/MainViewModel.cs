@@ -10,7 +10,6 @@ namespace VisualStudioStarter;
 
 public class MainViewModel : INotifyPropertyChanged
 {
-    private String _pathSolutions;
     private ObservableCollection<WorkSpace> _workSpace = [];
     private Boolean _isVs2022PreInstalled;
     private Boolean _isVs2022Installed;
@@ -24,11 +23,28 @@ public class MainViewModel : INotifyPropertyChanged
     private GridLength _col2022Width;
     private GridLength _col2022PreWidth;
     private WorkSpace? _activeWorkSpace;
+    private string? _comboBoxText;
 
     public WorkSpace? ActiveWorkSpace
     {
         get => _activeWorkSpace;
-        set => SetField(ref _activeWorkSpace, value);
+        set
+        {
+            var oldvalue = _activeWorkSpace;
+
+            if (SetField(ref _activeWorkSpace, value))
+            {
+                OnActiveWorkSpaceChange(oldvalue);
+            }
+        }
+    }
+
+    private void OnActiveWorkSpaceChange(WorkSpace? oldvalue)
+    {
+        if (ActiveWorkSpace?.Type == WorkSpaceType.AddNew)
+        {
+            MessageBox.Show("aaaaaaaaaaaaaaaaaa");
+        }
     }
 
     public const String PathEXE_VS2022Pre = @"C:\Program Files\Microsoft Visual Studio\2022\Preview\Common7\IDE\devenv.exe";
@@ -42,17 +58,6 @@ public class MainViewModel : INotifyPropertyChanged
         {
             SetField(ref _workSpace, value);
             OnPropertyChanged(nameof(ActiveWorkSpace));
-        }
-    }
-
-    public String PathSolutions
-    {
-        get => _pathSolutions;
-        set
-        {
-            if(SetField(ref _pathSolutions, value))
-            {
-            }
         }
     }
 
@@ -168,6 +173,12 @@ public class MainViewModel : INotifyPropertyChanged
         set => SetField(ref _col2022PreWidth, value);
     }
 
+    public String? ComboBoxText
+    {
+        get => _comboBoxText;
+        set => SetField(ref _comboBoxText, value);
+    }
+
     public MainViewModel()
     {
         var ws = SolutionManager.GetWorkSpaces();
@@ -177,16 +188,13 @@ public class MainViewModel : INotifyPropertyChanged
             WorkSpaces.Add(workSpace);
         }
 
-        WorkSpaces.Add(new WorkSpace(WorkSpaceType.Blank));
-        WorkSpaces.Add(new WorkSpace(WorkSpaceType.AddNew));
-
         if (ActiveWorkSpace == null && WorkSpaces.Any())
         {
             WorkSpaces.First(x => x.Type != WorkSpaceType.AddNew).Active = true;
         }
 
-        PathSolutions = ActiveWorkSpace?.Path ?? "";
-
+        SetActiveWorkSpace();
+        
         IsVS2022PreInstalled = File.Exists(PathEXE_VS2022Pre);
         IsVS2022Installed = File.Exists(PathEXE_VS2022);
         IsVS2019Installed = File.Exists(PathEXE_VS2019);
@@ -204,36 +212,43 @@ public class MainViewModel : INotifyPropertyChanged
         return true;
     }
 
-    public void RefreshSolutions(MainWindow mainWindow)
+    public void OpenOrAddWorkSpace(MainWindow mainWindow)
     {
-        try
+        if (ComboBoxText != null)
         {
-            if (WorkSpaces.Any(x => x.Path == _pathSolutions))
+            if (WorkSpaces.All(x => x.Path != ComboBoxText))
             {
-                foreach (var workSpace in WorkSpaces) { workSpace.Active = false; }
-
-                WorkSpaces.First(x => x.Path == PathSolutions).Active = true;
-                return;
-            }
-
-            if (Directory.Exists(_pathSolutions))
-            {
-                if (MessageBox.Show(mainWindow, $"Salvare il workspace \r\n\r\n {_pathSolutions}", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                if (Directory.Exists(ComboBoxText))
                 {
                     WorkSpaces.Add(new WorkSpace
                     {
-                        Path = _pathSolutions,
+                        Path = ComboBoxText,
                         Active = true,
-                        Solutions = SolutionManager.GetSolutions(_pathSolutions)
+                        Solutions = SolutionManager.GetSolutions(ComboBoxText)
                     });
                     SolutionManager.SaveWorkspaces(WorkSpaces.ToList());
                 }
             }
         }
-        finally
+
+        if (WorkSpaces.Any(x => x.Path == ComboBoxText))
         {
-            OnPropertyChanged(nameof(ActiveWorkSpace));
+            foreach (var workSpace in WorkSpaces) { workSpace.Active = false; }
+
+            WorkSpaces.First(x => x.Path == ComboBoxText).Active = true;
+
+            SetActiveWorkSpace();
         }
+    }
+
+    public void SetActiveWorkSpace()
+    {
+        if (WorkSpaces.Any(x => x.Active))
+        {
+            ActiveWorkSpace = WorkSpaces.First(x => x.Active);
+        }
+
+        OnPropertyChanged(nameof(ActiveWorkSpace));
     }
 
     public Boolean AvviaVisualStudio()
@@ -328,5 +343,14 @@ public class MainViewModel : INotifyPropertyChanged
         OnPropertyChanged(nameof(Col2019Width));
         OnPropertyChanged(nameof(Col2022Width));
         OnPropertyChanged(nameof(Col2022PreWidth));
+    }
+
+    public void DeleteWorkSpace()
+    {
+        if (WorkSpaces.Any(x => x.Path == ComboBoxText))
+        {
+            var w = WorkSpaces.First(x => x.Path == ComboBoxText);
+            WorkSpaces.Remove(w);
+        }
     }
 }
