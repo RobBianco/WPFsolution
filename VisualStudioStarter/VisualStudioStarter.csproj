@@ -13,9 +13,18 @@
     <None Remove="Images\refresh.png" />
     <None Remove="Images\save.png" />
     <None Remove="Images\Shield.ico" />
+    <None Remove="Images\sln.png" />
     <None Remove="Images\trash.png" />
     <None Remove="Images\VS2019.png" />
     <None Remove="Images\VS2022.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft-WindowsAPICodePack-Shell" Version="1.1.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\WPFUIControls\WPFUIControls.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,6 +32,7 @@
     <Resource Include="Images\refresh.png" />
     <Resource Include="Images\save.png" />
     <Resource Include="Images\Shield.ico" />
+    <Resource Include="Images\sln.png" />
     <Resource Include="Images\trash.png" />
     <Resource Include="Images\VS2019.png" />
     <Resource Include="Images\VS2022.png" />

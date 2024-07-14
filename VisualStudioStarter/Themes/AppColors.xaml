@@ -11,4 +11,10 @@
    <Color x:Key="Background3">#444546</Color>
    <SolidColorBrush x:Key="Background3Brush" Color="{StaticResource Background3}" />
 
+   <SolidColorBrush x:Key="ComboBoxNormalBorderBrush" Color="#e3e9ef" />
+   <SolidColorBrush x:Key="ComboBoxNormalBackgroundBrush" Color="#fff" />
+   <SolidColorBrush x:Key="ComboBoxDisabledForegroundBrush" Color="#888" />
+   <SolidColorBrush x:Key="ComboBoxDisabledBackgroundBrush" Color="#eee" />
+   <SolidColorBrush x:Key="ComboBoxDisabledBorderBrush" Color="#888" />
+
 </ResourceDictionary>

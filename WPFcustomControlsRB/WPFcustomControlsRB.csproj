@@ -68,8 +68,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="RoundedButton.cs" />
-    <Compile Include="RoundedProgressBar.cs" />
+    <Compile Include="RBToggleButton.cs" />
+    <Compile Include="RBButton.cs" />
+    <Compile Include="RBProgressBar.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

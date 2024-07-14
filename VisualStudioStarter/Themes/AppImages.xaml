@@ -6,4 +6,5 @@
    <ImageSource x:Key="OpenFolderPNG">../Images/openfolder.png</ImageSource>
    <ImageSource x:Key="SavePNG">../Images/save.png</ImageSource>
    <ImageSource x:Key="TrashPNG">../Images/trash.png</ImageSource>
+   <ImageSource x:Key="SlnPNG">../Images/sln.png</ImageSource>
 </ResourceDictionary>
