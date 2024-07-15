@@ -161,6 +161,10 @@ public class MainViewModel : INotifyPropertyChanged
         IsVS2019Installed = File.Exists(PathEXE_VS2019);
 
         UpdateColumnWidths();
+
+        var solutions = SolutionManager.GetSolutions();
+
+        
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
@@ -181,6 +185,8 @@ public class MainViewModel : INotifyPropertyChanged
         {
             Solutions.Add(solution);
         }
+
+        SolutionManager.SaveSolutions(Solutions.ToList());
     }
 
     public bool AvviaVisualStudio()

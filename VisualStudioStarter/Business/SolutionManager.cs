@@ -57,7 +57,7 @@ public static class SolutionManager
         return solutions;
     }
 
-    public static void SaveSolutions(List<Solution> workspaces)
+    public static void SaveSolutions(List<Solution> solutions)
     {
         if (File.Exists(SavePath))
         {
@@ -65,7 +65,7 @@ public static class SolutionManager
         }
 
         var json = JsonSerializer.Serialize(
-            workspaces, JsonSerializerOptions.Default);
+            solutions, JsonSerializerOptions.Default);
 
         File.WriteAllText(SavePath, json);
     }
