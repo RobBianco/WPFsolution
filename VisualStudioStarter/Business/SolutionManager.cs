@@ -1,6 +1,7 @@
 ﻿using Microsoft.WindowsAPICodePack.Dialogs;
 using System.IO;
 using System.Text.Json;
+using System.Text.Json.Serialization.Metadata;
 using VisualStudioStarter.ObjectModels;
 using Path = System.IO.Path;
 
@@ -65,7 +66,10 @@ public static class SolutionManager
         }
 
         var json = JsonSerializer.Serialize(
-            solutions, JsonSerializerOptions.Default);
+            solutions, new JsonSerializerOptions
+            {
+                WriteIndented = true
+            });
 
         File.WriteAllText(SavePath, json);
     }

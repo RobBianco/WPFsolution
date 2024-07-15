@@ -47,8 +47,10 @@
                        BorderBrush="{TemplateBinding BorderBrush}"
                        BorderThickness="{TemplateBinding BorderThickness}"
                        CornerRadius="{TemplateBinding CornerRadius}">
-                  <Grid>
-                     <Image HorizontalAlignment="{TemplateBinding HorizontalPictureAlignment}"
+                  <Grid Name="Grid">
+                     <Image Name="Image"
+                            Margin="{TemplateBinding PictureMargin}"
+                            HorizontalAlignment="{TemplateBinding HorizontalPictureAlignment}"
                             VerticalAlignment="{TemplateBinding VerticalPictureAlignment}"
                             Source="{TemplateBinding Picture}"
                             Stretch="{TemplateBinding PictureStretch}" />
@@ -58,6 +60,9 @@
                   </Grid>
                </Border>
                <ControlTemplate.Triggers>
+                  <Trigger Property="IsEnabled" Value="False">
+                     <Setter TargetName="Grid" Property="Opacity" Value="0.2" />
+                  </Trigger>
                   <Trigger Property="IsMouseOver" Value="True">
                      <Setter TargetName="Border" Property="Panel.Background" Value="{Binding MouseHoverBackColor, RelativeSource={RelativeSource TemplatedParent}}" />
                   </Trigger>
@@ -90,6 +95,7 @@
                        CornerRadius="{TemplateBinding CornerRadius}">
                   <Grid>
                      <Image Name="Border"
+                            Margin="{TemplateBinding PictureMargin}"
                             HorizontalAlignment="{TemplateBinding HorizontalPictureAlignment}"
                             VerticalAlignment="{TemplateBinding VerticalPictureAlignment}"
                             Source="{TemplateBinding Picture}"

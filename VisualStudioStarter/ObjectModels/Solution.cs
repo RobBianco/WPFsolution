@@ -17,7 +17,10 @@ public class Solution : INotifyPropertyChanged
         {
             if (SetField(ref _path, value))
             {
-                OnPropertyChanged(nameof(Fileinfo));
+                if (!string.IsNullOrEmpty(value))
+                {
+                    Fileinfo = new FileInfo(value);
+                }
             }
         }
     }
@@ -32,10 +35,14 @@ public class Solution : INotifyPropertyChanged
     public Solution(string filePath = "")
     {
         Path  = filePath.Trim();
-        if (!string.IsNullOrEmpty(filePath.Trim()))
+        if (!string.IsNullOrEmpty(Path))
         {
-            Fileinfo = new FileInfo(filePath);
+            Fileinfo = new FileInfo(Path);
         }
+    }
+
+    public Solution()
+    {
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;

@@ -29,11 +29,6 @@ public partial class MainWindow
     private void OnLoaded(object sender, RoutedEventArgs e)
     {
         SetHeight();
-
-        var screenHeight = SystemParameters.PrimaryScreenHeight;
-        var topFinal = SystemParameters.PrimaryScreenHeight - Height - 45;
-        Animate(screenHeight, topFinal, new PropertyPath(TopProperty));
-        Animate(0, 1, new PropertyPath(OpacityProperty));
     }
 
     private void Animate(double from, double to, PropertyPath propPath, string name = "")
@@ -52,12 +47,24 @@ public partial class MainWindow
 
         // Crea un Storyboard per contenere l'animazione
         var storyboard = new Storyboard();
+        if (name != "")
+        {
+            storyboard.Completed += StoryboardOnCompleted;
+        }
+        
+
         storyboard.Children.Add(animation);
         Storyboard.SetTarget(animation, this);
         Storyboard.SetTargetProperty(animation, propPath);
 
         // Inizia l'animazione
         storyboard.Begin();
+    }
+
+    private void StoryboardOnCompleted(object? sender, EventArgs e)
+    {
+        Animate(Top, SystemParameters.PrimaryScreenHeight - Height - 45, new PropertyPath(TopProperty));
+        Animate(0, 1, new PropertyPath(OpacityProperty));
     }
 
     private void btnVs_Click(object sender, RoutedEventArgs e)
@@ -70,21 +77,19 @@ public partial class MainWindow
 
     public void SetHeight()
     {
-        Height = 120 + Convert.ToDouble(VM.Solutions.Count * 31);
-        Animate(Top, SystemParameters.PrimaryScreenHeight - Height - 45, new PropertyPath(TopProperty));
+        Animate(Height, 120 + Convert.ToDouble(VM.Solutions.Count * 32), new PropertyPath(HeightProperty), "HEIGHT");
     }
 
 
     private void btnAddSolutionFolder_Click(object sender, RoutedEventArgs e)
     {
-        VM.AddSolutions(true);
+        VM.ChooseSolutions(true);
         SetHeight();
     }
 
     private void btnAddSolution_Click(object sender, RoutedEventArgs e)
     {
-        VM.AddSolutions(false);
-        SolutionManager.FindSolution(false);
+        VM.ChooseSolutions(false);
         SetHeight();
     }
 }

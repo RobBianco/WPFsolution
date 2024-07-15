@@ -28,11 +28,20 @@ namespace WPFUIControls
         public static readonly DependencyProperty PictureProperty = DependencyProperty.Register(
             nameof(Picture), typeof(ImageSource), typeof(RBToggleButton), new PropertyMetadata(default(ImageSource)));
 
+        public static readonly DependencyProperty PictureMarginProperty = DependencyProperty.Register(
+            nameof(PictureMargin), typeof(Thickness), typeof(RBToggleButton), new PropertyMetadata(default(Thickness)));
+
         static RBToggleButton()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(RBToggleButton), new FrameworkPropertyMetadata(typeof(RBToggleButton)));
         }
+       
 
+        public Thickness PictureMargin
+        {
+            get => (Thickness)GetValue(PictureMarginProperty);
+            set => SetValue(PictureMarginProperty, value);
+        }
         public Brush CheckedBackColor
         {
             get => (Brush)GetValue(CheckedBackColorProperty);

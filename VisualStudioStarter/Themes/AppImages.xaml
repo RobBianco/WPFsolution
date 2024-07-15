@@ -7,4 +7,5 @@
    <ImageSource x:Key="SavePNG">../Images/save.png</ImageSource>
    <ImageSource x:Key="TrashPNG">../Images/trash.png</ImageSource>
    <ImageSource x:Key="SlnPNG">../Images/sln.png</ImageSource>
+   <ImageSource x:Key="PinPNG">../Images/Pin.png</ImageSource>
 </ResourceDictionary>

@@ -162,9 +162,7 @@ public class MainViewModel : INotifyPropertyChanged
 
         UpdateColumnWidths();
 
-        var solutions = SolutionManager.GetSolutions();
-
-        
+        AddSolutions(SolutionManager.GetSolutions());
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
@@ -177,16 +175,21 @@ public class MainViewModel : INotifyPropertyChanged
         return true;
     }
 
-    public void AddSolutions(bool isFolderPicker)
+    public void ChooseSolutions(bool isFolderPicker)
     {
         IsAddSlnPressed = false;
 
-        foreach (var solution in SolutionManager.FindSolution(isFolderPicker))
+        AddSolutions(SolutionManager.FindSolution(isFolderPicker));
+
+        SolutionManager.SaveSolutions(Solutions.ToList());
+    }
+
+    public void AddSolutions(List<Solution> solutions)
+    {
+        foreach (var solution in solutions)
         {
             Solutions.Add(solution);
         }
-
-        SolutionManager.SaveSolutions(Solutions.ToList());
     }
 
     public bool AvviaVisualStudio()
@@ -281,10 +284,5 @@ public class MainViewModel : INotifyPropertyChanged
         OnPropertyChanged(nameof(Col2019Width));
         OnPropertyChanged(nameof(Col2022Width));
         OnPropertyChanged(nameof(Col2022PreWidth));
-    }
-
-    public void DeleteSolution()
-    {
-
     }
 }

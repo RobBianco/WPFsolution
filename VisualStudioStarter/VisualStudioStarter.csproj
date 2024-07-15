@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <None Remove="Images\openfolder.png" />
+    <None Remove="Images\Pin.png" />
     <None Remove="Images\refresh.png" />
     <None Remove="Images\save.png" />
     <None Remove="Images\Shield.ico" />
@@ -29,6 +30,7 @@
 
   <ItemGroup>
     <Resource Include="Images\openfolder.png" />
+    <Resource Include="Images\Pin.png" />
     <Resource Include="Images\refresh.png" />
     <Resource Include="Images\save.png" />
     <Resource Include="Images\Shield.ico" />

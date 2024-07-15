@@ -5,6 +5,10 @@
                     xmlns:wpfuiControls="clr-namespace:WPFUIControls;assembly=WPFUIControls"
                     mc:Ignorable="d">
 
+   <Style TargetType="{x:Type wpfuiControls:RBToggleButton}">
+      <Setter Property="PictureMargin" Value="2" />
+   </Style>
+
    <Style TargetType="{x:Type TextBox}">
       <Setter Property="Template">
          <Setter.Value>
@@ -35,13 +39,8 @@
          <Setter.Value>
             <ControlTemplate TargetType="{x:Type ListBoxItem}">
                <Grid>
-                  <Border Name="LeftBd"
-                          Width="3"
-                          Height="30"
-                          HorizontalAlignment="Left"
-                          Panel.ZIndex="3"
-                          CornerRadius="2" />
                   <Border Name="Bd"
+                          Height="31"
                           CornerRadius="5"
                           SnapsToDevicePixels="True">
                      <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
