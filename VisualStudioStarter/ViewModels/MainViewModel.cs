@@ -7,12 +7,15 @@ using System.Windows;
 using VisualStudioStarter.Business;
 using VisualStudioStarter.ObjectModels;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using System.Windows.Input;
+using WPFUIControls;
 
 namespace VisualStudioStarter.ViewModels;
 
 public class MainViewModel : INotifyPropertyChanged
 {
     private ObservableCollection<Solution> _solutions = [];
+    private ObservableCollection<Solution> _pinnedSolutions = [];
     private bool _isVs2022PreInstalled;
     private bool _isVs2022Installed;
     private bool _isVs2019Installed;
@@ -36,11 +39,20 @@ public class MainViewModel : INotifyPropertyChanged
         set => SetField(ref _solutions, value);
     }
 
+    public ObservableCollection<Solution> PinnedSolutions
+    {
+        get => _pinnedSolutions;
+        set => SetField(ref _pinnedSolutions, value);
+    }
+
     public Solution SelectedSolution
     {
         get => _selectedSolution ?? new Solution();
         set => SetField(ref _selectedSolution, value);
     }
+
+    public bool IsPinnedVisible => PinnedSolutions.Any();
+    public bool IsSolutonsVisible => Solutions.Any();
 
     public bool IsVS2022PreInstalled
     {
@@ -188,16 +200,43 @@ public class MainViewModel : INotifyPropertyChanged
     {
         foreach (var solution in solutions)
         {
-            Solutions.Add(solution);
+            if (solution.IsPinned)
+            {
+                PinnedSolutions.Add(solution);
+            }
+            else
+            {
+                Solutions.Add(solution);
+            }
         }
     }
 
-    public bool AvviaVisualStudio()
+    public void PinUnPin_Solution(Solution sln)
     {
+        sln.IsPinned = !sln.IsPinned;
+        if (sln.IsPinned)
+        {
+            Solutions.Remove(sln);
+            PinnedSolutions.Add(sln);
+        }
+        else
+        {
+            PinnedSolutions.Remove(sln);
+            Solutions.Add(sln);
+        }
+
+        OnPropertyChanged(nameof(IsPinnedVisible));
+        OnPropertyChanged(nameof(IsSolutonsVisible));
+    }
+
+    public bool AvviaVisualStudio(Solution? sln = null)
+    {
+        sln ??= SelectedSolution;
+
         var p = new Process();
         var st = new ProcessStartInfo
         {
-            Arguments = $"\"{SelectedSolution.Path}\"",
+            Arguments = $"\"{sln.Path}\"",
             Verb = IsAdmin ? "runas" : ""
         };
 

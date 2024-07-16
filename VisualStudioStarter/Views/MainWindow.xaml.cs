@@ -1,10 +1,9 @@
-﻿using System.IO;
-using System.Windows;
+﻿using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media.Animation;
-using Microsoft.Win32;
 using VisualStudioStarter.ViewModels;
-using Microsoft.WindowsAPICodePack.Dialogs;
-using VisualStudioStarter.Business;
+using VisualStudioStarter.ObjectModels;
+using WPFUIControls;
 
 namespace VisualStudioStarter.Views;
 
@@ -67,17 +66,9 @@ public partial class MainWindow
         Animate(0, 1, new PropertyPath(OpacityProperty));
     }
 
-    private void btnVs_Click(object sender, RoutedEventArgs e)
-    {
-        if (VM.AvviaVisualStudio())
-        {
-            Close();
-        }
-    }
-
     public void SetHeight()
     {
-        Animate(Height, 120 + Convert.ToDouble(VM.Solutions.Count * 32), new PropertyPath(HeightProperty), "HEIGHT");
+        Animate(Height, 190 + Convert.ToDouble(VM.Solutions.Count * 32), new PropertyPath(HeightProperty), "HEIGHT");
     }
 
 
@@ -91,5 +82,34 @@ public partial class MainWindow
     {
         VM.ChooseSolutions(false);
         SetHeight();
+    }
+
+    private void btnPinned_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is RBButton { DataContext: Solution sln })
+        {
+            VM.PinUnPin_Solution(sln);
+        }
+    }
+
+    private void DragWindow_MouseDown(object sender, MouseButtonEventArgs e)
+    {
+        DragMove();
+    }
+
+    private void OnSolution_MouseDown(object sender, MouseButtonEventArgs e)
+    {
+        if (e.ChangedButton == MouseButton.Right)
+        {
+            PopupSolution.IsOpen = !PopupSolution.IsOpen;
+            return;
+        }
+
+        var sln = e.Source is FrameworkElement { DataContext: Solution slnn } ? slnn : null;
+
+        if (VM.AvviaVisualStudio(sln))
+        {
+            Close();
+        }
     }
 }

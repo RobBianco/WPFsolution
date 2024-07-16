@@ -8,4 +8,5 @@
    <ImageSource x:Key="TrashPNG">../Images/trash.png</ImageSource>
    <ImageSource x:Key="SlnPNG">../Images/sln.png</ImageSource>
    <ImageSource x:Key="PinPNG">../Images/Pin.png</ImageSource>
+   <ImageSource x:Key="UnPinPNG">../Images/UnPin.png</ImageSource>
 </ResourceDictionary>

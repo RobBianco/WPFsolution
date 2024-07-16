@@ -4,7 +4,7 @@
                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                     xmlns:wpfuiControls="clr-namespace:WPFUIControls;assembly=WPFUIControls"
                     mc:Ignorable="d">
-
+   <wpfuiControls:VisibilityBooleanConverter x:Key="VisibilityBooleanConverter" />
    <Style TargetType="{x:Type wpfuiControls:RBToggleButton}">
       <Setter Property="PictureMargin" Value="2" />
    </Style>

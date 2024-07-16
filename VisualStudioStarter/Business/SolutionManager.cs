@@ -45,13 +45,13 @@ public static class SolutionManager
         {
             if (File.Exists(path))
             {
-                solutions.Add(new Solution(path));
+                solutions.Add(new Solution() { Path = path });
             }
 
             if (Directory.Exists(path))
             {
                 solutions.AddRange(Directory.GetFiles(path, "*.sln", SearchOption.AllDirectories)
-                    .Select(file => new Solution(file)));
+                    .Select(file => new Solution() { Path = file }));
             }
         }
 

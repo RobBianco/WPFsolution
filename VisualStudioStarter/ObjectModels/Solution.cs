@@ -2,6 +2,8 @@
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
+using System.Windows;
+using System.Windows.Media;
 
 namespace VisualStudioStarter.ObjectModels;
 
@@ -9,6 +11,16 @@ public class Solution : INotifyPropertyChanged
 {
     private string _path = "";
     private FileInfo _fileinfo;
+    private bool _isPinned;
+
+    public bool IsPinned
+    {
+        get => _isPinned;
+        set
+        {
+            if (SetField(ref _isPinned, value)) OnPropertyChanged(nameof(PinnedImage));
+        }
+    }
 
     public string Path
     {
@@ -32,14 +44,9 @@ public class Solution : INotifyPropertyChanged
         set => SetField(ref _fileinfo, value);
     }
 
-    public Solution(string filePath = "")
-    {
-        Path  = filePath.Trim();
-        if (!string.IsNullOrEmpty(Path))
-        {
-            Fileinfo = new FileInfo(Path);
-        }
-    }
+    [JsonIgnore]
+    public ImageSource? PinnedImage => IsPinned ? Application.Current.FindResource("UnPinPNG") as ImageSource : Application.Current.FindResource("PinPNG") as ImageSource;
+
 
     public Solution()
     {
