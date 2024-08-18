@@ -7,9 +7,14 @@
    <ImageSource x:Key="SavePNG">../Images/save.png</ImageSource>
    <ImageSource x:Key="TrashPNG">../Images/trash.png</ImageSource>
    <ImageSource x:Key="SlnPNG">../Images/sln.png</ImageSource>
+   <ImageSource x:Key="CsProjPNG">../Images/csproj.png</ImageSource>
    <ImageSource x:Key="PinPNG">../Images/pin.png</ImageSource>
    <ImageSource x:Key="UnPinPNG">../Images/unpin.png</ImageSource>
    <ImageSource x:Key="WindowPNG">../Images/window.png</ImageSource>
    <ImageSource x:Key="RemovePNG">../Images/remove.png</ImageSource>
    <ImageSource x:Key="SettingsPNG">../Images/settings.png</ImageSource>
+   <ImageSource x:Key="LeftArrowPNG">../Images/leftarrow.png</ImageSource>
+   <ImageSource x:Key="RightArrowPNG">../Images/rightarrow.png</ImageSource>
+   <ImageSource x:Key="UpArrowPNG">../Images/uparrow.png</ImageSource>
+   <ImageSource x:Key="DownArrowPNG">../Images/downarrow.png</ImageSource>
 </ResourceDictionary>

@@ -11,6 +11,7 @@ public class Solution : INotifyPropertyChanged
     private string _path = "";
     private FileInfo _fileinfo;
     private bool _isPinned;
+    private string _directory;
 
     public bool IsPinned
     {
@@ -37,15 +38,37 @@ public class Solution : INotifyPropertyChanged
     }
 
     [JsonIgnore]
-    public FileInfo Fileinfo
+    public FileInfo? Fileinfo
     {
         get => _fileinfo;
-        set => SetField(ref _fileinfo, value);
+        set
+        {
+            if (SetField(ref _fileinfo, value))
+            {
+                OnPropertyChanged(nameof(Image));
+                OnPropertyChanged(nameof(Directory));
+            }
+        }
     }
 
-    [JsonIgnore]
-    public ImageSource? PinnedImage => IsPinned ? Application.Current.FindResource("UnPinPNG") as ImageSource : Application.Current.FindResource("PinPNG") as ImageSource;
+    [JsonIgnore] 
+    public string Directory => System.IO.Path.GetDirectoryName(Fileinfo?.FullName ?? "") ?? "";
+    [JsonIgnore] 
+    public bool DirectoryExist => System.IO.Directory.Exists(Directory);
 
+    [JsonIgnore]
+    public ImageSource? PinnedImage => IsPinned
+        ? Application.Current.FindResource("UnPinPNG") as ImageSource
+        : Application.Current.FindResource("PinPNG") as ImageSource;
+
+    [JsonIgnore]
+    public ImageSource? Image =>
+        Fileinfo.Extension switch
+        {
+            ".sln" => Application.Current.FindResource("SlnPNG") as ImageSource,
+            ".csproj" => Application.Current.FindResource("CsProjPNG") as ImageSource,
+            _ => null
+        };
 
     public Solution()
     {

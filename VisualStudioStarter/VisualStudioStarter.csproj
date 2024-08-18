@@ -6,25 +6,32 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Images\csproj.png" />
+    <None Remove="Images\downarrow.png" />
     <None Remove="Images\folder.png" />
+    <None Remove="Images\leftarrow.png" />
     <None Remove="Images\Pin.png" />
     <None Remove="Images\refresh.png" />
     <None Remove="Images\remove.png" />
+    <None Remove="Images\rightarrow.png" />
     <None Remove="Images\save.png" />
     <None Remove="Images\settings.png" />
     <None Remove="Images\Shield.ico" />
     <None Remove="Images\sln.png" />
     <None Remove="Images\trash.png" />
     <None Remove="Images\UnPin.png" />
+    <None Remove="Images\uparrow.png" />
     <None Remove="Images\VS2019.png" />
     <None Remove="Images\VS2022.png" />
     <None Remove="Images\window.png" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="MaterialDesignThemes" Version="5.1.0" />
     <PackageReference Include="Microsoft-WindowsAPICodePack-Shell" Version="1.1.5" />
   </ItemGroup>
 
@@ -33,16 +40,21 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Images\csproj.png" />
+    <Resource Include="Images\downarrow.png" />
     <Resource Include="Images\folder.png" />
+    <Resource Include="Images\leftarrow.png" />
     <Resource Include="Images\pin.png" />
     <Resource Include="Images\refresh.png" />
     <Resource Include="Images\remove.png" />
+    <Resource Include="Images\rightarrow.png" />
     <Resource Include="Images\save.png" />
     <Resource Include="Images\settings.png" />
     <Resource Include="Images\Shield.ico" />
     <Resource Include="Images\sln.png" />
     <Resource Include="Images\trash.png" />
     <Resource Include="Images\unpin.png" />
+    <Resource Include="Images\uparrow.png" />
     <Resource Include="Images\VS2019.png" />
     <Resource Include="Images\VS2022.png" />
     <Resource Include="Images\window.png" />

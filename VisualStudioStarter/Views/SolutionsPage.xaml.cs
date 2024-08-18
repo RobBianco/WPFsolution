@@ -7,17 +7,15 @@ using WPFUIControls;
 namespace VisualStudioStarter.Views;
 
 /// <summary>
-/// Logica di interazione per SolutionsPage.xaml
+/// Logica di interazione per SolutionsPage.xam 
 /// </summary>
-public partial class SolutionsPage : Page
+public partial class SolutionsPage
 {
-    public MainViewModel? VM => DataContext as MainViewModel;
+    public SolutionPageViewModel? VM => DataContext as SolutionPageViewModel;
 
-    public SolutionsPage(MainViewModel vm)
+    public SolutionsPage()
     {
         InitializeComponent();
-        DataContext = vm;
-
         Loaded += OnLoaded;
         Unloaded += OnUnloaded;
     }
@@ -41,11 +39,34 @@ public partial class SolutionsPage : Page
 
     private void OpenSolution_OnClick(object sender, RoutedEventArgs e)
     {
-
+        VM?.OpenSolution();
     }
 
     private void OpenSolutionDirectory_OnClick(object sender, RoutedEventArgs e)
     {
+        VM?.OpenSolutionDirectory();
+    }
 
+    private void RemoveSolution_OnClick(object sender, RoutedEventArgs e)
+    {
+        VM?.Remove_Solution();
+    }
+
+    private void FrameworkElement_OnContextMenuOpening(object sender, ContextMenuEventArgs e)
+    {
+        OpenDirectoryPinnedMenu.IsEnabled = VM?.SelectedSolution?.DirectoryExist ?? false;
+        OpenDirectoryUnpinnedMenu.IsEnabled = VM?.SelectedSolution?.DirectoryExist ?? false;
+        OpenPropertiesPinnedMenu.IsEnabled = VM?.SelectedSolution?.DirectoryExist ?? false;
+        OpenPropertiesUnpinnedMenu.IsEnabled = VM?.SelectedSolution?.DirectoryExist ?? false;
+    }
+
+    private void RemoveAddPinned_OnClick(object sender, RoutedEventArgs e)
+    {
+        VM?.PinUnPin_Solution();
+    }
+
+    private void OpenSolutionProperties_OnClick(object sender, RoutedEventArgs e)
+    {
+        VM?.OpenSolutionProperties();
     }
 }

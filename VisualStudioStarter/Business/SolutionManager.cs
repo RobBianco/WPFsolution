@@ -9,9 +9,20 @@ public static class SolutionManager
 {
     public static string SavePath =
         Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "VsStarter", "VsStarterSolutions.json");
-    public static List<Solution> GetSolutions() => File.Exists(SavePath)
-        ? JsonSerializer.Deserialize<List<Solution>>(File.ReadAllText(SavePath), JsonSerializerOptions.Default) ?? []
-        : [];
+    public static List<Solution> GetSolutions()
+    {
+        try
+        {
+            return File.Exists(SavePath)
+                ? JsonSerializer.Deserialize<List<Solution>>(File.ReadAllText(SavePath), JsonSerializerOptions.Default) ??
+                  []
+                : [];
+        }
+        catch (Exception )
+        {
+            return [];
+        }
+    }
 
     public static List<Solution> FindSolution(bool IsFolderPicker)
     {
@@ -48,8 +59,12 @@ public static class SolutionManager
         return solutions;
     }
 
-    public static void SaveSolutions(List<Solution> solutions)
+    public static void SaveSolutions(IEnumerable<Solution>? pinnedSolutions, IEnumerable<Solution>? unpinnedSolutions)
     {
+        var solutions = new List<Solution>();
+        if (pinnedSolutions != null) solutions.AddRange(pinnedSolutions);
+        if (unpinnedSolutions != null) solutions.AddRange(unpinnedSolutions);
+
         if (File.Exists(SavePath))
         {
             File.Delete(SavePath);

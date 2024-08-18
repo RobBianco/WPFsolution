@@ -12,15 +12,16 @@ internal static class OptionsManager
         ? JsonSerializer.Deserialize<VsStarterOptions>(File.ReadAllText(SavePath), JsonSerializerOptions.Default) ?? VsStarterOptions.Default
         : VsStarterOptions.Default;
 
-    public static void SaveOptions(VsStarterOptions type)
+    public static void SaveOptions(VsStarterOptions? options)
     {
+        if (options == null)return;
         if (File.Exists(SavePath))
         {
             File.Delete(SavePath);
         }
 
         var json = JsonSerializer.Serialize(
-            type, options: new()
+            options, options: new()
             {
                 WriteIndented = true
             });
