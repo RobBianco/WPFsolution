@@ -24,6 +24,18 @@ public class RBButton : Button
     public static readonly DependencyProperty PictureProperty = DependencyProperty.Register(
         nameof(Picture), typeof(ImageSource), typeof(RBButton), new PropertyMetadata(default(ImageSource)));
 
+    public static readonly DependencyProperty PictureWitdhProperty = DependencyProperty.Register(
+        nameof(PictureWitdh), typeof(double), typeof(RBButton), new PropertyMetadata(default(double)));
+
+    public static readonly DependencyProperty PictureHeightProperty = DependencyProperty.Register(
+        nameof(PictureHeight), typeof(double), typeof(RBButton), new PropertyMetadata(default(double)));
+
+    public static readonly DependencyProperty PictureMarginProperty = DependencyProperty.Register(
+        nameof(PictureMargin), typeof(Thickness), typeof(RBButton), new PropertyMetadata(default(Thickness)));
+
+    public static readonly DependencyProperty PictureOpacityProperty = DependencyProperty.Register(
+        nameof(PictureOpacity), typeof(double), typeof(RBButton), new PropertyMetadata(default(double)));
+
     static RBButton()
     {
         DefaultStyleKeyProperty.OverrideMetadata(typeof(RBButton), new FrameworkPropertyMetadata(typeof(RBButton)));
@@ -59,14 +71,29 @@ public class RBButton : Button
         set => SetValue(PictureStretchProperty, value);
     }
 
+    public double PictureWitdh
+    {
+        get => (double)GetValue(PictureWitdhProperty);
+        set => SetValue(PictureWitdhProperty, value);
+    }
+
+    public double PictureHeight
+    {
+        get => (double)GetValue(PictureHeightProperty);
+        set => SetValue(PictureHeightProperty, value);
+    }
+
     public ImageSource Picture
     {
         get => (ImageSource)GetValue(PictureProperty);
         set => SetValue(PictureProperty, value);
     }
 
-    public static readonly DependencyProperty PictureMarginProperty = DependencyProperty.Register(
-        nameof(PictureMargin), typeof(Thickness), typeof(RBButton), new PropertyMetadata(default(Thickness)));
+    public double PictureOpacity
+    {
+        get => (double)GetValue(PictureOpacityProperty);
+        set => SetValue(PictureOpacityProperty, value);
+    }
 
     public Thickness PictureMargin
     {

@@ -1,33 +1,41 @@
 ﻿using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
+using System.Windows.Navigation;
 using VisualStudioStarter.ViewModels;
-using VisualStudioStarter.ObjectModels;
-using WPFUIControls;
+using VisualStudioStarter.Business;
 
 namespace VisualStudioStarter.Views;
 
-/// <summary>
-/// Interaction logic for MainWindow.xaml
-/// </summary>
 public partial class MainWindow
 {
+    private OptionsPage? _optionsPage;
+    private SolutionsPage? _solutionsPage;
     public MainViewModel VM => (MainViewModel)DataContext;
+    public OptionsPage OptionsPage => _optionsPage ??= new OptionsPage();
+    public SolutionsPage SolutionsPage => _solutionsPage ??= new SolutionsPage(VM);
 
     public MainWindow()
     {
         InitializeComponent();
 
         Loaded += OnLoaded;
-
+        Closing += OnClosing;
+        Frame.NavigationUIVisibility = NavigationUIVisibility.Hidden;
         Top = SystemParameters.PrimaryScreenHeight;
         Left = (SystemParameters.PrimaryScreenWidth - Width) / 2;
     }
 
+    private void OnClosing(object? sender, System.ComponentModel.CancelEventArgs e)
+    {
+        SolutionManager.SaveSolutions(VM.Solutions.ToList());
+    }
 
     private void OnLoaded(object sender, RoutedEventArgs e)
     {
         SetHeight();
+
+        Frame.Content = SolutionsPage;
     }
 
     private void Animate(double from, double to, PropertyPath propPath, string name = "")
@@ -71,6 +79,19 @@ public partial class MainWindow
         Animate(Height, 190 + Convert.ToDouble(VM.Solutions.Count * 32), new PropertyPath(HeightProperty), "HEIGHT");
     }
 
+    private void DragWindow_MouseDown(object sender, MouseButtonEventArgs e)
+    {
+        if (e.ChangedButton == MouseButton.Left)
+        {
+            DragMove();
+        }
+    }
+
+
+    private void OpenSetting_OnClick(object sender, RoutedEventArgs e)
+    {
+        Frame.Content = Equals(Frame.Content, OptionsPage) ? SolutionsPage : OptionsPage;
+    }
 
     private void btnAddSolutionFolder_Click(object sender, RoutedEventArgs e)
     {
@@ -82,34 +103,5 @@ public partial class MainWindow
     {
         VM.ChooseSolutions(false);
         SetHeight();
-    }
-
-    private void btnPinned_Click(object sender, RoutedEventArgs e)
-    {
-        if (sender is RBButton { DataContext: Solution sln })
-        {
-            VM.PinUnPin_Solution(sln);
-        }
-    }
-
-    private void DragWindow_MouseDown(object sender, MouseButtonEventArgs e)
-    {
-        DragMove();
-    }
-
-    private void OnSolution_MouseDown(object sender, MouseButtonEventArgs e)
-    {
-        if (e.ChangedButton == MouseButton.Right)
-        {
-            PopupSolution.IsOpen = !PopupSolution.IsOpen;
-            return;
-        }
-
-        var sln = e.Source is FrameworkElement { DataContext: Solution slnn } ? slnn : null;
-
-        if (VM.AvviaVisualStudio(sln))
-        {
-            Close();
-        }
     }
 }

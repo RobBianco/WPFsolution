@@ -1,15 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace VisualStudioStarter.Utils;
 
-namespace VisualStudioStarter.Utils;
-
-
-public enum WorkSpaceType
+public enum PinnedPlacement
 {
-    Standard,
-    AddNew,
-    Blank
+    Top,
+    Bottom,
 }

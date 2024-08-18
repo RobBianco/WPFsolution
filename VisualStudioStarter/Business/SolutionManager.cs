@@ -1,7 +1,5 @@
 ﻿using Microsoft.WindowsAPICodePack.Dialogs;
-using System.IO;
 using System.Text.Json;
-using System.Text.Json.Serialization.Metadata;
 using VisualStudioStarter.ObjectModels;
 using Path = System.IO.Path;
 
@@ -9,16 +7,8 @@ namespace VisualStudioStarter.Business;
 
 public static class SolutionManager
 {
-    public static string SavePath
-    {
-        get
-        {
-            var appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-            var savePath = Path.Combine(appDataPath, "VsStarter.json");
-            return savePath;
-        }
-    }
-
+    public static string SavePath =
+        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "VsStarter", "VsStarterSolutions.json");
     public static List<Solution> GetSolutions() => File.Exists(SavePath)
         ? JsonSerializer.Deserialize<List<Solution>>(File.ReadAllText(SavePath), JsonSerializerOptions.Default) ?? []
         : [];
@@ -66,10 +56,15 @@ public static class SolutionManager
         }
 
         var json = JsonSerializer.Serialize(
-            solutions, new JsonSerializerOptions
+            solutions, options: new()
             {
                 WriteIndented = true
             });
+
+        if (!Directory.Exists(Path.GetDirectoryName(SavePath)))
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(SavePath)!);
+        }
 
         File.WriteAllText(SavePath, json);
     }

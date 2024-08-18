@@ -1,14 +1,10 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.IO;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using VisualStudioStarter.Business;
 using VisualStudioStarter.ObjectModels;
-using Microsoft.WindowsAPICodePack.Dialogs;
-using System.Windows.Input;
-using WPFUIControls;
 
 namespace VisualStudioStarter.ViewModels;
 

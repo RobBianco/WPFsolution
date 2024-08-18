@@ -3,10 +3,13 @@
    <ImageSource x:Key="ShieldICO">../Images/Shield.ico</ImageSource>
    <ImageSource x:Key="Vs2019PNG">../Images/VS2019.png</ImageSource>
    <ImageSource x:Key="Vs2022PNG">../Images/VS2022.png</ImageSource>
-   <ImageSource x:Key="OpenFolderPNG">../Images/openfolder.png</ImageSource>
+   <ImageSource x:Key="FolderPNG">../Images/folder.png</ImageSource>
    <ImageSource x:Key="SavePNG">../Images/save.png</ImageSource>
    <ImageSource x:Key="TrashPNG">../Images/trash.png</ImageSource>
    <ImageSource x:Key="SlnPNG">../Images/sln.png</ImageSource>
-   <ImageSource x:Key="PinPNG">../Images/Pin.png</ImageSource>
-   <ImageSource x:Key="UnPinPNG">../Images/UnPin.png</ImageSource>
+   <ImageSource x:Key="PinPNG">../Images/pin.png</ImageSource>
+   <ImageSource x:Key="UnPinPNG">../Images/unpin.png</ImageSource>
+   <ImageSource x:Key="WindowPNG">../Images/window.png</ImageSource>
+   <ImageSource x:Key="RemovePNG">../Images/remove.png</ImageSource>
+   <ImageSource x:Key="SettingsPNG">../Images/settings.png</ImageSource>
 </ResourceDictionary>

@@ -1,8 +1,9 @@
-﻿<Application x:Class="VisualStudioStarter.App"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:VisualStudioStarter"
-             StartupUri="/Views/MainWindow.xaml">
+﻿<Application
+   x:Class="VisualStudioStarter.App"
+   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+   xmlns:ui="http://schemas.modernwpf.com/2019"
+   StartupUri="/Views/MainWindow.xaml">
    <Application.Resources>
       <ResourceDictionary>
          <ResourceDictionary.MergedDictionaries>
