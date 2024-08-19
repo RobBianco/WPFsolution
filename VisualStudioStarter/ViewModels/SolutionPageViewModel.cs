@@ -16,9 +16,9 @@ public class SolutionPageViewModel : BaseViewModel
     private bool _isVs2022Installed;
     private bool _isVs2019Installed;
     private bool _isAdmin;
-    private bool _isVisualStudio2022Pre;
-    private bool _isVisualStudio2022;
-    private bool _isVisualStudio2019;
+    //private bool _isVisualStudio2022Pre;
+    //private bool _isVisualStudio2022;
+    //private bool _isVisualStudio2019;
     private GridLength _col2019Width;
     private GridLength _col2022Width;
     private GridLength _col2022PreWidth;
@@ -100,58 +100,58 @@ public class SolutionPageViewModel : BaseViewModel
     }
 
 
-    public bool IsVisualStudio2022Pre
-    {
-        get => _isVisualStudio2022Pre;
-        set
-        {
-            SetField(ref _isVisualStudio2022Pre, value);
-            OnPropertyChanged(nameof(IsVisualStudioSelected));
-            if (value)
-            {
-                IsVisualStudio2022 = false;
-                IsVisualStudio2019 = false;
+    //public bool IsVisualStudio2022Pre
+    //{
+    //    get => _isVisualStudio2022Pre;
+    //    set
+    //    {
+    //        SetField(ref _isVisualStudio2022Pre, value);
+    //        OnPropertyChanged(nameof(IsVisualStudioSelected));
+    //        if (value)
+    //        {
+    //            IsVisualStudio2022 = false;
+    //            IsVisualStudio2019 = false;
 
-                UpdateColumnWidths();
-            }
-        }
-    }
+    //            UpdateColumnWidths();
+    //        }
+    //    }
+    //}
 
-    public bool IsVisualStudio2022
-    {
-        get => _isVisualStudio2022;
-        set
-        {
-            SetField(ref _isVisualStudio2022, value);
-            OnPropertyChanged(nameof(IsVisualStudioSelected));
-            if (value)
-            {
-                IsVisualStudio2022Pre = false;
-                IsVisualStudio2019 = false;
+    //public bool IsVisualStudio2022
+    //{
+    //    get => _isVisualStudio2022;
+    //    set
+    //    {
+    //        SetField(ref _isVisualStudio2022, value);
+    //        OnPropertyChanged(nameof(IsVisualStudioSelected));
+    //        if (value)
+    //        {
+    //            IsVisualStudio2022Pre = false;
+    //            IsVisualStudio2019 = false;
 
-                UpdateColumnWidths();
-            }
-        }
-    }
+    //            UpdateColumnWidths();
+    //        }
+    //    }
+    //}
 
-    public bool IsVisualStudio2019
-    {
-        get => _isVisualStudio2019;
-        set
-        {
-            SetField(ref _isVisualStudio2019, value);
-            OnPropertyChanged(nameof(IsVisualStudioSelected));
-            if (value)
-            {
-                IsVisualStudio2022Pre = false;
-                IsVisualStudio2022 = false;
+    //public bool IsVisualStudio2019
+    //{
+    //    get => _isVisualStudio2019;
+    //    set
+    //    {
+    //        SetField(ref _isVisualStudio2019, value);
+    //        OnPropertyChanged(nameof(IsVisualStudioSelected));
+    //        if (value)
+    //        {
+    //            IsVisualStudio2022Pre = false;
+    //            IsVisualStudio2022 = false;
 
-                UpdateColumnWidths();
-            }
-        }
-    }
+    //            UpdateColumnWidths();
+    //        }
+    //    }
+    //}
 
-    public bool IsVisualStudioSelected => IsVisualStudio2019 || IsVisualStudio2022 || IsVisualStudio2022Pre;
+    //public bool IsVisualStudioSelected => IsVisualStudio2019 || IsVisualStudio2022 || IsVisualStudio2022Pre;
 
     public Visibility Vs2022PreVisibility => IsVS2022PreInstalled ? Visibility.Visible : Visibility.Collapsed;
     public Visibility Vs2022Visibility => IsVS2022Installed ? Visibility.Visible : Visibility.Collapsed;
@@ -190,6 +190,8 @@ public class SolutionPageViewModel : BaseViewModel
 
     public SolutionPageViewModel()
     {
+        VsStarterOptions.OnOptionsChanged += VsStarterOptionsOnOnOptionsChanged;
+
         IsVS2022PreInstalled = File.Exists(PathEXE_VS2022Pre);
         IsVS2022Installed = File.Exists(PathEXE_VS2022);
         IsVS2019Installed = File.Exists(PathEXE_VS2019);
@@ -202,6 +204,34 @@ public class SolutionPageViewModel : BaseViewModel
         AddSolutions(SolutionManager.GetSolutions());
     }
 
+    private void VsStarterOptionsOnOnOptionsChanged(object? oldvalue, object? newvalue, string name)
+    {
+        switch (name)
+        {
+            case nameof(VsStarterOptions.PinnedPlacement):
+
+                if (Enum.TryParse<PinnedPlacement>(newvalue?.ToString(), out var @new))
+                {
+                    switch (@new)
+                    {
+                        case PinnedPlacement.Top:
+                            PinnedRow = 0;
+                            UnPinnedRow = 1;
+                            break;
+                        case PinnedPlacement.Bottom:
+                            PinnedRow = 1;
+                            UnPinnedRow = 0;
+                            break;
+                    }
+                }
+
+                break;
+        }
+    }
+
+
+    public event EventHandler? OnSolutionPinnedUnPinned;
+
     private void SolutionsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
         OnPropertyChanged(nameof(IsPinnedVisible));
@@ -209,8 +239,6 @@ public class SolutionPageViewModel : BaseViewModel
         OnPropertyChanged(nameof(IsSolutonsVisible));
 
     }
-
-    public event EventHandler? OnSolutionPinnedUnPinned;
 
     public void AddSolutions(List<Solution> solutions)
     {
@@ -242,49 +270,49 @@ public class SolutionPageViewModel : BaseViewModel
         {
             if (Vs2019Visibility == Visibility.Visible)
             {
-                Col2019Width = new GridLength(1, GridUnitType.Star);
-                Col2022Width = new GridLength(0);
-                Col2022PreWidth = new GridLength(0);
+                Col2019Width = new(1, GridUnitType.Star);
+                Col2022Width = new(0);
+                Col2022PreWidth = new(0);
             }
             else if (Vs2022Visibility == Visibility.Visible)
             {
-                Col2019Width = new GridLength(0);
-                Col2022Width = new GridLength(1, GridUnitType.Star);
-                Col2022PreWidth = new GridLength(0);
+                Col2019Width = new(0);
+                Col2022Width = new(1, GridUnitType.Star);
+                Col2022PreWidth = new(0);
             }
             else
             {
-                Col2019Width = new GridLength(0);
-                Col2022Width = new GridLength(0);
-                Col2022PreWidth = new GridLength(1, GridUnitType.Star);
+                Col2019Width = new(0);
+                Col2022Width = new(0);
+                Col2022PreWidth = new(1, GridUnitType.Star);
             }
         }
         else if (visibleButtons == 2)
         {
             if (Vs2019Visibility == Visibility.Visible && Vs2022Visibility == Visibility.Visible)
             {
-                Col2019Width = new GridLength(1, GridUnitType.Star);
-                Col2022Width = new GridLength(1, GridUnitType.Star);
-                Col2022PreWidth = new GridLength(0);
+                Col2019Width = new(1, GridUnitType.Star);
+                Col2022Width = new(1, GridUnitType.Star);
+                Col2022PreWidth = new(0);
             }
             else if (Vs2019Visibility == Visibility.Visible && Vs2022PreVisibility == Visibility.Visible)
             {
-                Col2019Width = new GridLength(1, GridUnitType.Star);
-                Col2022Width = new GridLength(0);
-                Col2022PreWidth = new GridLength(1, GridUnitType.Star);
+                Col2019Width = new(1, GridUnitType.Star);
+                Col2022Width = new(0);
+                Col2022PreWidth = new(1, GridUnitType.Star);
             }
             else
             {
-                Col2019Width = new GridLength(0);
-                Col2022Width = new GridLength(1, GridUnitType.Star);
-                Col2022PreWidth = new GridLength(1, GridUnitType.Star);
+                Col2019Width = new(0);
+                Col2022Width = new(1, GridUnitType.Star);
+                Col2022PreWidth = new(1, GridUnitType.Star);
             }
         }
         else
         {
-            Col2019Width = new GridLength(1, GridUnitType.Star);
-            Col2022Width = new GridLength(1, GridUnitType.Star);
-            Col2022PreWidth = new GridLength(1, GridUnitType.Star);
+            Col2019Width = new(1, GridUnitType.Star);
+            Col2022Width = new(1, GridUnitType.Star);
+            Col2022PreWidth = new(1, GridUnitType.Star);
         }
 
         OnPropertyChanged(nameof(Col2019Width));
@@ -334,18 +362,18 @@ public class SolutionPageViewModel : BaseViewModel
             Verb = IsAdmin ? "runas" : ""
         };
 
-        if (IsVisualStudio2022Pre)
-        {
-            st.FileName = PathEXE_VS2022Pre;
-        }
-        else if (IsVisualStudio2022)
-        {
-            st.FileName = PathEXE_VS2022;
-        }
-        else if (IsVisualStudio2019)
-        {
-            st.FileName = PathEXE_VS2019;
-        }
+        //if (IsVisualStudio2022Pre)
+        //{
+        //    st.FileName = PathEXE_VS2022Pre;
+        //}
+        //else if (IsVisualStudio2022)
+        //{
+        //    st.FileName = PathEXE_VS2022;
+        //}
+        //else if (IsVisualStudio2019)
+        //{
+        //    st.FileName = PathEXE_VS2019;
+        //}
 
         if (File.Exists(st.FileName))
         {
@@ -407,29 +435,57 @@ public class SolutionPageViewModel : BaseViewModel
         SolutionManager.SaveSolutions(PinnedSolutions, Solutions);
     }
 
-    public void VsStarterOptionsOnOnOptionsChanged(object oldvalue, object newvalue, string name)
+    public void MoveDownSolution(Solution? sln = null)
     {
-        switch (name)
+        sln ??= SelectedSolution;
+
+        if (sln is null)
+            return;
+
+        if (sln.IsPinned)
         {
-            case nameof(VsStarterOptions.PinnedPlacement):
-
-                if (Enum.TryParse<PinnedPlacement>(oldvalue.ToString(),out var old ) &&
-                    Enum.TryParse<PinnedPlacement>(newvalue.ToString(), out var @new))
-                {
-                    switch (@new)
-                    {
-                        case PinnedPlacement.Top:
-                            PinnedRow = 0;
-                            UnPinnedRow = 1;
-                            break;
-                        case PinnedPlacement.Bottom:
-                            PinnedRow = 1;
-                            UnPinnedRow = 0;
-                            break;
-                    }
-                }
-
-                break;
+            int index = PinnedSolutions.IndexOf(sln);
+            if (index >= 0 && index < PinnedSolutions.Count - 1)
+            {
+                PinnedSolutions.Move(index, index + 1);
+            }
         }
+        else
+        {
+            int index = Solutions.IndexOf(sln);
+            if (index >= 0 && index < Solutions.Count - 1)
+            {
+                Solutions.Move(index, index + 1);
+            }
+        }
+
+        SaveSolutions();
+    }
+
+    public void MoveUpSolution(Solution? sln = null)
+    {
+        sln ??= SelectedSolution;
+
+        if (sln is null)
+            return;
+
+        if (sln.IsPinned)
+        {
+            int index = PinnedSolutions.IndexOf(sln);
+            if (index > 0)
+            {
+                PinnedSolutions.Move(index, index - 1);
+            }
+        }
+        else
+        {
+            int index = Solutions.IndexOf(sln);
+            if (index > 0)
+            {
+                Solutions.Move(index, index - 1);
+            }
+        }
+
+        SaveSolutions();
     }
 }

@@ -45,7 +45,7 @@ namespace VisualStudioStarter.Utils
             info.cbSize = Marshal.SizeOf(info);
             info.lpVerb = "properties";
             info.lpFile = filename;
-            info.nShow = SW_SHOW;
+            //info.nShow = SW_SHOW;
             info.fMask = SEE_MASK_INVOKEIDLIST;
             return ShellExecuteEx(ref info);
         }

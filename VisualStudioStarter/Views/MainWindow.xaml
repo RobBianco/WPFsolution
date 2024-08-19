@@ -9,13 +9,14 @@
    xmlns:utils="clr-namespace:VisualStudioStarter.Utils"
    xmlns:viewModels="clr-namespace:VisualStudioStarter.ViewModels"
    Title="MainWindow"
-   Width="500"
-   Height="120"
+   Height="300"
+   MinWidth="200"
+   MaxWidth="1900"
+   MaxHeight="1000"
    AllowsTransparency="True"
    Background="Transparent"
    ResizeMode="NoResize"
    Style="{StaticResource MaterialDesignWindow}"
-   Topmost="{Binding VsStarterOptions.TopMost, Mode=OneWay}"
    WindowStyle="None"
    mc:Ignorable="d">
    <Window.DataContext>
@@ -23,11 +24,19 @@
    </Window.DataContext>
    <Window.Resources>
       <ObjectDataProvider
-         x:Key="EnumDataSource"
+         x:Key="EnumPinnedPlacement"
          MethodName="GetValues"
          ObjectType="{x:Type sys:Enum}">
          <ObjectDataProvider.MethodParameters>
             <x:Type TypeName="utils:PinnedPlacement" />
+         </ObjectDataProvider.MethodParameters>
+      </ObjectDataProvider>
+      <ObjectDataProvider
+         x:Key="EnumStartPosition"
+         MethodName="GetValues"
+         ObjectType="{x:Type sys:Enum}">
+         <ObjectDataProvider.MethodParameters>
+            <x:Type TypeName="utils:StartPosition" />
          </ObjectDataProvider.MethodParameters>
       </ObjectDataProvider>
    </Window.Resources>
@@ -42,14 +51,15 @@
             BlurRadius="10"
             Direction="0"
             ShadowDepth="0"
-            Color="#6c429b" />
+            Color="MediumPurple" />
       </Border.Effect>
       <materialDesign:DrawerHost
          IsRightDrawerOpen="{Binding IsOptionsDrawerOpen}"
          OpenMode="Standard"
-         RightDrawerBackground="Transparent">
+         RightDrawerBackground="{StaticResource BackgroundDark1Brush}"
+         RightDrawerCornerRadius="0 10 10 0">
          <materialDesign:DrawerHost.RightDrawerContent>
-            <Grid Margin="2,10,10,10">
+            <Grid Margin="10,10,10,4">
                <Grid.RowDefinitions>
                   <RowDefinition />
                   <RowDefinition Height="Auto" />
@@ -58,28 +68,19 @@
                   <Button
                      Height="24"
                      Margin="0,0,0,5"
-                     Background="#6c429b"
                      BorderThickness="0"
                      Click="btnAddSolution_Click"
                      Content="Add solution"
                      FontSize="13" />
                   <Button
                      Height="24"
-                     Background="#6c429b"
                      BorderThickness="0"
                      Click="btnAddSolutionFolder_Click"
                      Content="Add solutions"
                      FontSize="13" />
                </StackPanel>
                <StackPanel Grid.Row="1" VerticalAlignment="Bottom">
-                  <ComboBox
-                     materialDesign:HintAssist.Hint="Pinned placement"
-                     Background="{StaticResource Background1Brush}"
-                     Foreground="#6c429b"
-                     ItemsSource="{Binding Source={StaticResource EnumDataSource}}"
-                     SelectedItem="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=VsStarterOptions.PinnedPlacement}"
-                     Style="{StaticResource MaterialDesignFilledComboBox}" />
-                  <Grid Margin="0,10">
+                  <Grid Margin="0,10,0,0">
                      <Grid.ColumnDefinitions>
                         <ColumnDefinition />
                         <ColumnDefinition />
@@ -88,21 +89,74 @@
                         Grid.Column="1"
                         Margin="10"
                         VerticalAlignment="Center"
+                        Cursor="Hand"
+                        Foreground="LightGray"
+                        MouseDown="AlwaysOnTop_OnMouseDown"
                         Text="Always on top" />
                      <ToggleButton
+                        x:Name="ToggleTopMost"
                         Grid.Column="0"
                         Width="20"
                         Height="20"
                         HorizontalAlignment="Center"
                         HorizontalContentAlignment="Center"
                         materialDesign:ToggleButtonAssist.OnContent="{materialDesign:PackIcon Kind=Tick}"
+                        Background="MediumPurple"
+                        Checked="ToggleTopMost_OnChecked"
+                        Unchecked="ToggleTopMost_OnUnchecked"
                         Content="{materialDesign:PackIcon Kind=Remove}"
-                        IsChecked="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=VsStarterOptions.TopMost}"
+                        Opacity="0.7"
                         Style="{StaticResource MaterialDesignActionLightToggleButton}" />
                   </Grid>
 
-                  <Label>
-                     <StackPanel Orientation="Horizontal">
+                  <TextBox
+                     x:Name="TextBoxWidth"
+                     Margin="0,10"
+                     Padding="5"
+                     materialDesign:HintAssist.Background="{StaticResource BackgroundDark1Brush}"
+                     materialDesign:HintAssist.FloatingOffset="0 -17"
+                     materialDesign:HintAssist.FloatingScale="0.86"
+                     materialDesign:HintAssist.Foreground="LightGray"
+                     materialDesign:HintAssist.Hint="Window width"
+                     Foreground="MediumPurple"
+                     KeyDown="TextBoxWidth_OnKeyDown"
+                     LostFocus="TextBoxWidth_OnLostFocus"
+                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                     TextChanged="TextBoxWidth_OnTextChanged" />
+                  <ComboBox
+                     x:Name="ComboBoxPinnedPlacement"
+                     Width="130"
+                     Margin="0,10"
+                     Padding="5"
+                     materialDesign:HintAssist.Background="{StaticResource BackgroundDark1Brush}"
+                     materialDesign:HintAssist.FloatingOffset="0 -17"
+                     materialDesign:HintAssist.FloatingScale="0.80"
+                     materialDesign:HintAssist.Foreground="LightGray"
+                     materialDesign:HintAssist.Hint="Pinned placement"
+                     Foreground="MediumPurple"
+                     ItemsSource="{Binding Source={StaticResource EnumPinnedPlacement}}"
+                     SelectionChanged="ComboBoxPinnedPlacement_OnSelectionChanged"
+                     Style="{StaticResource MaterialDesignOutlinedComboBox}" />
+                  <ComboBox
+                     x:Name="ComboBoxStartingPosition"
+                     Width="130"
+                     Margin="0,10"
+                     Padding="5"
+                     materialDesign:HintAssist.Background="{StaticResource BackgroundDark1Brush}"
+                     materialDesign:HintAssist.FloatingOffset="0 -17"
+                     materialDesign:HintAssist.FloatingScale="0.80"
+                     materialDesign:HintAssist.Foreground="LightGray"
+                     materialDesign:HintAssist.Hint="Start Position"
+                     Foreground="MediumPurple"
+                     ItemsSource="{Binding Source={StaticResource EnumStartPosition}}"
+                     SelectionChanged="ComboBoxStartingPosition_OnSelectionChanged"
+                     Style="{StaticResource MaterialDesignOutlinedComboBox}" />
+
+                  <Label
+                     HorizontalAlignment="Right"
+                     FontSize="13"
+                     Opacity="0.5">
+                     <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
                         <TextBlock Text="Verison: " />
                         <TextBlock Text="{Binding Version}" />
                      </StackPanel>
@@ -118,21 +172,40 @@
             </Grid.RowDefinitions>
             <Grid Grid.Row="0" MouseDown="DragWindow_MouseDown">
                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="Auto" />
                   <ColumnDefinition />
-                  <ColumnDefinition Width="0.4*" />
+                  <ColumnDefinition Width="Auto" />
                </Grid.ColumnDefinitions>
                <TextBlock
-                  Grid.Column="0"
-                  Margin="10,0,0,0"
-                  VerticalAlignment="Center"
+                  Grid.Column="1"
+                  Margin="6"
+                  HorizontalAlignment="Left"
+                  VerticalAlignment="Top"
                   FontSize="19"
-                  Foreground="LightGray"
                   MouseDown="UIElement_OnMouseDown"
-                  Text="Visual studio"
+                  Text="Visual studio starter"
                   TextAlignment="Left" />
+               <Button
+                  Grid.Column="0"
+                  Width="30"
+                  Padding="0"
+                  HorizontalAlignment="Left"
+                  VerticalAlignment="Top"
+                  Background="Transparent"
+                  BorderThickness="0"
+                  Click="Close_OnClick"
+                  IsCancel="True"
+                  Opacity="0.6">
+                  <materialDesign:PackIcon
+                     Width="20"
+                     Height="20"
+                     HorizontalAlignment="Left"
+                     HorizontalContentAlignment="Left"
+                     Kind="Close" />
+               </Button>
                <ToggleButton
                   x:Name="toggleButton"
-                  Grid.Column="1"
+                  Grid.Column="2"
                   Margin="5"
                   HorizontalAlignment="Right"
                   materialDesign:ToggleButtonAssist.OnContent="{materialDesign:PackIcon Kind=MenuClose}"
@@ -145,11 +218,11 @@
             <Frame
                x:Name="Frame"
                Grid.Row="1"
-               Margin="0,0,0,5" />
+               Margin="0,0,0,5"
+               NavigationUIVisibility="Hidden" />
 
          </Grid>
       </materialDesign:DrawerHost>
-
    </Border>
 
 </Window>

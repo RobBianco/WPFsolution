@@ -1,5 +1,4 @@
 ﻿using System.Runtime.CompilerServices;
-using VisualStudioStarter.Business;
 using VisualStudioStarter.Utils;
 using VisualStudioStarter.ViewModels;
 
@@ -7,73 +6,78 @@ namespace VisualStudioStarter.ObjectModels;
 
 public class VsStarterOptions : BaseViewModel
 {
-    private PinnedPlacement _pinnedPlacement;
-    private double _width;
-    private double _maxHeight;
-    private bool _topMost;
+    private PinnedPlacement? _pinnedPlacement;
+    private StartPosition? _startPosition;
+    private double? _width;
+    private bool? _topMost;
+    private VisualStudioVersion? _visualStudioSelected;
 
     public PinnedPlacement PinnedPlacement
     {
-        get => _pinnedPlacement;
+        get => _pinnedPlacement ?? Default.PinnedPlacement;
         set
         {
             var old = _pinnedPlacement;
-            if (SetField(ref _pinnedPlacement, value))
-            {
-                OnOptionsChanged?.Invoke(old, value);
-            }
+            SetField(ref _pinnedPlacement, value);
+            OnOptionsChanged?.Invoke(old, value);
         }
+    }
 
+    public StartPosition StartPosition
+    {
+        get => _startPosition ?? StartPosition.Center;
+        set
+        {
+            var old = _startPosition;
+            SetField(ref _startPosition, value);
+            OnOptionsChanged?.Invoke(old, value);
+        }
+    }
+
+    public VisualStudioVersion VisualStudioSelected
+    {
+        get => _visualStudioSelected ?? Default.VisualStudioSelected;
+        set
+        {
+            var old = _visualStudioSelected;
+            SetField(ref _visualStudioSelected, value);
+            OnOptionsChanged?.Invoke(old, value);
+        }
     }
 
     public double Width
     {
-        get => _width;
+        get => _width ?? Default.Width;
         set
         {
             var old = _width;
-            if (SetField(ref _width, value))
-            {
-                OnOptionsChanged?.Invoke(old, value);
-            }
+            SetField(ref _width, value);
+            OnOptionsChanged?.Invoke(old, value);
         }
 
-    }
-
-    public double MaxHeight
-    {
-        get => _maxHeight;
-        set
-        {
-            var old = _maxHeight;
-            if (SetField(ref _maxHeight, value))
-            {
-                OnOptionsChanged?.Invoke(old, value);
-            }
-        }
     }
 
     public bool TopMost
     {
-        get => _topMost;
+        get => _topMost ?? Default.TopMost;
         set
         {
             var old = _topMost;
-            if (SetField(ref _topMost, value))
-            {
-                OnOptionsChanged?.Invoke(old, value);
-            }
+            SetField(ref _topMost, value);
+            OnOptionsChanged?.Invoke(old, value);
         }
     }
 
-    public event VsStarterOptionsDelegate<object>? OnOptionsChanged;
+    public static event VsStarterOptionsDelegate<object>? OnOptionsChanged;
 
     public static VsStarterOptions Default => new()
     {
-        MaxHeight = 0,
-        Width = 0,
-        PinnedPlacement = PinnedPlacement.Top
+        Width = 500,
+        TopMost = true,
+        PinnedPlacement = PinnedPlacement.Top,
+        VisualStudioSelected = VisualStudioVersion.None,
+        StartPosition = StartPosition.Center,
     };
 }
 
-public delegate void VsStarterOptionsDelegate<in T>(T oldValue, T newValue, [CallerMemberName] string name = "");
+public delegate void VsStarterOptionsDelegate<in T>(T? oldValue, T? newValue, [CallerMemberName] string name = "");

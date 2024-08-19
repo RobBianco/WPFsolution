@@ -2,6 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
+using System.Windows.Media.Effects;
 
 namespace WPFUIControls
 {
@@ -31,6 +32,9 @@ namespace WPFUIControls
         public static readonly DependencyProperty PictureMarginProperty = DependencyProperty.Register(
             nameof(PictureMargin), typeof(Thickness), typeof(RBToggleButton), new PropertyMetadata(default(Thickness)));
 
+        public static readonly DependencyProperty PictureEffectProperty = DependencyProperty.Register(
+            nameof(PictureEffect), typeof(Effect), typeof(RBToggleButton), new PropertyMetadata(default(Effect)));
+
         static RBToggleButton()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(RBToggleButton), new FrameworkPropertyMetadata(typeof(RBToggleButton)));
@@ -52,6 +56,12 @@ namespace WPFUIControls
         {
             get => (CornerRadius)GetValue(CornerRadiusProperty);
             set => SetValue(CornerRadiusProperty, value);
+        }
+
+        public Effect PictureEffect
+        {
+            get => (Effect)GetValue(PictureEffectProperty);
+            set => SetValue(PictureEffectProperty, value);
         }
 
         public Brush MouseHoverBackColor

@@ -23,14 +23,14 @@
             </ControlTemplate>
          </Setter.Value>
       </Setter>
-      <Setter Property="Background" Value="{StaticResource Background2Brush}" />
+      <Setter Property="Background" Value="{StaticResource BackgroundLight1Brush}" />
       <Setter Property="BorderThickness" Value="0" />
       <Setter Property="Foreground" Value="#bdbcbe" />
       <Setter Property="HorizontalContentAlignment" Value="Stretch" />
       <Setter Property="VerticalContentAlignment" Value="Stretch" />
       <Style.Triggers>
          <Trigger Property="IsMouseOver" Value="True">
-            <Setter Property="Background" Value="{StaticResource Background2Brush}" />
+            <Setter Property="Background" Value="{StaticResource BackgroundLight1Brush}" />
          </Trigger>
       </Style.Triggers>
    </Style>
@@ -52,12 +52,11 @@
                   </Border>
                </Grid>
                <ControlTemplate.Triggers>
-                  <Trigger Property="IsMouseOver" Value="True">
-                     <Setter TargetName="Bd" Property="Background" Value="{StaticResource Background3Brush}" />
-                  </Trigger>
-
                   <Trigger Property="IsSelected" Value="True">
-                     <Setter TargetName="Bd" Property="Background" Value="{StaticResource Background3Brush}" />
+                     <Setter TargetName="Bd" Property="Background" Value="{StaticResource BackgroundBrush}" />
+                  </Trigger>
+                  <Trigger Property="IsMouseOver" Value="True">
+                     <Setter TargetName="Bd" Property="Background" Value="{StaticResource BackgroundDark1Brush}" />
                   </Trigger>
                </ControlTemplate.Triggers>
             </ControlTemplate>
@@ -75,7 +74,7 @@
                   HorizontalContentAlignment="Left"
                   Content="{TemplateBinding Header}"
                   HorizontalPictureAlignment="Left"
-                  MouseHoverBackColor="{StaticResource Background2Brush}"
+                  MouseHoverBackColor="{StaticResource BackgroundLight4Brush}"
                   Picture="{TemplateBinding Icon}"
                   PictureMargin="0,0,6,0"
                   PictureOpacity="0.8"

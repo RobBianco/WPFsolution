@@ -9,11 +9,9 @@ namespace VisualStudioStarter;
 /// </summary>
 public partial class App
 {
-    public VsStarterOptions? Options { get; set; }
-
     protected override void OnStartup(StartupEventArgs e)
     {
-        Options = OptionsManager.GetOptions();
+        OptionsManager.LoadOptions();
 
         base.OnStartup(e);
     }

@@ -1,9 +1,4 @@
-﻿using System.ComponentModel;
-using System.Net.Mime;
-using System.Reflection;
-using VisualStudioStarter.Business;
-using VisualStudioStarter.ObjectModels;
-using VisualStudioStarter.Utils;
+﻿using System.Reflection;
 
 namespace VisualStudioStarter.ViewModels;
 

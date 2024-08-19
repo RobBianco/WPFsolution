@@ -1,79 +1,121 @@
-﻿using System.Windows;
+﻿using System.Timers;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
-using System.Windows.Navigation;
 using VisualStudioStarter.ViewModels;
 using VisualStudioStarter.Business;
 using VisualStudioStarter.ObjectModels;
+using MS.WindowsAPICodePack.Internal;
+using VisualStudioStarter.Utils;
+using Timer = System.Timers.Timer;
 
 namespace VisualStudioStarter.Views;
 
 public partial class MainWindow
 {
     private SolutionsPage? _solutionsPage;
+    private Storyboard _TopStoryBoard;
+    private Storyboard _OpacityStoryBoard;
+    private Storyboard _HeightStoryBoard;
+    private Storyboard _WidthStoryBoard;
+    private Storyboard _LeftStoryBoard;
+    private double _d;
+    private bool _initialize;
     public MainViewModel VM => (MainViewModel)DataContext;
-    public SolutionsPage SolutionsPage => _solutionsPage ??= new SolutionsPage();
-    public VsStarterOptions VsStarterOptions { get; } = OptionsManager.GetOptions();
+    public SolutionsPage SolutionsPage => _solutionsPage ??= new();
+    public Timer Timer { get; set; } = new();
 
     public MainWindow()
     {
+        _initialize = true;
+        VsStarterOptions.OnOptionsChanged += VsStarterOptionsOnOnOptionsChanged;
         InitializeComponent();
-
+        InitializeControls();
         Loaded += OnLoaded;
         Closing += OnClosing;
-        VsStarterOptions.OnOptionsChanged += VsStarterOptionsOnOnOptionsChanged;
-
-        Opacity = 0;
-        Frame.NavigationUIVisibility = NavigationUIVisibility.Hidden;
-        Top = SystemParameters.PrimaryScreenHeight;
-        Left = (SystemParameters.PrimaryScreenWidth - Width) / 2;
-
-#if DEBUG
-        Left = (SystemParameters.PrimaryScreenWidth - Width);
-        Topmost = true;
-#endif
         Frame.Content = SolutionsPage;
-        if (SolutionsPage.VM != null)
-            SolutionsPage.VM.OnSolutionPinnedUnPinned += OnSolutionPinnedUnPinned;
+
+        Left = GetLeft();
+        Opacity = 0;
+        Top = SystemParameters.PrimaryScreenHeight;
+    }
+
+    private void InitializeControls()
+    {
+        Timer.Elapsed += TimerOnElapsed;
+        Timer.Interval = 300;
+
+        TextBoxWidth.Text = OptionsManager.Instance.Options.Width.ToString();
+        ComboBoxPinnedPlacement.SelectedItem = OptionsManager.Instance.Options.PinnedPlacement;
+        ComboBoxStartingPosition.SelectedItem = OptionsManager.Instance.Options.StartPosition;
+        ToggleTopMost.IsChecked = OptionsManager.Instance.Options.TopMost;
+    }
+
+    private void TimerOnElapsed(object? sender, ElapsedEventArgs e)
+    {
+        Dispatcher.Invoke(() =>
+            AnimateWidth(_d, new Duration(TimeSpan.FromMilliseconds(400)),
+                onCompleted: (_, _) => AnimateLeft(new Duration(TimeSpan.FromMilliseconds(200)))));
+
     }
 
     #region ANIMATION
 
+    public double GetHeight()
+    {
+        const double mainborderMargins = 20;
+        const double listboxPadding = 10 * 2;
+        const double btnVSPagging = 10;
+        const double margins = mainborderMargins + listboxPadding + btnVSPagging;
+        const double titleBar = 45;
+        const double scritta = 16;
+        const double item = 31;
+        const double vsbuttons = 60;
+        var h1 = SolutionsPage.VM.PinnedSolutions.Count * item;
+        var h2 = SolutionsPage.VM.Solutions.Count * item;
+        var h11 = h1 > 0 ? scritta + h1 : 0;
+        var h22 = h2 > 0 ? scritta + h2 : 0;
+        var h = margins + titleBar + h11 + h22 + vsbuttons;
+        return Math.Min(MaxHeight, Math.Max(300,h));
+    }
+
+    public double GetTop() => SystemParameters.PrimaryScreenHeight - GetHeight() - 45;
+    public double GetLeft() =>
+        OptionsManager.Instance.Options.StartPosition switch
+        {
+            StartPosition.Center => (SystemParameters.PrimaryScreenWidth - ActualWidth) / 2,
+            StartPosition.Left => 10,
+            StartPosition.Right => SystemParameters.PrimaryScreenWidth - ActualWidth - 10,
+            _ => (SystemParameters.PrimaryScreenWidth - ActualWidth) / 2
+        };
+
     public void AnimateTop(Duration? duration = null, EventHandler? onCompleted = null)
     {
-        Animate(Top, SystemParameters.PrimaryScreenHeight - GetHeight() - 45, new PropertyPath(TopProperty), duration, onCompleted);
+        Animate(ref _TopStoryBoard, Top, GetTop(), new(TopProperty), duration, onCompleted);
     }
 
     public void AnimateOpacity(Duration? duration = null, EventHandler? onCompleted = null)
     {
-        Animate(0, 1, new PropertyPath(OpacityProperty), duration, onCompleted);
-    }
-
-    public int GetHeight()
-    {
-        const int mainborderMargins = 20;
-        const int listboxPadding = 10 * 2;
-        const int btnVSPagging = 10;
-        const int margins = mainborderMargins + listboxPadding + btnVSPagging;
-        const int titleBar = 45;
-        const int scritta = 16;
-        const int item = 31;
-        const int vsbuttons = 60;
-        var h1 = SolutionsPage.VM?.PinnedSolutions.Count * item ?? 0;
-        var h2 = SolutionsPage.VM?.Solutions.Count * item ?? 0;
-        var h11 = h1 > 0 ? scritta + h1 : 0;
-        var h22 = h2 > 0 ? scritta + h2 : 0;
-        var h = margins + titleBar + h11 + h22 + vsbuttons;
-        return Math.Max(200, h);
+        Animate(ref _OpacityStoryBoard, 0, 1, new(OpacityProperty), duration, onCompleted);
     }
 
     public void AnimateHeight(Duration? duration = null, EventHandler? onCompleted = null)
     {
-        Animate(Height, GetHeight(), new PropertyPath(HeightProperty), duration, onCompleted);
+        Animate(ref _HeightStoryBoard, Height, GetHeight(), new(HeightProperty), duration, onCompleted);
+    }
+    public void AnimateWidth(double width, Duration? duration = null, EventHandler? onCompleted = null)
+    {
+        Animate(ref _WidthStoryBoard,ActualWidth, width, new(WidthProperty), duration, onCompleted);
     }
 
-    private void Animate(double from, double to, PropertyPath propPath, Duration? duration = null, EventHandler? onCompleted = null)
+    public void AnimateLeft(Duration? duration = null, EventHandler? onCompleted = null)
+    {
+        Animate(ref _LeftStoryBoard, Left, GetLeft(), new(LeftProperty), duration, onCompleted);
+    }
+
+
+    private void Animate(ref Storyboard storyboard, double from, double to, PropertyPath propPath, Duration? duration = null, EventHandler? onCompleted = null)
     {
         if (from == to) return;
 
@@ -89,7 +131,7 @@ public partial class MainWindow
         };
 
         // Crea un Storyboard per contenere l'animazione
-        var storyboard = new Storyboard
+        storyboard = new()
         {
             Children = { animation }
         };
@@ -104,11 +146,38 @@ public partial class MainWindow
 
     #endregion ANIMATION
 
-    private void VsStarterOptionsOnOnOptionsChanged(object oldvalue, object newvalue, string name)
+    private void VsStarterOptionsOnOnOptionsChanged(object? oldvalue, object? newvalue, string name)
     {
-        OptionsManager.SaveOptions(VsStarterOptions);
+        if (name == nameof(VsStarterOptions.TopMost) && newvalue is bool b)
+        {
+            Topmost = b;
+        }
 
-        SolutionsPage.VM?.VsStarterOptionsOnOnOptionsChanged(oldvalue, newvalue, name);
+        if (name == nameof(VsStarterOptions.Width) && newvalue is double d)
+        {
+            _d = d;
+            if (!OptionsManager.CanSave)
+            {
+                Width = d;
+                Left = GetLeft();
+                return;
+            }
+
+            Timer.AutoReset = false;
+            Timer.Stop();
+            Timer.Start();
+        }
+
+        if (name == nameof(VsStarterOptions.StartPosition))
+        {
+            if (!OptionsManager.CanSave)
+            {
+                Left = GetLeft();
+                return;
+            }
+
+            AnimateLeft();
+        }
     }
 
     private void OnSolutionPinnedUnPinned(object? sender, EventArgs e)
@@ -119,7 +188,7 @@ public partial class MainWindow
 
     private void OnClosing(object? sender, System.ComponentModel.CancelEventArgs e)
     {
-        SolutionsPage.VM?.SaveSolutions();
+        SolutionsPage.VM.SaveSolutions();
     }
 
     private void OnLoaded(object sender, RoutedEventArgs e)
@@ -127,6 +196,9 @@ public partial class MainWindow
         AnimateOpacity();
         AnimateTop();
         AnimateHeight();
+
+        SolutionsPage.VM.OnSolutionPinnedUnPinned += OnSolutionPinnedUnPinned;
+        _initialize = false;
     }
 
     private void DragWindow_MouseDown(object sender, MouseButtonEventArgs e)
@@ -146,9 +218,6 @@ public partial class MainWindow
 
     private void btnAddSolutionFolder_Click(object sender, RoutedEventArgs e)
     {
-        if (SolutionsPage.VM == null)
-            return;
-
         SolutionsPage.VM.AddSolutions(SolutionManager.FindSolution(true));
         AnimateHeight();
         AnimateTop();
@@ -157,9 +226,6 @@ public partial class MainWindow
 
     private void btnAddSolution_Click(object sender, RoutedEventArgs e)
     {
-        if (SolutionsPage.VM == null)
-            return;
-
         SolutionsPage.VM.AddSolutions(SolutionManager.FindSolution(false));
         AnimateHeight();
         AnimateTop();
@@ -172,6 +238,90 @@ public partial class MainWindow
         {
             AnimateHeight();
             AnimateTop();
+        }
+    }
+
+    private void AlwaysOnTop_OnMouseDown(object sender, MouseButtonEventArgs e)
+    {
+        ToggleTopMost.IsChecked = !ToggleTopMost.IsChecked;
+    }
+
+    private void Close_OnClick(object sender, RoutedEventArgs e)
+    {
+        Close();
+    }
+
+    private void ToggleTopMost_OnChecked(object sender, RoutedEventArgs e)
+    {
+        OptionsManager.Instance.Options.TopMost = ToggleTopMost.IsChecked ?? false;
+    }
+
+    private void ToggleTopMost_OnUnchecked(object sender, RoutedEventArgs e)
+    {
+        OptionsManager.Instance.Options.TopMost = ToggleTopMost.IsChecked ?? false;
+    }
+
+    private void TextBoxWidth_OnTextChanged(object sender, TextChangedEventArgs e)
+    {
+        if (double.TryParse(TextBoxWidth.Text, out var result))
+        {
+            if (result > MaxWidth)
+            {
+                result = MaxWidth;
+            }
+            else if (result < MinWidth)
+            {
+                result = MinWidth;
+            }
+
+            OptionsManager.Instance.Options.Width = result;
+        }
+    }
+
+    private void TextBoxWidth_OnKeyDown(object sender, KeyEventArgs e)
+    {
+        e.Handled = true;
+
+        if (e.Key is Key.Enter or Key.Tab)
+        {
+            ComboBoxPinnedPlacement.Focus();
+            return;
+        }
+
+        if (e.Key is >= Key.D0 and <= Key.D9 or >= Key.NumPad0 and Key.NumPad9)
+        {
+            e.Handled = false;
+        }
+    }
+
+    private void TextBoxWidth_OnLostFocus(object sender, RoutedEventArgs e)
+    {
+        if (!double.TryParse(TextBoxWidth.Text, out var result)) return;
+
+        TextBoxWidth.TextChanged -= TextBoxWidth_OnTextChanged;
+        if (result > MaxWidth)
+        {
+            TextBoxWidth.Text = MaxWidth.ToString();
+        }
+        else if (result < MinWidth)
+        {
+            TextBoxWidth.Text = MinWidth.ToString();
+        }
+        TextBoxWidth.TextChanged += TextBoxWidth_OnTextChanged;
+    }
+
+    private void ComboBoxPinnedPlacement_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (ComboBoxPinnedPlacement.SelectedItem is PinnedPlacement pp)
+        {
+            OptionsManager.Instance.Options.PinnedPlacement = pp;
+        }
+    }
+    private void ComboBoxStartingPosition_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (ComboBoxStartingPosition.SelectedItem is StartPosition sp)
+        {
+            OptionsManager.Instance.Options.StartPosition = sp;
         }
     }
 }

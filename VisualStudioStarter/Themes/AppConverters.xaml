@@ -1,6 +1,8 @@
 ﻿<ResourceDictionary
    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-   xmlns:converters="clr-namespace:WPFUIControls.Converters;assembly=WPFUIControls">
+   xmlns:converters="clr-namespace:WPFUIControls.Converters;assembly=WPFUIControls"
+   xmlns:utils="clr-namespace:VisualStudioStarter.Utils">
    <converters:ObjectToVisibilityConverter x:Key="ObjectToVisibilityConverter" />
+   <converters:StringToDoubleConverter x:Key="StringToDoubleConverter" />
 </ResourceDictionary>

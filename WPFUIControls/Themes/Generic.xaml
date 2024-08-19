@@ -53,6 +53,7 @@
                         Margin="{TemplateBinding PictureMargin}"
                         HorizontalAlignment="{TemplateBinding HorizontalPictureAlignment}"
                         VerticalAlignment="{TemplateBinding VerticalPictureAlignment}"
+                        Effect="{TemplateBinding PictureEffect}"
                         Source="{TemplateBinding Picture}"
                         Stretch="{TemplateBinding PictureStretch}" />
                      <ContentPresenter
