@@ -3,10 +3,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
+using MaterialDesignThemes.Wpf;
 using VisualStudioStarter.ViewModels;
 using VisualStudioStarter.Business;
 using VisualStudioStarter.ObjectModels;
-using MS.WindowsAPICodePack.Internal;
 using VisualStudioStarter.Utils;
 using Timer = System.Timers.Timer;
 
@@ -22,6 +22,7 @@ public partial class MainWindow
     private Storyboard _LeftStoryBoard;
     private double _d;
     private bool _initialize;
+    private readonly GlobalKeyboardHook _globalKeys = new();
     public MainViewModel VM => (MainViewModel)DataContext;
     public SolutionsPage SolutionsPage => _solutionsPage ??= new();
     public Timer Timer { get; set; } = new();
@@ -30,6 +31,8 @@ public partial class MainWindow
     {
         _initialize = true;
         VsStarterOptions.OnOptionsChanged += VsStarterOptionsOnOnOptionsChanged;
+        _globalKeys.KeyPressed += GlobalKeysOnKeyPressed;
+
         InitializeComponent();
         InitializeControls();
         Loaded += OnLoaded;
@@ -41,12 +44,20 @@ public partial class MainWindow
         Top = SystemParameters.PrimaryScreenHeight;
     }
 
+    private void GlobalKeysOnKeyPressed(object? sender, KeyPressedEventArgs e)
+    {
+        if (e.VirtualKeyCode == 27)  // 27 è il codice virtuale per Esc
+        {
+            Application.Current.Shutdown();
+        }
+    }
+
     private void InitializeControls()
     {
         Timer.Elapsed += TimerOnElapsed;
         Timer.Interval = 300;
 
-        TextBoxWidth.Text = OptionsManager.Instance.Options.Width.ToString();
+        TextBoxWidth.Text = OptionsManager.Instance.Options.Width.ToString("");
         ComboBoxPinnedPlacement.SelectedItem = OptionsManager.Instance.Options.PinnedPlacement;
         ComboBoxStartingPosition.SelectedItem = OptionsManager.Instance.Options.StartPosition;
         ToggleTopMost.IsChecked = OptionsManager.Instance.Options.TopMost;
@@ -182,12 +193,13 @@ public partial class MainWindow
 
     private void OnSolutionPinnedUnPinned(object? sender, EventArgs e)
     {
-        AnimateTop(new Duration(TimeSpan.FromMilliseconds(100)));
-        AnimateHeight(new Duration(TimeSpan.FromMilliseconds(0)));
+        AnimateTop(new Duration(TimeSpan.FromMilliseconds(300)));
+        AnimateHeight(new Duration(TimeSpan.FromMilliseconds(300)));
     }
 
     private void OnClosing(object? sender, System.ComponentModel.CancelEventArgs e)
     {
+        _globalKeys.Dispose();
         SolutionsPage.VM.SaveSolutions();
     }
 
@@ -216,17 +228,23 @@ public partial class MainWindow
         }
     }
 
-    private void btnAddSolutionFolder_Click(object sender, RoutedEventArgs e)
+    private async void btnAddSolutionFolder_Click(object sender, RoutedEventArgs e)
     {
-        SolutionsPage.VM.AddSolutions(SolutionManager.FindSolution(true));
+        await SolutionsPage.VM.AddSolutions(await SolutionManager.FindSolution(true));
+        DialogHost.GetDialogSession("MainDialogHost")?.Close();
         AnimateHeight();
         AnimateTop();
         VM.IsOptionsDrawerOpen = false;
     }
 
-    private void btnAddSolution_Click(object sender, RoutedEventArgs e)
+    private void ClosingEventHandler(object sender, DialogClosingEventArgs eventargs)
     {
-        SolutionsPage.VM.AddSolutions(SolutionManager.FindSolution(false));
+    }
+
+    private async void btnAddSolution_Click(object sender, RoutedEventArgs e)
+    {
+        await SolutionsPage.VM.AddSolutions(await SolutionManager.FindSolution(false));
+        DialogHost.GetDialogSession("MainDialogHost")?.Close();
         AnimateHeight();
         AnimateTop();
         VM.IsOptionsDrawerOpen = false;
@@ -301,11 +319,11 @@ public partial class MainWindow
         TextBoxWidth.TextChanged -= TextBoxWidth_OnTextChanged;
         if (result > MaxWidth)
         {
-            TextBoxWidth.Text = MaxWidth.ToString();
+            TextBoxWidth.Text = MaxWidth.ToString("");
         }
         else if (result < MinWidth)
         {
-            TextBoxWidth.Text = MinWidth.ToString();
+            TextBoxWidth.Text = MinWidth.ToString("");
         }
         TextBoxWidth.TextChanged += TextBoxWidth_OnTextChanged;
     }

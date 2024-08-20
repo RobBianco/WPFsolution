@@ -1,0 +1,61 @@
+﻿<UserControl
+   x:Class="VisualStudioStarter.Views.DialogPage"
+   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+   xmlns:local="clr-namespace:VisualStudioStarter.Views"
+   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+   d:DesignHeight="200"
+   d:DesignWidth="300"
+   Background="{StaticResource BackgroundBrush}"
+   mc:Ignorable="d">
+   <Grid>
+      <Grid.RowDefinitions>
+         <RowDefinition Height="*" />
+         <RowDefinition Height="*" />
+         <RowDefinition Height="Auto" />
+         <RowDefinition Height="Auto" />
+      </Grid.RowDefinitions>
+
+      <TextBlock
+         Grid.Row="0"
+         Margin="10"
+         VerticalAlignment="Center"
+         FontSize="16"
+         Foreground="MediumPurple"
+         Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Path=SolutionName}"
+         TextAlignment="Center" />
+      <TextBlock
+         Grid.Row="1"
+         Margin="10"
+         VerticalAlignment="Center"
+         FontSize="16"
+         Text="The solution is no longer available."
+         TextAlignment="Center" />
+
+      <TextBlock
+         Grid.Row="2"
+         Margin="0"
+         VerticalAlignment="Center"
+         FontSize="14"
+         Text="Do you want to delete it?"
+         TextAlignment="Center" />
+
+      <StackPanel
+         Grid.Row="3"
+         Margin="10"
+         HorizontalAlignment="Center"
+         Orientation="Horizontal">
+         <Button
+            Width="75"
+            Margin="5"
+            Click="BtnYes_OnClick"
+            Content="Yes" />
+         <Button
+            Width="75"
+            Margin="5"
+            Click="BtnNo_OnClick"
+            Content="No" />
+      </StackPanel>
+   </Grid>
+</UserControl>

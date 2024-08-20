@@ -2,9 +2,13 @@
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Windows;
+using System.Windows.Forms;
+using MaterialDesignThemes.Wpf;
 using VisualStudioStarter.Business;
 using VisualStudioStarter.ObjectModels;
 using VisualStudioStarter.Utils;
+using VisualStudioStarter.Views;
+using Application = System.Windows.Application;
 
 namespace VisualStudioStarter.ViewModels;
 
@@ -240,23 +244,29 @@ public class SolutionPageViewModel : BaseViewModel
 
     }
 
-    public void AddSolutions(List<Solution> solutions)
+    public Task AddSolutions(List<Solution> solutions)
     {
-        foreach (var solution in solutions)
+        var task = new Task(() =>
         {
-            if (solution.IsPinned)
+            foreach (var solution in solutions)
             {
-                PinnedSolutions.Add(solution);
+                if (solution.IsPinned)
+                {
+                    Application.Current.Dispatcher.Invoke(() => PinnedSolutions.Add(solution));
+                }
+                else
+                {
+                    if (Solutions.All(x => x.Path != solution.Path))
+                        Application.Current.Dispatcher.Invoke(() => Solutions.Add(solution));
+                }
             }
-            else
-            {
-                Solutions.Add(solution);
-            }
-        }
 
-        OnSolutionPinnedUnPinned?.Invoke(this, EventArgs.Empty);
+            Application.Current.Dispatcher.Invoke(() => OnSolutionPinnedUnPinned?.Invoke(this, EventArgs.Empty));
 
-        SaveSolutions();
+            SaveSolutions();
+        });
+        task.Start();
+        return task;
     }
 
     private void UpdateColumnWidths()
@@ -348,42 +358,54 @@ public class SolutionPageViewModel : BaseViewModel
         return true;
     }
 
-    public bool OpenSolution(Solution? sln = null)
+    public async Task<bool> OpenSolution(Solution? sln = null, VisualStudioVersion? vsVersion = null)
     {
         sln ??= SelectedSolution;
 
         if (sln == null)
             return false;
 
-        var p = new Process();
         var st = new ProcessStartInfo
         {
             Arguments = $"\"{sln.Path}\"",
             Verb = IsAdmin ? "runas" : ""
         };
 
-        //if (IsVisualStudio2022Pre)
-        //{
-        //    st.FileName = PathEXE_VS2022Pre;
-        //}
-        //else if (IsVisualStudio2022)
-        //{
-        //    st.FileName = PathEXE_VS2022;
-        //}
-        //else if (IsVisualStudio2019)
-        //{
-        //    st.FileName = PathEXE_VS2019;
-        //}
-
-        if (File.Exists(st.FileName))
+        switch (vsVersion ?? OptionsManager.Instance.Options.VisualStudioSelected)
         {
-            p.StartInfo = st;
-            p.Start();
-
-            return true;
+            case VisualStudioVersion.None:
+                return false;
+            case VisualStudioVersion.VS2019:
+                st.FileName = PathEXE_VS2019;
+                break;
+            case VisualStudioVersion.VS2022:
+                st.FileName = PathEXE_VS2022;
+                break;
+            case VisualStudioVersion.VS2022Pre:
+                st.FileName = PathEXE_VS2022Pre;
+                break;
+            default:
+                return false;
         }
 
-        return false;
+        if (!File.Exists(st.FileName))
+        {
+            var res = await DialogHost.Show(new DialogPage(sln.Fileinfo?.Name ?? ""), "SolutionDialogBox");
+            if (res is DialogResult.Yes)
+            {
+                Remove_Solution(sln);
+            }
+
+            return false;
+        }
+
+        var p = new Process
+        {
+            StartInfo = st
+        };
+        p.Start();
+
+        return true;
     }
 
     public void Remove_Solution(Solution? sln = null)

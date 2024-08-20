@@ -1,6 +1,8 @@
-﻿using Microsoft.WindowsAPICodePack.Dialogs;
+﻿using MaterialDesignThemes.Wpf;
+using Microsoft.WindowsAPICodePack.Dialogs;
 using System.Text.Json;
 using VisualStudioStarter.ObjectModels;
+using VisualStudioStarter.Views;
 using Path = System.IO.Path;
 
 namespace VisualStudioStarter.Business;
@@ -18,13 +20,13 @@ public static class SolutionManager
                   []
                 : [];
         }
-        catch (Exception )
+        catch (Exception)
         {
             return [];
         }
     }
 
-    public static List<Solution> FindSolution(bool IsFolderPicker)
+    public static Task<List<Solution>> FindSolution(bool IsFolderPicker)
     {
         var solutions = new List<Solution>();
 
@@ -37,26 +39,35 @@ public static class SolutionManager
         };
 
         var res = openFileDialog.ShowDialog();
-        if (res is not CommonFileDialogResult.Ok)
+
+        if (res is CommonFileDialogResult.Ok)
+            DialogHost.Show(new LoadingUC(), "MainDialogHost");
+
+        var task = new Task<List<Solution>>(() =>
         {
+            if (res is not CommonFileDialogResult.Ok)
+            {
+                return solutions;
+            }
+
+            foreach (var path in openFileDialog.FileNames)
+            {
+                if (File.Exists(path))
+                {
+                    solutions.Add(new() { Path = path });
+                }
+
+                if (Directory.Exists(path))
+                {
+                    solutions.AddRange(Directory.GetFiles(path, "*.sln", SearchOption.AllDirectories)
+                        .Select(file => new Solution() { Path = file }));
+                }
+            }
+
             return solutions;
-        }
-
-        foreach (var path in openFileDialog.FileNames)
-        {
-            if (File.Exists(path))
-            {
-                solutions.Add(new Solution() { Path = path });
-            }
-
-            if (Directory.Exists(path))
-            {
-                solutions.AddRange(Directory.GetFiles(path, "*.sln", SearchOption.AllDirectories)
-                    .Select(file => new Solution() { Path = file }));
-            }
-        }
-
-        return solutions;
+        });
+        task.Start();
+        return task;
     }
 
     public static void SaveSolutions(IEnumerable<Solution>? pinnedSolutions, IEnumerable<Solution>? unpinnedSolutions)

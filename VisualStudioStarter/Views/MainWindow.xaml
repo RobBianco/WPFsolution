@@ -53,176 +53,177 @@
             ShadowDepth="0"
             Color="MediumPurple" />
       </Border.Effect>
-      <materialDesign:DrawerHost
-         IsRightDrawerOpen="{Binding IsOptionsDrawerOpen}"
-         OpenMode="Standard"
-         RightDrawerBackground="{StaticResource BackgroundDark1Brush}"
-         RightDrawerCornerRadius="0 10 10 0">
-         <materialDesign:DrawerHost.RightDrawerContent>
-            <Grid Margin="10,10,10,4">
+      <materialDesign:DialogHost x:Name="MainDialogHost" Identifier="MainDialogHost">
+         <materialDesign:DrawerHost
+            IsRightDrawerOpen="{Binding IsOptionsDrawerOpen}"
+            OpenMode="Standard"
+            RightDrawerBackground="{StaticResource BackgroundDark1Brush}"
+            RightDrawerCornerRadius="0 10 10 0">
+            <materialDesign:DrawerHost.RightDrawerContent>
+               <Grid Margin="10,10,10,4">
+                  <Grid.RowDefinitions>
+                     <RowDefinition />
+                     <RowDefinition Height="Auto" />
+                  </Grid.RowDefinitions>
+                  <StackPanel>
+                     <Button
+                        Height="24"
+                        Margin="0,0,0,5"
+                        BorderThickness="0"
+                        Click="btnAddSolution_Click"
+                        Content="Add solution"
+                        FontSize="13" />
+                     <Button
+                        Height="24"
+                        BorderThickness="0"
+                        Click="btnAddSolutionFolder_Click"
+                        Content="Add solutions"
+                        FontSize="13" />
+                  </StackPanel>
+                  <StackPanel Grid.Row="1" VerticalAlignment="Bottom">
+                     <Grid Margin="0,10,0,0">
+                        <Grid.ColumnDefinitions>
+                           <ColumnDefinition />
+                           <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock
+                           Grid.Column="1"
+                           Margin="10"
+                           VerticalAlignment="Center"
+                           Cursor="Hand"
+                           Foreground="LightGray"
+                           MouseDown="AlwaysOnTop_OnMouseDown"
+                           Text="Always on top" />
+                        <ToggleButton
+                           x:Name="ToggleTopMost"
+                           Grid.Column="0"
+                           Width="20"
+                           Height="20"
+                           HorizontalAlignment="Center"
+                           HorizontalContentAlignment="Center"
+                           materialDesign:ToggleButtonAssist.OnContent="{materialDesign:PackIcon Kind=Tick}"
+                           Background="MediumPurple"
+                           Checked="ToggleTopMost_OnChecked"
+                           Content="{materialDesign:PackIcon Kind=Remove}"
+                           Opacity="0.7"
+                           Style="{StaticResource MaterialDesignActionLightToggleButton}"
+                           Unchecked="ToggleTopMost_OnUnchecked" />
+                     </Grid>
+
+                     <TextBox
+                        x:Name="TextBoxWidth"
+                        Margin="0,10"
+                        Padding="5"
+                        materialDesign:HintAssist.Background="{StaticResource BackgroundDark1Brush}"
+                        materialDesign:HintAssist.FloatingOffset="0 -17"
+                        materialDesign:HintAssist.FloatingScale="0.86"
+                        materialDesign:HintAssist.Foreground="LightGray"
+                        materialDesign:HintAssist.Hint="Window width"
+                        Foreground="MediumPurple"
+                        KeyDown="TextBoxWidth_OnKeyDown"
+                        LostFocus="TextBoxWidth_OnLostFocus"
+                        Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                        TextChanged="TextBoxWidth_OnTextChanged" />
+                     <ComboBox
+                        x:Name="ComboBoxPinnedPlacement"
+                        Width="130"
+                        Margin="0,10"
+                        Padding="5"
+                        materialDesign:HintAssist.Background="{StaticResource BackgroundDark1Brush}"
+                        materialDesign:HintAssist.FloatingOffset="0 -17"
+                        materialDesign:HintAssist.FloatingScale="0.80"
+                        materialDesign:HintAssist.Foreground="LightGray"
+                        materialDesign:HintAssist.Hint="Pinned placement"
+                        Foreground="MediumPurple"
+                        ItemsSource="{Binding Source={StaticResource EnumPinnedPlacement}}"
+                        SelectionChanged="ComboBoxPinnedPlacement_OnSelectionChanged"
+                        Style="{StaticResource MaterialDesignOutlinedComboBox}" />
+                     <ComboBox
+                        x:Name="ComboBoxStartingPosition"
+                        Width="130"
+                        Margin="0,10"
+                        Padding="5"
+                        materialDesign:HintAssist.Background="{StaticResource BackgroundDark1Brush}"
+                        materialDesign:HintAssist.FloatingOffset="0 -17"
+                        materialDesign:HintAssist.FloatingScale="0.80"
+                        materialDesign:HintAssist.Foreground="LightGray"
+                        materialDesign:HintAssist.Hint="Start Position"
+                        Foreground="MediumPurple"
+                        ItemsSource="{Binding Source={StaticResource EnumStartPosition}}"
+                        SelectionChanged="ComboBoxStartingPosition_OnSelectionChanged"
+                        Style="{StaticResource MaterialDesignOutlinedComboBox}" />
+
+                     <Label
+                        HorizontalAlignment="Right"
+                        FontSize="13"
+                        Opacity="0.5">
+                        <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
+                           <TextBlock Text="Verison: " />
+                           <TextBlock Text="{Binding Version}" />
+                        </StackPanel>
+                     </Label>
+                  </StackPanel>
+               </Grid>
+
+            </materialDesign:DrawerHost.RightDrawerContent>
+            <Grid x:Name="mainGridName">
                <Grid.RowDefinitions>
+                  <RowDefinition Height="45" />
                   <RowDefinition />
-                  <RowDefinition Height="Auto" />
                </Grid.RowDefinitions>
-               <StackPanel>
+               <Grid Grid.Row="0" MouseDown="DragWindow_MouseDown">
+                  <Grid.ColumnDefinitions>
+                     <ColumnDefinition Width="Auto" />
+                     <ColumnDefinition />
+                     <ColumnDefinition Width="Auto" />
+                  </Grid.ColumnDefinitions>
+                  <TextBlock
+                     Grid.Column="1"
+                     Margin="6"
+                     HorizontalAlignment="Left"
+                     VerticalAlignment="Top"
+                     FontSize="19"
+                     MouseDown="UIElement_OnMouseDown"
+                     Text="Visual studio starter"
+                     TextAlignment="Left" />
                   <Button
-                     Height="24"
-                     Margin="0,0,0,5"
+                     Grid.Column="0"
+                     Width="30"
+                     Padding="0"
+                     HorizontalAlignment="Left"
+                     VerticalAlignment="Top"
+                     Background="Transparent"
                      BorderThickness="0"
-                     Click="btnAddSolution_Click"
-                     Content="Add solution"
-                     FontSize="13" />
-                  <Button
-                     Height="24"
-                     BorderThickness="0"
-                     Click="btnAddSolutionFolder_Click"
-                     Content="Add solutions"
-                     FontSize="13" />
-               </StackPanel>
-               <StackPanel Grid.Row="1" VerticalAlignment="Bottom">
-                  <Grid Margin="0,10,0,0">
-                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                        <ColumnDefinition />
-                     </Grid.ColumnDefinitions>
-                     <TextBlock
-                        Grid.Column="1"
-                        Margin="10"
-                        VerticalAlignment="Center"
-                        Cursor="Hand"
-                        Foreground="LightGray"
-                        MouseDown="AlwaysOnTop_OnMouseDown"
-                        Text="Always on top" />
-                     <ToggleButton
-                        x:Name="ToggleTopMost"
-                        Grid.Column="0"
+                     Click="Close_OnClick"
+                     IsCancel="True"
+                     Opacity="0.6">
+                     <materialDesign:PackIcon
                         Width="20"
                         Height="20"
-                        HorizontalAlignment="Center"
-                        HorizontalContentAlignment="Center"
-                        materialDesign:ToggleButtonAssist.OnContent="{materialDesign:PackIcon Kind=Tick}"
-                        Background="MediumPurple"
-                        Checked="ToggleTopMost_OnChecked"
-                        Unchecked="ToggleTopMost_OnUnchecked"
-                        Content="{materialDesign:PackIcon Kind=Remove}"
-                        Opacity="0.7"
-                        Style="{StaticResource MaterialDesignActionLightToggleButton}" />
-                  </Grid>
-
-                  <TextBox
-                     x:Name="TextBoxWidth"
-                     Margin="0,10"
-                     Padding="5"
-                     materialDesign:HintAssist.Background="{StaticResource BackgroundDark1Brush}"
-                     materialDesign:HintAssist.FloatingOffset="0 -17"
-                     materialDesign:HintAssist.FloatingScale="0.86"
-                     materialDesign:HintAssist.Foreground="LightGray"
-                     materialDesign:HintAssist.Hint="Window width"
-                     Foreground="MediumPurple"
-                     KeyDown="TextBoxWidth_OnKeyDown"
-                     LostFocus="TextBoxWidth_OnLostFocus"
-                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                     TextChanged="TextBoxWidth_OnTextChanged" />
-                  <ComboBox
-                     x:Name="ComboBoxPinnedPlacement"
-                     Width="130"
-                     Margin="0,10"
-                     Padding="5"
-                     materialDesign:HintAssist.Background="{StaticResource BackgroundDark1Brush}"
-                     materialDesign:HintAssist.FloatingOffset="0 -17"
-                     materialDesign:HintAssist.FloatingScale="0.80"
-                     materialDesign:HintAssist.Foreground="LightGray"
-                     materialDesign:HintAssist.Hint="Pinned placement"
-                     Foreground="MediumPurple"
-                     ItemsSource="{Binding Source={StaticResource EnumPinnedPlacement}}"
-                     SelectionChanged="ComboBoxPinnedPlacement_OnSelectionChanged"
-                     Style="{StaticResource MaterialDesignOutlinedComboBox}" />
-                  <ComboBox
-                     x:Name="ComboBoxStartingPosition"
-                     Width="130"
-                     Margin="0,10"
-                     Padding="5"
-                     materialDesign:HintAssist.Background="{StaticResource BackgroundDark1Brush}"
-                     materialDesign:HintAssist.FloatingOffset="0 -17"
-                     materialDesign:HintAssist.FloatingScale="0.80"
-                     materialDesign:HintAssist.Foreground="LightGray"
-                     materialDesign:HintAssist.Hint="Start Position"
-                     Foreground="MediumPurple"
-                     ItemsSource="{Binding Source={StaticResource EnumStartPosition}}"
-                     SelectionChanged="ComboBoxStartingPosition_OnSelectionChanged"
-                     Style="{StaticResource MaterialDesignOutlinedComboBox}" />
-
-                  <Label
+                        HorizontalAlignment="Left"
+                        HorizontalContentAlignment="Left"
+                        Kind="Close" />
+                  </Button>
+                  <ToggleButton
+                     x:Name="toggleButton"
+                     Grid.Column="2"
+                     Margin="5"
                      HorizontalAlignment="Right"
-                     FontSize="13"
-                     Opacity="0.5">
-                     <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
-                        <TextBlock Text="Verison: " />
-                        <TextBlock Text="{Binding Version}" />
-                     </StackPanel>
-                  </Label>
-               </StackPanel>
-            </Grid>
+                     materialDesign:ToggleButtonAssist.OnContent="{materialDesign:PackIcon Kind=MenuClose}"
+                     Background="Transparent"
+                     Content="{materialDesign:PackIcon Kind=MenuOpen}"
+                     Foreground="LightGray"
+                     IsChecked="{Binding IsOptionsDrawerOpen}"
+                     Style="{StaticResource MaterialDesignActionLightToggleButton}" />
+               </Grid>
+               <Frame
+                  x:Name="Frame"
+                  Grid.Row="1"
+                  Margin="0,0,0,5"
+                  NavigationUIVisibility="Hidden" />
 
-         </materialDesign:DrawerHost.RightDrawerContent>
-         <Grid x:Name="mainGridName">
-            <Grid.RowDefinitions>
-               <RowDefinition Height="45" />
-               <RowDefinition />
-            </Grid.RowDefinitions>
-            <Grid Grid.Row="0" MouseDown="DragWindow_MouseDown">
-               <Grid.ColumnDefinitions>
-                  <ColumnDefinition Width="Auto" />
-                  <ColumnDefinition />
-                  <ColumnDefinition Width="Auto" />
-               </Grid.ColumnDefinitions>
-               <TextBlock
-                  Grid.Column="1"
-                  Margin="6"
-                  HorizontalAlignment="Left"
-                  VerticalAlignment="Top"
-                  FontSize="19"
-                  MouseDown="UIElement_OnMouseDown"
-                  Text="Visual studio starter"
-                  TextAlignment="Left" />
-               <Button
-                  Grid.Column="0"
-                  Width="30"
-                  Padding="0"
-                  HorizontalAlignment="Left"
-                  VerticalAlignment="Top"
-                  Background="Transparent"
-                  BorderThickness="0"
-                  Click="Close_OnClick"
-                  IsCancel="True"
-                  Opacity="0.6">
-                  <materialDesign:PackIcon
-                     Width="20"
-                     Height="20"
-                     HorizontalAlignment="Left"
-                     HorizontalContentAlignment="Left"
-                     Kind="Close" />
-               </Button>
-               <ToggleButton
-                  x:Name="toggleButton"
-                  Grid.Column="2"
-                  Margin="5"
-                  HorizontalAlignment="Right"
-                  materialDesign:ToggleButtonAssist.OnContent="{materialDesign:PackIcon Kind=MenuClose}"
-                  Background="Transparent"
-                  Content="{materialDesign:PackIcon Kind=MenuOpen}"
-                  Foreground="LightGray"
-                  IsChecked="{Binding IsOptionsDrawerOpen}"
-                  Style="{StaticResource MaterialDesignActionLightToggleButton}" />
             </Grid>
-            <Frame
-               x:Name="Frame"
-               Grid.Row="1"
-               Margin="0,0,0,5"
-               NavigationUIVisibility="Hidden" />
-
-         </Grid>
-      </materialDesign:DrawerHost>
+         </materialDesign:DrawerHost>
+      </materialDesign:DialogHost>
    </Border>
-
 </Window>
