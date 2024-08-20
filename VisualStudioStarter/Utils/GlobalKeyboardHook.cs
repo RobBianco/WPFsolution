@@ -4,18 +4,38 @@ using System.Runtime.InteropServices;
 public class GlobalKeyboardHook : IDisposable
 {
     // Definizione delle costanti e delle API esterne
+
+    #region CONST
+
     private const int WH_KEYBOARD_LL = 13;
     private const int WM_KEYDOWN = 0x0100;
+
+    #endregion
+
+    #region FIELDS
+
     private LowLevelKeyboardProc _proc;
     private IntPtr _hookID = IntPtr.Zero;
 
-    public event EventHandler<KeyPressedEventArgs> KeyPressed;
+    #endregion
+
+    #region CTOR
 
     public GlobalKeyboardHook()
     {
         _proc = HookCallback;
         _hookID = SetHook(_proc);
     }
+
+    #endregion
+
+    #region EVENTS
+
+    public event EventHandler<KeyPressedEventArgs> KeyPressed;
+
+    #endregion
+
+    #region METHODS
 
     private IntPtr SetHook(LowLevelKeyboardProc proc)
     {
@@ -56,6 +76,8 @@ public class GlobalKeyboardHook : IDisposable
     {
         UnhookWindowsHookEx(_hookID);
     }
+
+    #endregion
 }
 
 public class KeyPressedEventArgs(int virtualKeyCode) : EventArgs

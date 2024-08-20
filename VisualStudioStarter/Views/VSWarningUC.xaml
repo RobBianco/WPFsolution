@@ -29,7 +29,7 @@
          Background="Transparent"
          BorderThickness="0"
          Foreground="MediumPurple"
-         Value="{Binding ProgressValue, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
-         Maximum="{Binding MaxProgressValue, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}" />
+         Maximum="{Binding MaxProgressValue, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
+         Value="{Binding ProgressValue, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}" />
    </Grid>
 </UserControl>

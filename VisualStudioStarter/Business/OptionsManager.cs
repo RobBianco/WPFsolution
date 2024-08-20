@@ -5,23 +5,38 @@ namespace VisualStudioStarter.Business;
 
 public class OptionsManager
 {
-    private static OptionsManager? _instance;
+    #region FIELDS
 
     public static string SavePath =
         Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "VsStarter", "VsStartOptions.json");
 
+    private static OptionsManager? _instance;
+
+    #endregion
+
+    #region PROPS
+
     public static OptionsManager Instance => _instance ??= new();
     public VsStarterOptions Options { get; set; }
-    public static VsStarterOptions GetOptions() => File.Exists(SavePath)
-        ? JsonSerializer.Deserialize<VsStarterOptions>(File.ReadAllText(SavePath), JsonSerializerOptions.Default) ?? VsStarterOptions.Default
-        : VsStarterOptions.Default;
+
+    public static bool CanSave { get; set; }
+
+    #endregion
+
+    #region CTOR
 
     public OptionsManager()
     {
         VsStarterOptions.OnOptionsChanged += (_, _, _) => SaveOptions(Options);
     }
 
-    public static bool CanSave { get; set; }
+    #endregion
+
+    #region METHODS
+
+    public static VsStarterOptions GetOptions() => File.Exists(SavePath)
+        ? JsonSerializer.Deserialize<VsStarterOptions>(File.ReadAllText(SavePath), JsonSerializerOptions.Default) ?? VsStarterOptions.Default
+        : VsStarterOptions.Default;
 
     public static void LoadOptions() => Instance.Options = GetOptions();
 
@@ -46,4 +61,6 @@ public class OptionsManager
 
         File.WriteAllText(SavePath, json);
     }
+
+    #endregion
 }

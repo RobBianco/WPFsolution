@@ -6,11 +6,17 @@ namespace VisualStudioStarter.ObjectModels;
 
 public class VsStarterOptions : BaseViewModel
 {
+    #region FIELDS
+
     private PinnedPlacement? _pinnedPlacement;
     private StartPosition? _startPosition;
     private double? _width;
     private bool? _topMost;
     private VisualStudioVersion? _visualStudioSelected;
+
+    #endregion
+
+    #region PROPS
 
     public PinnedPlacement PinnedPlacement
     {
@@ -68,8 +74,6 @@ public class VsStarterOptions : BaseViewModel
         }
     }
 
-    public static event VsStarterOptionsDelegate<object>? OnOptionsChanged;
-
     public static VsStarterOptions Default => new()
     {
         Width = 500,
@@ -78,6 +82,14 @@ public class VsStarterOptions : BaseViewModel
         VisualStudioSelected = VisualStudioVersion.None,
         StartPosition = StartPosition.Center,
     };
+
+    #endregion
+
+    #region EVENTS
+
+    public static event VsStarterOptionsDelegate<object>? OnOptionsChanged;
+
+    #endregion
 }
 
 public delegate void VsStarterOptionsDelegate<in T>(T? oldValue, T? newValue, [CallerMemberName] string name = "");

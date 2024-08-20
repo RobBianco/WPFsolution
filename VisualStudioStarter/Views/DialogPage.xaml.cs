@@ -11,7 +11,13 @@ namespace VisualStudioStarter.Views;
 /// </summary>
 public partial class DialogPage : INotifyPropertyChanged
 {
+    #region FIELDS
+
     private string _solutionName;
+
+    #endregion
+
+    #region PROPS
 
     public string SolutionName
     {
@@ -19,11 +25,19 @@ public partial class DialogPage : INotifyPropertyChanged
         set => SetField(ref _solutionName, value);
     }
 
+    #endregion
+
+    #region CTOR
+
     public DialogPage(string solutionName)
     {
         InitializeComponent();
         SolutionName = solutionName;
     }
+
+    #endregion
+
+    #region EVENTS
 
     private void BtnYes_OnClick(object sender, RoutedEventArgs e)
     {
@@ -49,4 +63,6 @@ public partial class DialogPage : INotifyPropertyChanged
         OnPropertyChanged(propertyName);
         return true;
     }
+
+    #endregion
 }

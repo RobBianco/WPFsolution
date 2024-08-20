@@ -14,6 +14,21 @@ namespace VisualStudioStarter.ViewModels;
 
 public class SolutionPageViewModel : BaseViewModel
 {
+    #region CONST
+
+    public const string PathEXE_VS2022Pre =
+        @"C:\Program Files\Microsoft Visual Studio\2022\Preview\Common7\IDE\devenv.exe";
+
+    public const string PathEXE_VS2022 =
+        @"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\devenv.exe";
+
+    public const string PathEXE_VS2019 =
+        @"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\devenv.exe";
+
+    #endregion
+
+    #region FIELDS
+
     private ObservableCollection<Solution> _solutions = [];
     private ObservableCollection<Solution> _pinnedSolutions = [];
     private bool _isVs2022PreInstalled;
@@ -30,14 +45,9 @@ public class SolutionPageViewModel : BaseViewModel
     private int _pinnedRow;
     private int _unPinnedRow;
 
-    public const string PathEXE_VS2022Pre =
-        @"C:\Program Files\Microsoft Visual Studio\2022\Preview\Common7\IDE\devenv.exe";
+    #endregion
 
-    public const string PathEXE_VS2022 =
-        @"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\devenv.exe";
-
-    public const string PathEXE_VS2019 =
-        @"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\devenv.exe";
+    #region PROPS
 
     public ObservableCollection<Solution> Solutions
     {
@@ -192,6 +202,10 @@ public class SolutionPageViewModel : BaseViewModel
         set => SetField(ref _unPinnedRow, value);
     }
 
+    #endregion
+
+    #region CTOR
+
     public SolutionPageViewModel()
     {
         VsStarterOptions.OnOptionsChanged += VsStarterOptionsOnOnOptionsChanged;
@@ -206,6 +220,36 @@ public class SolutionPageViewModel : BaseViewModel
         PinnedSolutions.CollectionChanged += SolutionsOnCollectionChanged;
 
         AddSolutions(SolutionManager.GetSolutions());
+    }
+
+    #endregion
+
+    #region EVENTS
+
+    public event EventHandler? OnSolutionPinnedUnPinned;
+
+    public void PinUnPin_Solution(Solution? sln = null)
+    {
+        sln ??= SelectedSolution;
+
+        if (sln is null)
+            return;
+
+        sln.IsPinned = !sln.IsPinned;
+        if (sln.IsPinned)
+        {
+            Solutions.Remove(sln);
+            PinnedSolutions.Add(sln);
+        }
+        else
+        {
+            PinnedSolutions.Remove(sln);
+            Solutions.Add(sln);
+        }
+
+        OnSolutionPinnedUnPinned?.Invoke(this, EventArgs.Empty);
+
+        SaveSolutions();
     }
 
     private void VsStarterOptionsOnOnOptionsChanged(object? oldvalue, object? newvalue, string name)
@@ -234,8 +278,6 @@ public class SolutionPageViewModel : BaseViewModel
     }
 
 
-    public event EventHandler? OnSolutionPinnedUnPinned;
-
     private void SolutionsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
         OnPropertyChanged(nameof(IsPinnedVisible));
@@ -243,6 +285,31 @@ public class SolutionPageViewModel : BaseViewModel
         OnPropertyChanged(nameof(IsSolutonsVisible));
 
     }
+
+    public void Remove_Solution(Solution? sln = null)
+    {
+        sln ??= SelectedSolution;
+
+        if (sln is null)
+            return;
+
+        if (sln.IsPinned)
+        {
+            PinnedSolutions.Remove(sln);
+        }
+        else
+        {
+            Solutions.Remove(sln);
+        }
+
+        OnSolutionPinnedUnPinned?.Invoke(this, EventArgs.Empty);
+
+        SaveSolutions();
+    }
+
+    #endregion
+
+    #region METHODS
 
     public Task AddSolutions(List<Solution> solutions)
     {
@@ -411,50 +478,6 @@ public class SolutionPageViewModel : BaseViewModel
         return true;
     }
 
-    public void Remove_Solution(Solution? sln = null)
-    {
-        sln ??= SelectedSolution;
-
-        if (sln is null)
-            return;
-
-        if (sln.IsPinned)
-        {
-            PinnedSolutions.Remove(sln);
-        }
-        else
-        {
-            Solutions.Remove(sln);
-        }
-
-        OnSolutionPinnedUnPinned?.Invoke(this, EventArgs.Empty);
-
-        SaveSolutions();
-    }
-    public void PinUnPin_Solution(Solution? sln = null)
-    {
-        sln ??= SelectedSolution;
-
-        if (sln is null)
-            return;
-
-        sln.IsPinned = !sln.IsPinned;
-        if (sln.IsPinned)
-        {
-            Solutions.Remove(sln);
-            PinnedSolutions.Add(sln);
-        }
-        else
-        {
-            PinnedSolutions.Remove(sln);
-            Solutions.Add(sln);
-        }
-
-        OnSolutionPinnedUnPinned?.Invoke(this, EventArgs.Empty);
-
-        SaveSolutions();
-    }
-
     public void SaveSolutions()
     {
         SolutionManager.SaveSolutions(PinnedSolutions, Solutions);
@@ -513,4 +536,6 @@ public class SolutionPageViewModel : BaseViewModel
 
         SaveSolutions();
     }
+
+    #endregion
 }

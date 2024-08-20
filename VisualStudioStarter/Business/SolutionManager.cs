@@ -9,8 +9,15 @@ namespace VisualStudioStarter.Business;
 
 public static class SolutionManager
 {
+    #region FIELDS
+
     public static string SavePath =
         Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "VsStarter", "VsStarterSolutions.json");
+
+    #endregion
+
+    #region METHODS
+
     public static List<Solution> GetSolutions()
     {
         try
@@ -104,4 +111,6 @@ public static class SolutionManager
 
         File.WriteAllText(SavePath, json);
     }
+
+    #endregion
 }

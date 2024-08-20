@@ -14,6 +14,8 @@ namespace VisualStudioStarter.Views;
 
 public partial class MainWindow
 {
+    #region FIELDS
+
     private SolutionsPage? _solutionsPage;
     private Storyboard _TopStoryBoard;
     private Storyboard _OpacityStoryBoard;
@@ -23,9 +25,18 @@ public partial class MainWindow
     private double _d;
     private bool _initialize;
     private readonly GlobalKeyboardHook _globalKeys = new();
+
+    #endregion
+
+    #region PROPS
+
     public MainViewModel VM => (MainViewModel)DataContext;
     public SolutionsPage SolutionsPage => _solutionsPage ??= new();
     public Timer Timer { get; set; } = new();
+
+    #endregion
+
+    #region CTOR
 
     public MainWindow()
     {
@@ -43,6 +54,10 @@ public partial class MainWindow
         Opacity = 0;
         Top = SystemParameters.PrimaryScreenHeight;
     }
+
+    #endregion
+
+    #region EVENTS
 
     private void GlobalKeysOnKeyPressed(object? sender, KeyPressedEventArgs e)
     {
@@ -66,17 +81,6 @@ public partial class MainWindow
         }
     }
 
-    private void InitializeControls()
-    {
-        Timer.Elapsed += TimerOnElapsed;
-        Timer.Interval = 300;
-
-        TextBoxWidth.Text = OptionsManager.Instance.Options.Width.ToString("");
-        ComboBoxPinnedPlacement.SelectedItem = OptionsManager.Instance.Options.PinnedPlacement;
-        ComboBoxStartingPosition.SelectedItem = OptionsManager.Instance.Options.StartPosition;
-        ToggleTopMost.IsChecked = OptionsManager.Instance.Options.TopMost;
-    }
-
     private void TimerOnElapsed(object? sender, ElapsedEventArgs e)
     {
         Dispatcher.Invoke(() =>
@@ -84,92 +88,6 @@ public partial class MainWindow
                 onCompleted: (_, _) => AnimateLeft(new Duration(TimeSpan.FromMilliseconds(200)))));
 
     }
-
-    #region ANIMATION
-
-    public double GetHeight()
-    {
-        const double mainborderMargins = 20;
-        const double listboxPadding = 10 * 2;
-        const double btnVSPagging = 10;
-        const double margins = mainborderMargins + listboxPadding + btnVSPagging;
-        const double titleBar = 45;
-        const double scritta = 16;
-        const double item = 31;
-        const double vsbuttons = 60;
-        var h1 = SolutionsPage.VM.PinnedSolutions.Count * item;
-        var h2 = SolutionsPage.VM.Solutions.Count * item;
-        var h11 = h1 > 0 ? scritta + h1 : 0;
-        var h22 = h2 > 0 ? scritta + h2 : 0;
-        var h = margins + titleBar + h11 + h22 + vsbuttons;
-        return Math.Min(MaxHeight, Math.Max(300,h));
-    }
-
-    public double GetTop() => SystemParameters.PrimaryScreenHeight - GetHeight() - 45;
-    public double GetLeft() =>
-        OptionsManager.Instance.Options.StartPosition switch
-        {
-            StartPosition.Center => (SystemParameters.PrimaryScreenWidth - ActualWidth) / 2,
-            StartPosition.Left => 10,
-            StartPosition.Right => SystemParameters.PrimaryScreenWidth - ActualWidth - 10,
-            _ => (SystemParameters.PrimaryScreenWidth - ActualWidth) / 2
-        };
-
-    public void AnimateTop(Duration? duration = null, EventHandler? onCompleted = null)
-    {
-        Animate(ref _TopStoryBoard, Top, GetTop(), new(TopProperty), duration, onCompleted);
-    }
-
-    public void AnimateOpacity(Duration? duration = null, EventHandler? onCompleted = null)
-    {
-        Animate(ref _OpacityStoryBoard, 0, 1, new(OpacityProperty), duration, onCompleted);
-    }
-
-    public void AnimateHeight(Duration? duration = null, EventHandler? onCompleted = null)
-    {
-        Animate(ref _HeightStoryBoard, Height, GetHeight(), new(HeightProperty), duration, onCompleted);
-    }
-    public void AnimateWidth(double width, Duration? duration = null, EventHandler? onCompleted = null)
-    {
-        Animate(ref _WidthStoryBoard,ActualWidth, width, new(WidthProperty), duration, onCompleted);
-    }
-
-    public void AnimateLeft(Duration? duration = null, EventHandler? onCompleted = null)
-    {
-        Animate(ref _LeftStoryBoard, Left, GetLeft(), new(LeftProperty), duration, onCompleted);
-    }
-
-
-    private void Animate(ref Storyboard storyboard, double from, double to, PropertyPath propPath, Duration? duration = null, EventHandler? onCompleted = null)
-    {
-        if (from == to) return;
-
-        var animation = new DoubleAnimation
-        {
-            From = from,
-            To = to,
-            Duration = duration ?? new Duration(TimeSpan.FromMilliseconds(700)),
-            EasingFunction = new SineEase()
-            {
-                EasingMode = EasingMode.EaseInOut
-            },
-        };
-
-        // Crea un Storyboard per contenere l'animazione
-        storyboard = new()
-        {
-            Children = { animation }
-        };
-        if (onCompleted is not null)
-            storyboard.Completed += onCompleted;
-        Storyboard.SetTarget(animation, this);
-        Storyboard.SetTargetProperty(animation, propPath);
-
-        // Inizia l'animazione
-        storyboard.Begin();
-    }
-
-    #endregion ANIMATION
 
     private void VsStarterOptionsOnOnOptionsChanged(object? oldvalue, object? newvalue, string name)
     {
@@ -352,4 +270,107 @@ public partial class MainWindow
             OptionsManager.Instance.Options.StartPosition = sp;
         }
     }
+
+    #endregion
+
+    #region METHODS
+
+    #region ANIMATION
+
+    public double GetHeight()
+    {
+        const double mainborderMargins = 20;
+        const double listboxPadding = 10 * 2;
+        const double btnVSPagging = 10;
+        const double margins = mainborderMargins + listboxPadding + btnVSPagging;
+        const double titleBar = 45;
+        const double scritta = 16;
+        const double item = 31;
+        const double vsbuttons = 60;
+        var h1 = SolutionsPage.VM.PinnedSolutions.Count * item;
+        var h2 = SolutionsPage.VM.Solutions.Count * item;
+        var h11 = h1 > 0 ? scritta + h1 : 0;
+        var h22 = h2 > 0 ? scritta + h2 : 0;
+        var h = margins + titleBar + h11 + h22 + vsbuttons;
+        return Math.Min(MaxHeight, Math.Max(300,h));
+    }
+
+    public double GetTop() => SystemParameters.PrimaryScreenHeight - GetHeight() - 45;
+    public double GetLeft() =>
+        OptionsManager.Instance.Options.StartPosition switch
+        {
+            StartPosition.Center => (SystemParameters.PrimaryScreenWidth - ActualWidth) / 2,
+            StartPosition.Left => 10,
+            StartPosition.Right => SystemParameters.PrimaryScreenWidth - ActualWidth - 10,
+            _ => (SystemParameters.PrimaryScreenWidth - ActualWidth) / 2
+        };
+
+    public void AnimateTop(Duration? duration = null, EventHandler? onCompleted = null)
+    {
+        Animate(ref _TopStoryBoard, Top, GetTop(), new(TopProperty), duration, onCompleted);
+    }
+
+    public void AnimateOpacity(Duration? duration = null, EventHandler? onCompleted = null)
+    {
+        Animate(ref _OpacityStoryBoard, 0, 1, new(OpacityProperty), duration, onCompleted);
+    }
+
+    public void AnimateHeight(Duration? duration = null, EventHandler? onCompleted = null)
+    {
+        Animate(ref _HeightStoryBoard, Height, GetHeight(), new(HeightProperty), duration, onCompleted);
+    }
+    public void AnimateWidth(double width, Duration? duration = null, EventHandler? onCompleted = null)
+    {
+        Animate(ref _WidthStoryBoard,ActualWidth, width, new(WidthProperty), duration, onCompleted);
+    }
+
+    public void AnimateLeft(Duration? duration = null, EventHandler? onCompleted = null)
+    {
+        Animate(ref _LeftStoryBoard, Left, GetLeft(), new(LeftProperty), duration, onCompleted);
+    }
+
+
+    private void Animate(ref Storyboard storyboard, double from, double to, PropertyPath propPath, Duration? duration = null, EventHandler? onCompleted = null)
+    {
+        if (from == to) return;
+
+        var animation = new DoubleAnimation
+        {
+            From = from,
+            To = to,
+            Duration = duration ?? new Duration(TimeSpan.FromMilliseconds(700)),
+            EasingFunction = new SineEase()
+            {
+                EasingMode = EasingMode.EaseInOut
+            },
+        };
+
+        // Crea un Storyboard per contenere l'animazione
+        storyboard = new()
+        {
+            Children = { animation }
+        };
+        if (onCompleted is not null)
+            storyboard.Completed += onCompleted;
+        Storyboard.SetTarget(animation, this);
+        Storyboard.SetTargetProperty(animation, propPath);
+
+        // Inizia l'animazione
+        storyboard.Begin();
+    }
+
+    #endregion ANIMATION
+
+    private void InitializeControls()
+    {
+        Timer.Elapsed += TimerOnElapsed;
+        Timer.Interval = 300;
+
+        TextBoxWidth.Text = OptionsManager.Instance.Options.Width.ToString("");
+        ComboBoxPinnedPlacement.SelectedItem = OptionsManager.Instance.Options.PinnedPlacement;
+        ComboBoxStartingPosition.SelectedItem = OptionsManager.Instance.Options.StartPosition;
+        ToggleTopMost.IsChecked = OptionsManager.Instance.Options.TopMost;
+    }
+
+    #endregion
 }

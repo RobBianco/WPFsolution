@@ -14,7 +14,13 @@ namespace VisualStudioStarter.Views;
 /// </summary>
 public partial class SolutionsPage
 {
+    #region PROPS
+
     public SolutionPageViewModel VM => (SolutionPageViewModel)DataContext;
+
+    #endregion
+
+    #region CTOR
 
     public SolutionsPage()
     {
@@ -24,6 +30,10 @@ public partial class SolutionsPage
         Loaded += OnLoaded;
         Unloaded += OnUnloaded;
     }
+
+    #endregion
+
+    #region EVENTS
 
     private void VsStarterOptionsOnOnOptionsChanged(object? oldvalue, object? newvalue, string name)
     {
@@ -80,11 +90,6 @@ public partial class SolutionsPage
         await VM.OpenSolution();
     }
 
-    private void OpenSolutionDirectory_OnClick(object sender, RoutedEventArgs e)
-    {
-        VM.OpenSolutionDirectory();
-    }
-
     private void RemoveSolution_OnClick(object sender, RoutedEventArgs e)
     {
         VM.Remove_Solution();
@@ -130,12 +135,6 @@ public partial class SolutionsPage
             OpenWith2022Unpinned.Visibility,
             OpenWith2022PreUnpinned.Visibility
         );
-    }
-
-    private static Visibility GetVisibilityBasedOnChildControls(params Visibility[] visibilities)
-    {
-        var visibleCount = visibilities.Count(v => v == Visibility.Visible);
-        return visibleCount >= 2 ? Visibility.Visible : Visibility.Collapsed;
     }
 
     private void RemoveAddPinned_OnClick(object sender, RoutedEventArgs e)
@@ -218,4 +217,21 @@ public partial class SolutionsPage
             Application.Current.Shutdown();
         }
     }
+
+    private void OpenSolutionDirectory_OnClick(object sender, RoutedEventArgs e)
+    {
+        VM.OpenSolutionDirectory();
+    }
+
+    #endregion
+
+    #region METHODS
+
+    private static Visibility GetVisibilityBasedOnChildControls(params Visibility[] visibilities)
+    {
+        var visibleCount = visibilities.Count(v => v == Visibility.Visible);
+        return visibleCount >= 2 ? Visibility.Visible : Visibility.Collapsed;
+    }
+
+    #endregion
 }

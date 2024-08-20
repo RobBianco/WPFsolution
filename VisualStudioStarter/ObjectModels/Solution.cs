@@ -8,10 +8,16 @@ namespace VisualStudioStarter.ObjectModels;
 
 public class Solution : INotifyPropertyChanged
 {
+    #region FIELDS
+
     private string _path = "";
     private FileInfo _fileinfo;
     private bool _isPinned;
     private string _directory;
+
+    #endregion
+
+    #region PROPS
 
     public bool IsPinned
     {
@@ -70,12 +76,25 @@ public class Solution : INotifyPropertyChanged
             _ => null
         };
 
+    #endregion
+
+    #region CTOR
+
     public Solution()
     {
     }
 
+    #endregion
+
+    #region EVENTS
+
     public event PropertyChangedEventHandler? PropertyChanged;
+
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null) { PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName)); }
+
+    #endregion
+
+    #region METHODS
 
     protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
     {
@@ -85,4 +104,6 @@ public class Solution : INotifyPropertyChanged
         OnPropertyChanged(propertyName);
         return true;
     }
+
+    #endregion
 }

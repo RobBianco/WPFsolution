@@ -12,11 +12,33 @@ namespace VisualStudioStarter.Views;
 /// </summary>
 public partial class VSWarningUC : INotifyPropertyChanged
 {
+    #region FIELDS
+
     private double _progressValue;
 
     private readonly Timer timer = new();
     private double _maxProgressValue;
     private readonly double _totalDurationMs; // Durata totale in millisecondi
+
+    #endregion
+
+    #region PROPS
+
+    public double ProgressValue
+    {
+        get => _progressValue;
+        set => SetField(ref _progressValue, value);
+    }
+
+    public double MaxProgressValue
+    {
+        get => _maxProgressValue;
+        set => SetField(ref _maxProgressValue, value);
+    }
+
+    #endregion
+
+    #region CTOR
 
     public VSWarningUC(double? durationMs = null)
     {
@@ -30,6 +52,12 @@ public partial class VSWarningUC : INotifyPropertyChanged
         timer.Elapsed += TimerOnElapsed;
         timer.Start();
     }
+
+    #endregion
+
+    #region EVENTS
+
+    public event PropertyChangedEventHandler? PropertyChanged;
 
     private void TimerOnElapsed(object? sender, ElapsedEventArgs e)
     {
@@ -48,24 +76,19 @@ public partial class VSWarningUC : INotifyPropertyChanged
         });
     }
 
-    public double ProgressValue
-    {
-        get => _progressValue;
-        set => SetField(ref _progressValue, value);
-    }
-
-    public double MaxProgressValue
-    {
-        get => _maxProgressValue;
-        set => SetField(ref _maxProgressValue, value);
-    }
-
-    public event PropertyChangedEventHandler? PropertyChanged;
-
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
+
+    private void UIElement_OnMouseDown(object sender, MouseButtonEventArgs e)
+    {
+        DialogHost.GetDialogSession("SolutionDialogHost")?.Close();
+    }
+
+    #endregion
+
+    #region METHODS
 
     protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
     {
@@ -75,8 +98,5 @@ public partial class VSWarningUC : INotifyPropertyChanged
         return true;
     }
 
-    private void UIElement_OnMouseDown(object sender, MouseButtonEventArgs e)
-    {
-        DialogHost.GetDialogSession("SolutionDialogHost")?.Close();
-    }
+    #endregion
 }
