@@ -41,7 +41,10 @@ public static class SolutionManager
         var res = openFileDialog.ShowDialog();
 
         if (res is CommonFileDialogResult.Ok)
+        {
             DialogHost.Show(new LoadingUC(), "MainDialogHost");
+        }
+            
 
         var task = new Task<List<Solution>>(() =>
         {
@@ -50,18 +53,25 @@ public static class SolutionManager
                 return solutions;
             }
 
-            foreach (var path in openFileDialog.FileNames)
+            try
             {
-                if (File.Exists(path))
+                foreach (var path in openFileDialog.FileNames)
                 {
-                    solutions.Add(new() { Path = path });
-                }
+                    if (File.Exists(path))
+                    {
+                        solutions.Add(new() { Path = path });
+                    }
 
-                if (Directory.Exists(path))
-                {
-                    solutions.AddRange(Directory.GetFiles(path, "*.sln", SearchOption.AllDirectories)
-                        .Select(file => new Solution() { Path = file }));
+                    if (Directory.Exists(path))
+                    {
+                        solutions.AddRange(Directory.GetFiles(path, "*.sln", SearchOption.AllDirectories)
+                            .Select(file => new Solution() { Path = file }));
+                    }
                 }
+            }
+            catch (Exception)
+            {
+                // continue
             }
 
             return solutions;

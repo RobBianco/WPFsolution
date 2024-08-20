@@ -99,7 +99,7 @@
       CloseOnClickAway="False"
       DialogContentUniformCornerRadius="10"
       DialogTheme="Dark"
-      Identifier="SolutionDialogBox">
+      Identifier="SolutionDialogHost">
       <Grid>
          <Grid.RowDefinitions>
             <RowDefinition Height="*" />

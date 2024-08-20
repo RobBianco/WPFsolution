@@ -250,14 +250,16 @@ public class SolutionPageViewModel : BaseViewModel
         {
             foreach (var solution in solutions)
             {
+                if (Solutions.Any(x => x.Path == solution.Path) ||
+                    PinnedSolutions.Any(x => x.Path == solution.Path)) continue;
+
                 if (solution.IsPinned)
                 {
                     Application.Current.Dispatcher.Invoke(() => PinnedSolutions.Add(solution));
                 }
                 else
                 {
-                    if (Solutions.All(x => x.Path != solution.Path))
-                        Application.Current.Dispatcher.Invoke(() => Solutions.Add(solution));
+                    Application.Current.Dispatcher.Invoke(() => Solutions.Add(solution));
                 }
             }
 
@@ -374,6 +376,7 @@ public class SolutionPageViewModel : BaseViewModel
         switch (vsVersion ?? OptionsManager.Instance.Options.VisualStudioSelected)
         {
             case VisualStudioVersion.None:
+                await DialogHost.Show(new VSWarningUC(), "SolutionDialogHost");
                 return false;
             case VisualStudioVersion.VS2019:
                 st.FileName = PathEXE_VS2019;
@@ -390,7 +393,7 @@ public class SolutionPageViewModel : BaseViewModel
 
         if (!File.Exists(st.FileName))
         {
-            var res = await DialogHost.Show(new DialogPage(sln.Fileinfo?.Name ?? ""), "SolutionDialogBox");
+            var res = await DialogHost.Show(new DialogPage(sln.Fileinfo?.Name ?? ""), "SolutionDialogHost");
             if (res is DialogResult.Yes)
             {
                 Remove_Solution(sln);

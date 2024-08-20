@@ -1,6 +1,5 @@
 ﻿using System.Windows;
 using VisualStudioStarter.Business;
-using VisualStudioStarter.ObjectModels;
 
 namespace VisualStudioStarter;
 

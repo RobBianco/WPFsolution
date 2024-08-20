@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using VisualStudioStarter.Business;
@@ -163,7 +162,16 @@ public partial class SolutionsPage
 
     private void BtnVS_OnUnchecked(object sender, RoutedEventArgs e)
     {
-
+        switch (OptionsManager.Instance.Options.VisualStudioSelected)
+        {
+            case VisualStudioVersion.None:
+                break;
+            case VisualStudioVersion.VS2019 when Equals(sender, btn2019) && btn2019.IsChecked is false:
+            case VisualStudioVersion.VS2022 when Equals(sender, btn2022) && btn2022.IsChecked is false:
+            case VisualStudioVersion.VS2022Pre when Equals(sender, btn2022Pre) && btn2022Pre.IsChecked is false:
+                OptionsManager.Instance.Options.VisualStudioSelected = VisualStudioVersion.None;
+                break;
+        }
     }
 
     private void BtnVS_OnChecked(object sender, RoutedEventArgs e)

@@ -48,6 +48,20 @@ public partial class MainWindow
     {
         if (e.VirtualKeyCode == 27)  // 27 è il codice virtuale per Esc
         {
+            try
+            {
+                if (DialogHost.GetDialogSession("SolutionDialogHost") is not null
+                    || DialogHost.GetDialogSession("MainDialogHost") is not null)
+                {
+                    return;
+                }
+            }
+            catch (Exception)
+            {
+                // continue
+            }
+            
+
             Application.Current.Shutdown();
         }
     }
@@ -235,10 +249,6 @@ public partial class MainWindow
         AnimateHeight();
         AnimateTop();
         VM.IsOptionsDrawerOpen = false;
-    }
-
-    private void ClosingEventHandler(object sender, DialogClosingEventArgs eventargs)
-    {
     }
 
     private async void btnAddSolution_Click(object sender, RoutedEventArgs e)

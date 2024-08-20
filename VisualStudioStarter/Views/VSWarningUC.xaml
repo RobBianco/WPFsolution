@@ -1,0 +1,35 @@
+﻿<UserControl
+   x:Class="VisualStudioStarter.Views.VSWarningUC"
+   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+   xmlns:local="clr-namespace:VisualStudioStarter.Views"
+   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+   d:DesignHeight="150"
+   d:DesignWidth="250"
+   Background="{StaticResource BackgroundBrush}"
+   mc:Ignorable="d">
+   <Grid MouseDown="UIElement_OnMouseDown">
+      <Grid.RowDefinitions>
+         <RowDefinition />
+         <RowDefinition Height="Auto" />
+         <RowDefinition Height="Auto" />
+      </Grid.RowDefinitions>
+      <Image Source="{StaticResource Vs2022PNG}" />
+      <TextBlock
+         Grid.Row="1"
+         Margin="10"
+         HorizontalAlignment="Center"
+         VerticalAlignment="Center"
+         FontSize="18"
+         Foreground="LightGray"
+         Text="Please select a Visual studio " />
+      <ProgressBar
+         Grid.Row="2"
+         Background="Transparent"
+         BorderThickness="0"
+         Foreground="MediumPurple"
+         Value="{Binding ProgressValue, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
+         Maximum="{Binding MaxProgressValue, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}" />
+   </Grid>
+</UserControl>
