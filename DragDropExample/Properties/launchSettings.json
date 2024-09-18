@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "DragDropExample": {
+      "commandName": "Project",
+      "commandLineArgs": "Ciaone"
+    }
+  }
+}

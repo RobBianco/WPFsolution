@@ -7,6 +7,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
+     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+     <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
+     <ApplicationIcon>Visual_Studio_Starter.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -28,6 +31,17 @@
     <None Remove="Images\VS2019.png" />
     <None Remove="Images\VS2022.png" />
     <None Remove="Images\window.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Visual_Studio_Starter.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\..\..\Downloads\Visual_Studio_Starter.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
