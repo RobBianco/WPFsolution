@@ -71,41 +71,11 @@ public class SolutionPageViewModel : BaseViewModel
     public bool IsUnPinnedSolutonsVisible => Solutions.Any();
     public bool IsSolutonsVisible => IsPinnedVisible || IsUnPinnedSolutonsVisible;
 
-    public bool IsVS2022PreInstalled
-    {
-        get => _isVs2022PreInstalled;
-        set
-        {
-            if (SetField(ref _isVs2022PreInstalled, value))
-            {
-                OnPropertyChanged(nameof(Vs2022PreVisibility));
-            }
-        }
-    }
+    public bool IsVS2022PreInstalled;
 
-    public bool IsVS2022Installed
-    {
-        get => _isVs2022Installed;
-        set
-        {
-            if (SetField(ref _isVs2022Installed, value))
-            {
-                OnPropertyChanged(nameof(Vs2022Visibility));
-            }
-        }
-    }
+    public bool IsVS2022Installed;
 
-    public bool IsVS2019Installed
-    {
-        get => _isVs2019Installed;
-        set
-        {
-            if (SetField(ref _isVs2019Installed, value))
-            {
-                OnPropertyChanged(nameof(Vs2019Visibility));
-            }
-        }
-    }
+    public bool IsVS2019Installed;
 
     public bool IsAdmin
     {
@@ -113,63 +83,7 @@ public class SolutionPageViewModel : BaseViewModel
         set => SetField(ref _isAdmin, value);
     }
 
-
-    //public bool IsVisualStudio2022Pre
-    //{
-    //    get => _isVisualStudio2022Pre;
-    //    set
-    //    {
-    //        SetField(ref _isVisualStudio2022Pre, value);
-    //        OnPropertyChanged(nameof(IsVisualStudioSelected));
-    //        if (value)
-    //        {
-    //            IsVisualStudio2022 = false;
-    //            IsVisualStudio2019 = false;
-
-    //            UpdateColumnWidths();
-    //        }
-    //    }
-    //}
-
-    //public bool IsVisualStudio2022
-    //{
-    //    get => _isVisualStudio2022;
-    //    set
-    //    {
-    //        SetField(ref _isVisualStudio2022, value);
-    //        OnPropertyChanged(nameof(IsVisualStudioSelected));
-    //        if (value)
-    //        {
-    //            IsVisualStudio2022Pre = false;
-    //            IsVisualStudio2019 = false;
-
-    //            UpdateColumnWidths();
-    //        }
-    //    }
-    //}
-
-    //public bool IsVisualStudio2019
-    //{
-    //    get => _isVisualStudio2019;
-    //    set
-    //    {
-    //        SetField(ref _isVisualStudio2019, value);
-    //        OnPropertyChanged(nameof(IsVisualStudioSelected));
-    //        if (value)
-    //        {
-    //            IsVisualStudio2022Pre = false;
-    //            IsVisualStudio2022 = false;
-
-    //            UpdateColumnWidths();
-    //        }
-    //    }
-    //}
-
-    //public bool IsVisualStudioSelected => IsVisualStudio2019 || IsVisualStudio2022 || IsVisualStudio2022Pre;
-
-    public Visibility Vs2022PreVisibility => IsVS2022PreInstalled ? Visibility.Visible : Visibility.Collapsed;
-    public Visibility Vs2022Visibility => IsVS2022Installed ? Visibility.Visible : Visibility.Collapsed;
-    public Visibility Vs2019Visibility => IsVS2019Installed ? Visibility.Visible : Visibility.Collapsed;
+    public int VSColumns { get; set; }
 
     public GridLength Col2019Width
     {
@@ -213,8 +127,6 @@ public class SolutionPageViewModel : BaseViewModel
         IsVS2022PreInstalled = File.Exists(PathEXE_VS2022Pre);
         IsVS2022Installed = File.Exists(PathEXE_VS2022);
         IsVS2019Installed = File.Exists(PathEXE_VS2019);
-
-        UpdateColumnWidths();
 
         Solutions.CollectionChanged += SolutionsOnCollectionChanged;
         PinnedSolutions.CollectionChanged += SolutionsOnCollectionChanged;
@@ -338,66 +250,66 @@ public class SolutionPageViewModel : BaseViewModel
         return task;
     }
 
-    private void UpdateColumnWidths()
-    {
-        var visibleButtons = new List<Visibility>
-        {
-            Vs2019Visibility, Vs2022Visibility, Vs2022PreVisibility
-        }.Count(v => v == Visibility.Visible);
+    //private void UpdateColumnWidths()
+    //{
+    //    var visibleButtons = new List<Visibility>
+    //    {
+    //        Vs2019Visibility, Vs2022Visibility, Vs2022PreVisibility
+    //    }.Count(v => v == Visibility.Visible);
 
-        if (visibleButtons == 1)
-        {
-            if (Vs2019Visibility == Visibility.Visible)
-            {
-                Col2019Width = new(1, GridUnitType.Star);
-                Col2022Width = new(0);
-                Col2022PreWidth = new(0);
-            }
-            else if (Vs2022Visibility == Visibility.Visible)
-            {
-                Col2019Width = new(0);
-                Col2022Width = new(1, GridUnitType.Star);
-                Col2022PreWidth = new(0);
-            }
-            else
-            {
-                Col2019Width = new(0);
-                Col2022Width = new(0);
-                Col2022PreWidth = new(1, GridUnitType.Star);
-            }
-        }
-        else if (visibleButtons == 2)
-        {
-            if (Vs2019Visibility == Visibility.Visible && Vs2022Visibility == Visibility.Visible)
-            {
-                Col2019Width = new(1, GridUnitType.Star);
-                Col2022Width = new(1, GridUnitType.Star);
-                Col2022PreWidth = new(0);
-            }
-            else if (Vs2019Visibility == Visibility.Visible && Vs2022PreVisibility == Visibility.Visible)
-            {
-                Col2019Width = new(1, GridUnitType.Star);
-                Col2022Width = new(0);
-                Col2022PreWidth = new(1, GridUnitType.Star);
-            }
-            else
-            {
-                Col2019Width = new(0);
-                Col2022Width = new(1, GridUnitType.Star);
-                Col2022PreWidth = new(1, GridUnitType.Star);
-            }
-        }
-        else
-        {
-            Col2019Width = new(1, GridUnitType.Star);
-            Col2022Width = new(1, GridUnitType.Star);
-            Col2022PreWidth = new(1, GridUnitType.Star);
-        }
+    //    if (visibleButtons == 1)
+    //    {
+    //        if (Vs2019Visibility == Visibility.Visible)
+    //        {
+    //            Col2019Width = new(1, GridUnitType.Star);
+    //            Col2022Width = new(0);
+    //            Col2022PreWidth = new(0);
+    //        }
+    //        else if (Vs2022Visibility == Visibility.Visible)
+    //        {
+    //            Col2019Width = new(0);
+    //            Col2022Width = new(1, GridUnitType.Star);
+    //            Col2022PreWidth = new(0);
+    //        }
+    //        else
+    //        {
+    //            Col2019Width = new(0);
+    //            Col2022Width = new(0);
+    //            Col2022PreWidth = new(1, GridUnitType.Star);
+    //        }
+    //    }
+    //    else if (visibleButtons == 2)
+    //    {
+    //        if (Vs2019Visibility == Visibility.Visible && Vs2022Visibility == Visibility.Visible)
+    //        {
+    //            Col2019Width = new(1, GridUnitType.Star);
+    //            Col2022Width = new(1, GridUnitType.Star);
+    //            Col2022PreWidth = new(0);
+    //        }
+    //        else if (Vs2019Visibility == Visibility.Visible && Vs2022PreVisibility == Visibility.Visible)
+    //        {
+    //            Col2019Width = new(1, GridUnitType.Star);
+    //            Col2022Width = new(0);
+    //            Col2022PreWidth = new(1, GridUnitType.Star);
+    //        }
+    //        else
+    //        {
+    //            Col2019Width = new(0);
+    //            Col2022Width = new(1, GridUnitType.Star);
+    //            Col2022PreWidth = new(1, GridUnitType.Star);
+    //        }
+    //    }
+    //    else
+    //    {
+    //        Col2019Width = new(1, GridUnitType.Star);
+    //        Col2022Width = new(1, GridUnitType.Star);
+    //        Col2022PreWidth = new(1, GridUnitType.Star);
+    //    }
 
-        OnPropertyChanged(nameof(Col2019Width));
-        OnPropertyChanged(nameof(Col2022Width));
-        OnPropertyChanged(nameof(Col2022PreWidth));
-    }
+    //    OnPropertyChanged(nameof(Col2019Width));
+    //    OnPropertyChanged(nameof(Col2022Width));
+    //    OnPropertyChanged(nameof(Col2022PreWidth));
+    //}
 
     public bool OpenSolutionProperties(Solution? sln = null)
     {

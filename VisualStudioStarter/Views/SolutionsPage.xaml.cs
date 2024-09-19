@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using VisualStudioStarter.Business;
 using VisualStudioStarter.ObjectModels;
 using VisualStudioStarter.Utils;
@@ -14,6 +15,8 @@ namespace VisualStudioStarter.Views;
 /// </summary>
 public partial class SolutionsPage
 {
+    private List<RBToggleButton> VSButtons;
+
     #region PROPS
 
     public SolutionPageViewModel VM => (SolutionPageViewModel)DataContext;
@@ -27,8 +30,76 @@ public partial class SolutionsPage
         VsStarterOptions.OnOptionsChanged += VsStarterOptionsOnOnOptionsChanged;
 
         InitializeComponent();
+        InitVsinstallations();
+
         Loaded += OnLoaded;
         Unloaded += OnUnloaded;
+    }
+
+    private void InitVsinstallations()
+    {
+        VSButtons = new List<RBToggleButton>();
+
+        foreach (var vs in (VisualStudioVersion[])Enum.GetValues(typeof(VisualStudioVersion)))
+        {
+            if (vs == VisualStudioVersion.None)
+                continue;
+
+            VSButtons.Add(GetVSButton(vs));
+        }
+
+        UniformGridVS.Columns = VSButtons.Count;
+        foreach (var button in VSButtons)
+        {
+            UniformGridVS.Children.Add(button);
+        }
+    }
+
+    private RBToggleButton GetVSButton(VisualStudioVersion vs)
+    {
+        var btn = new RBToggleButton
+        {
+            Tag = vs,
+            Margin = new Thickness(10, 5, 10, 5),
+            HorizontalContentAlignment = HorizontalAlignment.Center,
+            CheckedBackColor = new SolidColorBrush(Colors.MediumPurple),
+            Picture = vs switch
+            {
+                VisualStudioVersion.VS2019 => (ImageSource)Application.Current.FindResource("Vs2019PNG")!,
+                VisualStudioVersion.VS2022 => (ImageSource)Application.Current.FindResource("Vs2022PNG")!,
+                VisualStudioVersion.VS2022Pre => (ImageSource)Application.Current.FindResource("Vs2022PrePNG")!,
+                VisualStudioVersion.None => null,
+                _ => throw new ArgumentOutOfRangeException(nameof(vs), vs, null)
+            } ,
+            RenderTransformOrigin = new Point(0.5, 0.5),
+
+        };
+
+        btn.Checked += BtnVS_OnChecked;
+        btn.Unchecked += BtnVS_OnUnchecked;
+        return btn;
+    }
+
+    private void BtnVS_OnUnchecked(object sender, RoutedEventArgs e)
+    {
+        if (sender is RBToggleButton { Tag: VisualStudioVersion vs })
+        {
+
+        }
+    }
+
+    private void BtnVS_OnChecked(object sender, RoutedEventArgs e)
+    {
+        if (sender is RBToggleButton { Tag: VisualStudioVersion vs })
+        {
+            foreach (var rbToggleButton in VSButtons)
+            {
+                if (rbToggleButton.Tag is VisualStudioVersion vs2 && vs2 != vs)
+
+                    rbToggleButton.IsChecked = vs2 == vs;
+            }
+            OptionsManager.Instance.Options.VisualStudioSelected = vs;
+        }
     }
 
     #endregion
@@ -37,33 +108,6 @@ public partial class SolutionsPage
 
     private void VsStarterOptionsOnOnOptionsChanged(object? oldvalue, object? newvalue, string name)
     {
-        if (name == nameof(VsStarterOptions.VisualStudioSelected) &&
-            newvalue is VisualStudioVersion vs)
-        {
-            switch (vs)
-            {
-                case VisualStudioVersion.None:
-                    btn2019.IsChecked = false;
-                    btn2022.IsChecked = false;
-                    btn2022Pre.IsChecked = false;
-                    break;
-                case VisualStudioVersion.VS2019:
-                    btn2019.IsChecked = true;
-                    btn2022.IsChecked = false;
-                    btn2022Pre.IsChecked = false;
-                    break;
-                case VisualStudioVersion.VS2022:
-                    btn2019.IsChecked = false;
-                    btn2022.IsChecked = true;
-                    btn2022Pre.IsChecked = false;
-                    break;
-                case VisualStudioVersion.VS2022Pre:
-                    btn2019.IsChecked = false;
-                    btn2022.IsChecked = false;
-                    btn2022Pre.IsChecked = true;
-                    break;
-            }
-        }
     }
 
     private void OnUnloaded(object sender, RoutedEventArgs e)
@@ -157,42 +201,6 @@ public partial class SolutionsPage
     private void MoveUpMenu_OnClick(object sender, RoutedEventArgs e)
     {
         VM.MoveUpSolution();
-    }
-
-    private void BtnVS_OnUnchecked(object sender, RoutedEventArgs e)
-    {
-        switch (OptionsManager.Instance.Options.VisualStudioSelected)
-        {
-            case VisualStudioVersion.None:
-                break;
-            case VisualStudioVersion.VS2019 when Equals(sender, btn2019) && btn2019.IsChecked is false:
-            case VisualStudioVersion.VS2022 when Equals(sender, btn2022) && btn2022.IsChecked is false:
-            case VisualStudioVersion.VS2022Pre when Equals(sender, btn2022Pre) && btn2022Pre.IsChecked is false:
-                OptionsManager.Instance.Options.VisualStudioSelected = VisualStudioVersion.None;
-                break;
-        }
-    }
-
-    private void BtnVS_OnChecked(object sender, RoutedEventArgs e)
-    {
-        if (Equals(sender, btn2019))
-        {
-            btn2022.IsChecked = false;
-            btn2022Pre.IsChecked = false;
-            OptionsManager.Instance.Options.VisualStudioSelected = VisualStudioVersion.VS2019;
-        }
-        else if (Equals(sender, btn2022))
-        {
-            btn2019.IsChecked = false;
-            btn2022Pre.IsChecked = false;
-            OptionsManager.Instance.Options.VisualStudioSelected = VisualStudioVersion.VS2022;
-        }
-        else if (Equals(sender, btn2022Pre))
-        {
-            btn2019.IsChecked = false;
-            btn2022.IsChecked = false;
-            OptionsManager.Instance.Options.VisualStudioSelected = VisualStudioVersion.VS2022Pre;
-        }
     }
 
     private async void OpenWith_OnClick(object sender, RoutedEventArgs e)

@@ -70,7 +70,7 @@ namespace WPFUIControls
             set => SetValue(MouseHoverBackColorProperty, value);
         }
 
-        public ImageSource Picture
+        public ImageSource? Picture
         {
             get => (ImageSource)GetValue(PictureProperty);
             set => SetValue(PictureProperty, value);
