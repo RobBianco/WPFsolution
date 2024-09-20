@@ -1,114 +1,142 @@
 ﻿<ResourceDictionary
-   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-   xmlns:wpfuiControls="clr-namespace:WPFUIControls;assembly=WPFUIControls"
-   mc:Ignorable="d">
-   <Style TargetType="{x:Type wpfuiControls:RBToggleButton}">
-      <Setter Property="PictureMargin" Value="2" />
-   </Style>
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:objectModels="clr-namespace:VisualStudioStarter.ObjectModels"
+  xmlns:wpfuiControls="clr-namespace:WPFUIControls;assembly=WPFUIControls"
+  mc:Ignorable="d">
+  <Style TargetType="{x:Type wpfuiControls:RBToggleButton}">
+    <Setter Property="PictureMargin" Value="2" />
+  </Style>
 
-   <Style TargetType="{x:Type TextBox}">
-      <Setter Property="Template">
-         <Setter.Value>
-            <ControlTemplate TargetType="{x:Type TextBox}">
-               <Border
-                  Background="{TemplateBinding Background}"
-                  BorderBrush="{TemplateBinding BorderBrush}"
-                  BorderThickness="{TemplateBinding BorderThickness}"
-                  CornerRadius="5">
-                  <ScrollViewer x:Name="PART_ContentHost" Margin="5,0" />
-               </Border>
-            </ControlTemplate>
-         </Setter.Value>
-      </Setter>
-      <Setter Property="Background" Value="{StaticResource BackgroundLight1Brush}" />
-      <Setter Property="BorderThickness" Value="0" />
-      <Setter Property="Foreground" Value="#bdbcbe" />
-      <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-      <Setter Property="VerticalContentAlignment" Value="Stretch" />
-      <Style.Triggers>
-         <Trigger Property="IsMouseOver" Value="True">
-            <Setter Property="Background" Value="{StaticResource BackgroundLight1Brush}" />
-         </Trigger>
-      </Style.Triggers>
-   </Style>
+  <Style TargetType="{x:Type TextBox}">
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type TextBox}">
+          <Border
+            Background="{TemplateBinding Background}"
+            BorderBrush="{TemplateBinding BorderBrush}"
+            BorderThickness="{TemplateBinding BorderThickness}"
+            CornerRadius="5">
+            <ScrollViewer x:Name="PART_ContentHost" Margin="5,0" />
+          </Border>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+    <Setter Property="Background" Value="{StaticResource BackgroundLight1Brush}" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="Foreground" Value="#bdbcbe" />
+    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+    <Setter Property="VerticalContentAlignment" Value="Stretch" />
+    <Style.Triggers>
+      <Trigger Property="IsMouseOver" Value="True">
+        <Setter Property="Background" Value="{StaticResource BackgroundLight1Brush}" />
+      </Trigger>
+    </Style.Triggers>
+  </Style>
 
-   <Style x:Key="ListBoxSelectedItem" TargetType="{x:Type ListBoxItem}">
-      <Setter Property="Template">
-         <Setter.Value>
-            <ControlTemplate TargetType="{x:Type ListBoxItem}">
-               <Grid>
-                  <Border
-                     Name="Bd"
-                     Height="31"
-                     CornerRadius="5"
-                     SnapsToDevicePixels="True">
-                     <ContentPresenter
-                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                        SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                  </Border>
-               </Grid>
-               <ControlTemplate.Triggers>
-                  <Trigger Property="IsSelected" Value="True">
-                     <Setter TargetName="Bd" Property="Background" Value="{StaticResource BackgroundBrush}" />
-                  </Trigger>
-                  <Trigger Property="IsMouseOver" Value="True">
-                     <Setter TargetName="Bd" Property="Background" Value="{StaticResource BackgroundDark1Brush}" />
-                  </Trigger>
-               </ControlTemplate.Triggers>
-            </ControlTemplate>
-         </Setter.Value>
-      </Setter>
-   </Style>
-
-   <Style TargetType="{x:Type MenuItem}">
-      <Setter Property="Template">
-         <Setter.Value>
-            <ControlTemplate TargetType="{x:Type MenuItem}">
-               <wpfuiControls:RBButton
-                  Height="30"
-                  Margin="0,5,0,0"
-                  HorizontalContentAlignment="Left"
-                  Content="{TemplateBinding Header}"
-                  HorizontalPictureAlignment="Left"
-                  MouseHoverBackColor="{StaticResource BackgroundLight4Brush}"
-                  Picture="{TemplateBinding Icon}"
-                  PictureMargin="0,0,6,0"
-                  PictureOpacity="0.8"
-                  VerticalPictureAlignment="Center" />
-            </ControlTemplate>
-         </Setter.Value>
-      </Setter>
-   </Style>
-
-   <Style TargetType="{x:Type ContextMenu}">
-      <Setter Property="Template">
-         <Setter.Value>
-            <ControlTemplate TargetType="{x:Type ContextMenu}">
-               <Border
-                  x:Name="Border"
-                  Margin="10"
-                  Background="{StaticResource BackgroundBrush}"
-                  BorderThickness="1"
+  <Style x:Key="ListBoxSelectedItem" TargetType="{x:Type ListBoxItem}">
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type ListBoxItem}">
+          <Grid>
+            <Border
+              Name="Bd"
+              Height="31"
+              CornerRadius="5"
+              SnapsToDevicePixels="True">
+              <Border.ToolTip>
+                <Border
+                  Padding="10"
+                  Background="{StaticResource BackgroundDark1Brush}"
                   CornerRadius="10">
                   <Border.Effect>
-                     <DropShadowEffect
-                        BlurRadius="10"
-                        Opacity="0.9"
-                        ShadowDepth="0"
-                        Color="Black" />
+                    <DropShadowEffect
+                      BlurRadius="10"
+                      Opacity="0.4"
+                      Color="MediumPurple" />
+
                   </Border.Effect>
-                  <StackPanel
-                     Margin="5,0,5,5"
-                     IsItemsHost="True"
-                     KeyboardNavigation.DirectionalNavigation="Cycle"
-                     Orientation="Vertical" />
-               </Border>
-            </ControlTemplate>
-         </Setter.Value>
-      </Setter>
-   </Style>
+                  <TextBlock Foreground="LightGray" Text="{Binding Path}" />
+                </Border>
+              </Border.ToolTip>
+              <Border.Resources>
+                <Style TargetType="ToolTip">
+                  <Setter Property="Padding" Value="10" />
+                  <Setter Property="Background" Value="Transparent" />
+                  <Setter Property="BorderThickness" Value="0" />
+                  <Setter Property="Placement" Value="Top" />
+                  <Setter Property="ToolTipService.InitialShowDelay" Value="5500" />
+                  <Setter Property="ToolTipService.ShowDuration" Value="5000" />
+                  <Setter Property="ToolTipService.BetweenShowDelay" Value="5000" />
+                </Style>
+              </Border.Resources>
+
+              <ContentPresenter
+                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+            </Border>
+          </Grid>
+          <ControlTemplate.Triggers>
+            <Trigger Property="IsSelected" Value="True">
+              <Setter TargetName="Bd" Property="Background" Value="{StaticResource BackgroundBrush}" />
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="True">
+              <Setter TargetName="Bd" Property="Background" Value="{StaticResource BackgroundDark1Brush}" />
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <Style TargetType="{x:Type MenuItem}">
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type MenuItem}">
+          <wpfuiControls:RBButton
+            Height="30"
+            Margin="0,5,0,0"
+            HorizontalContentAlignment="Left"
+            Content="{TemplateBinding Header}"
+            HorizontalPictureAlignment="Left"
+            MouseHoverBackColor="{StaticResource BackgroundLight4Brush}"
+            Picture="{TemplateBinding Icon}"
+            PictureMargin="0,0,6,0"
+            PictureOpacity="0.8"
+            VerticalPictureAlignment="Center" />
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <Style TargetType="{x:Type ContextMenu}">
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type ContextMenu}">
+          <Border
+            x:Name="Border"
+            Margin="10"
+            Background="{StaticResource BackgroundBrush}"
+            BorderThickness="1"
+            CornerRadius="10">
+            <Border.Effect>
+              <DropShadowEffect
+                BlurRadius="10"
+                Opacity="0.9"
+                ShadowDepth="0"
+                Color="Black" />
+            </Border.Effect>
+            <StackPanel
+              Margin="5,0,5,5"
+              IsItemsHost="True"
+              KeyboardNavigation.DirectionalNavigation="Cycle"
+              Orientation="Vertical" />
+          </Border>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
 </ResourceDictionary>

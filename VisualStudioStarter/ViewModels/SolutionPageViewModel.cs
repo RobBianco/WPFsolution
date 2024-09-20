@@ -34,7 +34,6 @@ public class SolutionPageViewModel : BaseViewModel
     private bool _isVs2022PreInstalled;
     private bool _isVs2022Installed;
     private bool _isVs2019Installed;
-    private bool _isAdmin;
     //private bool _isVisualStudio2022Pre;
     //private bool _isVisualStudio2022;
     //private bool _isVisualStudio2019;
@@ -106,13 +105,7 @@ public class SolutionPageViewModel : BaseViewModel
             }
         }
     }
-
-    public bool IsAdmin
-    {
-        get => _isAdmin;
-        set => SetField(ref _isAdmin, value);
-    }
-
+    public bool IsVSCODEInstalled { get; set; }
 
     //public bool IsVisualStudio2022Pre
     //{
@@ -210,9 +203,12 @@ public class SolutionPageViewModel : BaseViewModel
     {
         VsStarterOptions.OnOptionsChanged += VsStarterOptionsOnOnOptionsChanged;
 
+        VsCodePath = RegeditUtils.GetVSCodePath();
+
         IsVS2022PreInstalled = File.Exists(PathEXE_VS2022Pre);
         IsVS2022Installed = File.Exists(PathEXE_VS2022);
         IsVS2019Installed = File.Exists(PathEXE_VS2019);
+        IsVSCODEInstalled = File.Exists(VsCodePath);
 
         UpdateColumnWidths();
 
@@ -221,6 +217,8 @@ public class SolutionPageViewModel : BaseViewModel
 
         AddSolutions(SolutionManager.GetSolutions());
     }
+
+    public String VsCodePath { get; set; }
 
     #endregion
 
@@ -427,17 +425,49 @@ public class SolutionPageViewModel : BaseViewModel
         return true;
     }
 
+    public async Task<bool> OpenSolutionWithVSCode(Solution? sln = null)
+    {
+        sln ??= SelectedSolution;
+
+        if (sln == null || String.IsNullOrEmpty(sln.Path))
+            return false;
+        var pathCartella = Path.GetDirectoryName(sln.Path);
+        var st = new ProcessStartInfo
+        {
+            Arguments = $"\"{pathCartella}\"",
+            FileName = VsCodePath
+        };
+
+        if (!File.Exists(st.FileName))
+        {
+            var res = await DialogHost.Show(new DialogPage(sln.Fileinfo?.Name ?? ""), "SolutionDialogHost");
+            if (res is DialogResult.Yes)
+            {
+                Remove_Solution(sln);
+            }
+
+            return false;
+        }
+
+        var p = new Process
+        {
+            StartInfo = st
+        };
+        p.Start();
+
+        return true;
+    }
+
     public async Task<bool> OpenSolution(Solution? sln = null, VisualStudioVersion? vsVersion = null)
     {
         sln ??= SelectedSolution;
 
-        if (sln == null)
+        if (sln == null || String.IsNullOrEmpty(sln.Path))
             return false;
 
         var st = new ProcessStartInfo
         {
             Arguments = $"\"{sln.Path}\"",
-            Verb = IsAdmin ? "runas" : ""
         };
 
         switch (vsVersion ?? OptionsManager.Instance.Options.VisualStudioSelected)

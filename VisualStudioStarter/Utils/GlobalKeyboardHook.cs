@@ -39,8 +39,8 @@ public class GlobalKeyboardHook : IDisposable
 
     private IntPtr SetHook(LowLevelKeyboardProc proc)
     {
-        using (Process curProcess = Process.GetCurrentProcess())
-        using (ProcessModule curModule = curProcess.MainModule)
+        using (var curProcess = Process.GetCurrentProcess())
+        using (var curModule = curProcess.MainModule)
         {
             return SetWindowsHookEx(WH_KEYBOARD_LL, proc,
                 GetModuleHandle(curModule.ModuleName), 0);
@@ -53,7 +53,7 @@ public class GlobalKeyboardHook : IDisposable
     {
         if (nCode >= 0 && wParam == (IntPtr)WM_KEYDOWN)
         {
-            int vkCode = Marshal.ReadInt32(lParam);
+            var vkCode = Marshal.ReadInt32(lParam);
             KeyPressed?.Invoke(this, new KeyPressedEventArgs(vkCode));
         }
         return CallNextHookEx(_hookID, nCode, wParam, lParam);

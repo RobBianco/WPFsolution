@@ -212,11 +212,26 @@ public partial class SolutionsPage
         if (e.ChangedButton == MouseButton.Right)
             return;
 
-        if (await VM.OpenSolution())
+        if (sender is FrameworkElement { DataContext: Solution clickedSolution })
         {
-            Application.Current.Shutdown();
+            if (await VM.OpenSolution(clickedSolution) &&
+                !Keyboard.Modifiers.HasFlag(ModifierKeys.Control) && !Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
+            {
+                OnOpenSolution?.Invoke(this, clickedSolution);
+            }
         }
     }
+
+    private async void OpenCodeSolution_OnClick(Object sender, RoutedEventArgs e)
+    {
+        if (await VM.OpenSolutionWithVSCode() &&
+            !Keyboard.Modifiers.HasFlag(ModifierKeys.Control) && !Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
+        {
+            OnOpenSolution?.Invoke(this, VM.SelectedSolution);
+        }
+    }
+
+    internal event EventHandler<Solution?>? OnOpenSolution;
 
     private void OpenSolutionDirectory_OnClick(object sender, RoutedEventArgs e)
     {

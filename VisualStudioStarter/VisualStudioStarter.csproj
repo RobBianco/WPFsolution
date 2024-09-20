@@ -6,10 +6,11 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
-    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <AssemblyVersion>1.0.0.1</AssemblyVersion>
      <RuntimeIdentifier>win-x64</RuntimeIdentifier>
      <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
      <ApplicationIcon>Visual_Studio_Starter.ico</ApplicationIcon>
+     <FileVersion>1.0.0.1</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

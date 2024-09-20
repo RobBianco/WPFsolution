@@ -1,135 +1,135 @@
 <ResourceDictionary
-   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-   xmlns:local="clr-namespace:WPFUIControls">
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:local="clr-namespace:WPFUIControls">
 
-   <Color x:Key="Background">#202121</Color>
-   <SolidColorBrush x:Key="Background1Brush" Color="{StaticResource Background}" />
+  <Color x:Key="Background">#202121</Color>
+  <SolidColorBrush x:Key="Background1Brush" Color="{StaticResource Background}" />
 
-   <Color x:Key="Background1">#2c2d2d</Color>
-   <SolidColorBrush x:Key="BackgroundBrush" Color="{StaticResource Background1}" />
+  <Color x:Key="Background1">#2c2d2d</Color>
+  <SolidColorBrush x:Key="BackgroundBrush" Color="{StaticResource Background1}" />
 
-   <Color x:Key="Background2">#38393a</Color>
-   <SolidColorBrush x:Key="Background2Brush" Color="{StaticResource Background2}" />
+  <Color x:Key="Background2">#38393a</Color>
+  <SolidColorBrush x:Key="Background2Brush" Color="{StaticResource Background2}" />
 
-   <Color x:Key="Background3">#444546</Color>
-   <SolidColorBrush x:Key="Background3Brush" Color="{StaticResource Background3}" />
+  <Color x:Key="Background3">#444546</Color>
+  <SolidColorBrush x:Key="Background3Brush" Color="{StaticResource Background3}" />
 
-   <Color x:Key="Background4">#4e4f50</Color>
-   <SolidColorBrush x:Key="Background4Brush" Color="{StaticResource Background4}" />
+  <Color x:Key="Background4">#4e4f50</Color>
+  <SolidColorBrush x:Key="Background4Brush" Color="{StaticResource Background4}" />
 
-   <SolidColorBrush x:Key="ComboBoxNormalBorderBrush" Color="#e3e9ef" />
-   <SolidColorBrush x:Key="ComboBoxNormalBackgroundBrush" Color="#fff" />
-   <SolidColorBrush x:Key="ComboBoxDisabledForegroundBrush" Color="#888" />
-   <SolidColorBrush x:Key="ComboBoxDisabledBackgroundBrush" Color="#eee" />
-   <SolidColorBrush x:Key="ComboBoxDisabledBorderBrush" Color="#888" />
+  <SolidColorBrush x:Key="ComboBoxNormalBorderBrush" Color="#e3e9ef" />
+  <SolidColorBrush x:Key="ComboBoxNormalBackgroundBrush" Color="#fff" />
+  <SolidColorBrush x:Key="ComboBoxDisabledForegroundBrush" Color="#888" />
+  <SolidColorBrush x:Key="ComboBoxDisabledBackgroundBrush" Color="#eee" />
+  <SolidColorBrush x:Key="ComboBoxDisabledBorderBrush" Color="#888" />
 
-   <Style TargetType="{x:Type local:RBToggleButton}">
-      <Setter Property="CheckedBackColor" Value="{StaticResource Background4Brush}" />
-      <Setter Property="MouseHoverBackColor" Value="{StaticResource Background3Brush}" />
-      <Setter Property="Foreground" Value="LightGray" />
-      <Setter Property="Background" Value="{StaticResource Background2Brush}" />
-      <Setter Property="CornerRadius" Value="5" />
-      <Setter Property="HorizontalContentAlignment" Value="Center" />
-      <Setter Property="VerticalContentAlignment" Value="Center" />
-      <Setter Property="Cursor" Value="Hand" />
-      <Setter Property="PictureStretch" Value="Uniform" />
-      <Setter Property="HorizontalPictureAlignment" Value="Center" />
-      <Setter Property="VerticalPictureAlignment" Value="Center" />
-      <Setter Property="Template">
-         <Setter.Value>
-            <ControlTemplate TargetType="{x:Type local:RBToggleButton}">
-               <Border
-                  Name="Border"
-                  HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
-                  VerticalAlignment="{TemplateBinding VerticalAlignment}"
-                  Background="{TemplateBinding Background}"
-                  BorderBrush="{TemplateBinding BorderBrush}"
-                  BorderThickness="{TemplateBinding BorderThickness}"
-                  CornerRadius="{TemplateBinding CornerRadius}">
-                  <Grid Name="Grid">
-                     <Image
-                        Name="Image"
-                        Margin="{TemplateBinding PictureMargin}"
-                        HorizontalAlignment="{TemplateBinding HorizontalPictureAlignment}"
-                        VerticalAlignment="{TemplateBinding VerticalPictureAlignment}"
-                        Effect="{TemplateBinding PictureEffect}"
-                        Source="{TemplateBinding Picture}"
-                        Stretch="{TemplateBinding PictureStretch}" />
-                     <ContentPresenter
-                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                        Content="{TemplateBinding Content}" />
-                  </Grid>
-               </Border>
-               <ControlTemplate.Triggers>
-                  <Trigger Property="IsEnabled" Value="False">
-                     <Setter TargetName="Grid" Property="Opacity" Value="0.2" />
-                  </Trigger>
-                  <Trigger Property="IsMouseOver" Value="True">
-                     <Setter TargetName="Border" Property="Panel.Background" Value="{Binding MouseHoverBackColor, RelativeSource={RelativeSource TemplatedParent}}" />
-                  </Trigger>
-                  <Trigger Property="IsChecked" Value="True">
-                     <Setter TargetName="Border" Property="Panel.Background" Value="{Binding CheckedBackColor, RelativeSource={RelativeSource TemplatedParent}}" />
-                  </Trigger>
-               </ControlTemplate.Triggers>
-            </ControlTemplate>
-         </Setter.Value>
-      </Setter>
-   </Style>
+  <Style TargetType="{x:Type local:RBToggleButton}">
+    <Setter Property="CheckedBackColor" Value="{StaticResource Background4Brush}" />
+    <Setter Property="MouseHoverBackColor" Value="{StaticResource Background3Brush}" />
+    <Setter Property="Foreground" Value="LightGray" />
+    <Setter Property="Background" Value="{StaticResource Background2Brush}" />
+    <Setter Property="CornerRadius" Value="5" />
+    <Setter Property="HorizontalContentAlignment" Value="Center" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+    <Setter Property="Cursor" Value="Hand" />
+    <Setter Property="PictureStretch" Value="Uniform" />
+    <Setter Property="HorizontalPictureAlignment" Value="Center" />
+    <Setter Property="VerticalPictureAlignment" Value="Center" />
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type local:RBToggleButton}">
+          <Border
+            Name="Border"
+            HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+            VerticalAlignment="{TemplateBinding VerticalAlignment}"
+            Background="{TemplateBinding Background}"
+            BorderBrush="{TemplateBinding BorderBrush}"
+            BorderThickness="{TemplateBinding BorderThickness}"
+            CornerRadius="{TemplateBinding CornerRadius}">
+            <Grid Name="Grid">
+              <Image
+                Name="Image"
+                Margin="{TemplateBinding PictureMargin}"
+                HorizontalAlignment="{TemplateBinding HorizontalPictureAlignment}"
+                VerticalAlignment="{TemplateBinding VerticalPictureAlignment}"
+                Effect="{TemplateBinding PictureEffect}"
+                Source="{TemplateBinding Picture}"
+                Stretch="{TemplateBinding PictureStretch}" />
+              <ContentPresenter
+                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                Content="{TemplateBinding Content}" />
+            </Grid>
+          </Border>
+          <ControlTemplate.Triggers>
+            <Trigger Property="IsEnabled" Value="False">
+              <Setter TargetName="Grid" Property="Opacity" Value="0.2" />
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="True">
+              <Setter TargetName="Border" Property="Panel.Background" Value="{Binding MouseHoverBackColor, RelativeSource={RelativeSource TemplatedParent}}" />
+            </Trigger>
+            <Trigger Property="IsChecked" Value="True">
+              <Setter TargetName="Border" Property="Panel.Background" Value="{Binding CheckedBackColor, RelativeSource={RelativeSource TemplatedParent}}" />
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
 
-   <Style TargetType="{x:Type local:RBButton}">
-      <Setter Property="Foreground" Value="LightGray" />
-      <Setter Property="Background" Value="{StaticResource Background2Brush}" />
-      <Setter Property="MouseHoverBackColor" Value="{StaticResource Background3Brush}" />
-      <Setter Property="CornerRadius" Value="5" />
-      <Setter Property="HorizontalContentAlignment" Value="Center" />
-      <Setter Property="VerticalContentAlignment" Value="Center" />
-      <Setter Property="Cursor" Value="Hand" />
-      <Setter Property="PictureHeight" Value="20" />
-      <Setter Property="PictureWitdh" Value="20" />
-      <Setter Property="PictureOpacity" Value="1" />
-      <Setter Property="PictureStretch" Value="Uniform" />
-      <Setter Property="HorizontalPictureAlignment" Value="Center" />
-      <Setter Property="VerticalPictureAlignment" Value="Center" />
-      <Setter Property="Template">
-         <Setter.Value>
-            <ControlTemplate TargetType="{x:Type local:RBButton}">
-               <Border
-                  Background="{TemplateBinding Background}"
-                  BorderBrush="{TemplateBinding BorderBrush}"
-                  BorderThickness="{TemplateBinding BorderThickness}"
-                  CornerRadius="{TemplateBinding CornerRadius}">
-                  <Grid Margin="5,0">
-                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition />
-                     </Grid.ColumnDefinitions>
-                     <Image
-                        Name="Border"
-                        Width="{TemplateBinding PictureWitdh}"
-                        Height="{TemplateBinding PictureHeight}"
-                        Margin="{TemplateBinding PictureMargin}"
-                        HorizontalAlignment="{TemplateBinding HorizontalPictureAlignment}"
-                        VerticalAlignment="{TemplateBinding VerticalPictureAlignment}"
-                        Opacity="{TemplateBinding PictureOpacity}"
-                        Source="{TemplateBinding Picture}"
-                        Stretch="{TemplateBinding PictureStretch}" />
-                     <ContentPresenter
-                        Grid.Column="1"
-                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                        Content="{TemplateBinding Content}" />
-                  </Grid>
-               </Border>
-               <ControlTemplate.Triggers>
-                  <Trigger Property="IsMouseOver" Value="True">
-                     <Setter TargetName="Border" Property="Panel.Background" Value="{Binding MouseHoverBackColor, RelativeSource={RelativeSource TemplatedParent}}" />
-                  </Trigger>
-               </ControlTemplate.Triggers>
-            </ControlTemplate>
-         </Setter.Value>
-      </Setter>
+  <Style TargetType="{x:Type local:RBButton}">
+    <Setter Property="Foreground" Value="LightGray" />
+    <Setter Property="Background" Value="{StaticResource Background2Brush}" />
+    <Setter Property="MouseHoverBackColor" Value="{StaticResource Background3Brush}" />
+    <Setter Property="CornerRadius" Value="5" />
+    <Setter Property="HorizontalContentAlignment" Value="Center" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+    <Setter Property="Cursor" Value="Hand" />
+    <Setter Property="PictureHeight" Value="20" />
+    <Setter Property="PictureWitdh" Value="20" />
+    <Setter Property="PictureOpacity" Value="1" />
+    <Setter Property="PictureStretch" Value="Uniform" />
+    <Setter Property="HorizontalPictureAlignment" Value="Center" />
+    <Setter Property="VerticalPictureAlignment" Value="Center" />
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type local:RBButton}">
+          <Border
+            Background="{TemplateBinding Background}"
+            BorderBrush="{TemplateBinding BorderBrush}"
+            BorderThickness="{TemplateBinding BorderThickness}"
+            CornerRadius="{TemplateBinding CornerRadius}">
+            <Grid Margin="5,0">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+              </Grid.ColumnDefinitions>
+              <Image
+                Name="Border"
+                Width="{TemplateBinding PictureWitdh}"
+                Height="{TemplateBinding PictureHeight}"
+                Margin="{TemplateBinding PictureMargin}"
+                HorizontalAlignment="{TemplateBinding HorizontalPictureAlignment}"
+                VerticalAlignment="{TemplateBinding VerticalPictureAlignment}"
+                Opacity="{TemplateBinding PictureOpacity}"
+                Source="{TemplateBinding Picture}"
+                Stretch="{TemplateBinding PictureStretch}" />
+              <ContentPresenter
+                Grid.Column="1"
+                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                Content="{TemplateBinding Content}" />
+            </Grid>
+          </Border>
+          <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+              <Setter TargetName="Border" Property="Panel.Background" Value="{Binding MouseHoverBackColor, RelativeSource={RelativeSource TemplatedParent}}" />
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
 
-   </Style>
+  </Style>
 </ResourceDictionary>

@@ -22,6 +22,7 @@ public partial class MainWindow
     private Storyboard _HeightStoryBoard;
     private Storyboard _WidthStoryBoard;
     private Storyboard _LeftStoryBoard;
+    private bool _isClosing;
     private double _d;
     private bool _initialize;
     private readonly GlobalKeyboardHook _globalKeys = new();
@@ -49,10 +50,20 @@ public partial class MainWindow
         Loaded += OnLoaded;
         Closing += OnClosing;
         Frame.Content = SolutionsPage;
+        SolutionsPage.OnOpenSolution += SolutionsPageOnOnOpenSolution;
 
         Left = GetLeft();
         Opacity = 0;
         Top = SystemParameters.PrimaryScreenHeight;
+    }
+
+    private void SolutionsPageOnOnOpenSolution(Object? sender, Solution? e)
+    {
+        _isClosing = true;
+        AnimateTop(new Duration(TimeSpan.FromMilliseconds(600)),(_, _) =>
+        {
+            Application.Current.Shutdown();
+        });
     }
 
     #endregion
@@ -75,7 +86,6 @@ public partial class MainWindow
             {
                 // continue
             }
-            
 
             Application.Current.Shutdown();
         }
@@ -295,7 +305,7 @@ public partial class MainWindow
         return Math.Min(MaxHeight, Math.Max(300,h));
     }
 
-    public double GetTop() => SystemParameters.PrimaryScreenHeight - GetHeight() - 45;
+    public double GetTop() => _isClosing ? SystemParameters.PrimaryScreenHeight + 20 : SystemParameters.PrimaryScreenHeight - GetHeight() - 45;
     public double GetLeft() =>
         OptionsManager.Instance.Options.StartPosition switch
         {

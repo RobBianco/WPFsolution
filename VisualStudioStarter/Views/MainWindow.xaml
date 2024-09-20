@@ -162,7 +162,7 @@
                         FontSize="13"
                         Opacity="0.5">
                         <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
-                           <TextBlock Text="Verison: " />
+                           <TextBlock Text="Version: " />
                            <TextBlock Text="{Binding Version}" />
                         </StackPanel>
                      </Label>
