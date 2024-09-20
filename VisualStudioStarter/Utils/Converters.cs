@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.Windows;
 using System.Windows.Data;
 
 namespace VisualStudioStarter.Utils
@@ -8,16 +9,17 @@ namespace VisualStudioStarter.Utils
         /// <inheritdoc />
         public Object Convert(Object value, Type targetType, Object parameter, CultureInfo culture)
         {
+            var res = System.Windows.Visibility.Collapsed;
             if (value is VisualStudioVersion vs)
             {
-                return vs switch
+                res = vs switch
                 {
                     VisualStudioVersion.None => System.Windows.Visibility.Collapsed,
                     _ => System.Windows.Visibility.Visible
                 };
             }
 
-            return System.Windows.Visibility.Collapsed;
+            return parameter is "reverse" ? res == Visibility.Collapsed ? Visibility.Visible : Visibility.Collapsed : res;
         }
 
         /// <inheritdoc />

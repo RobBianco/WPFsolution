@@ -28,6 +28,12 @@ public class Solution : INotifyPropertyChanged
         }
     }
 
+    public string Name
+    {
+        get => _name ?? Fileinfo?.Name ?? System.IO.Path.GetDirectoryName(Path) ?? "Error retriving path"; 
+        set => SetField(ref _name, value);
+    }
+
     public string Path
     {
         get => _path;
@@ -44,6 +50,7 @@ public class Solution : INotifyPropertyChanged
     }
 
     private VisualStudioVersion _defaultVersion = VisualStudioVersion.None;
+    private string? _name;
 
     public VisualStudioVersion DefaultVersion
     {

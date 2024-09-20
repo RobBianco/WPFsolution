@@ -8,6 +8,7 @@
    d:DesignHeight="200"
    d:DesignWidth="300"
    Background="{StaticResource BackgroundBrush}"
+   Foreground="LightGray"
    mc:Ignorable="d">
    <Grid>
       <Grid.RowDefinitions>

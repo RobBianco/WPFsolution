@@ -8,7 +8,7 @@
    xmlns:sys="clr-namespace:System;assembly=System.Runtime"
    xmlns:utils="clr-namespace:VisualStudioStarter.Utils"
    xmlns:viewModels="clr-namespace:VisualStudioStarter.ViewModels"
-   Title="MainWindow"
+   Title="Visual Studio Starter"
    Height="300"
    MinWidth="200"
    MaxWidth="1900"

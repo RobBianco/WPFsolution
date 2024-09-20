@@ -489,7 +489,7 @@ public class SolutionPageViewModel : BaseViewModel
                 return false;
         }
 
-        if (!File.Exists(st.FileName))
+        if (!File.Exists(sln.Path))
         {
             var res = await DialogHost.Show(new DialogPage(sln.Fileinfo?.Name ?? ""), "SolutionDialogHost");
             if (res is DialogResult.Yes)
@@ -578,5 +578,20 @@ public class SolutionPageViewModel : BaseViewModel
             return;
 
         sln.DefaultVersion = version;
+    }
+
+    public async Task RenameSolution()
+    {
+        var sln = SelectedSolution;
+
+        if (sln is null)
+            return;
+
+        var ucRename = new RenameUC(sln.Path, sln.Name);
+        var res = await DialogHost.Show(ucRename, "SolutionDialogHost");
+        if (res is DialogResult.Yes)
+        {
+            sln.Name = ucRename.Name;
+        }
     }
 }
