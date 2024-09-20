@@ -17,7 +17,7 @@ namespace WPFUIControls.Converters
             var a = parameter is not null && bool.TryParse(parameter.ToString(), out var ress) && !ress;
             var tr = !a ? Visibility.Visible : Visibility.Collapsed;
             var fa = !a ? Visibility.Collapsed : Visibility.Visible;
-            return value switch
+            var res = value switch
             {
                 bool b => b ? tr : fa,
                 string s => !string.IsNullOrEmpty(s) ? tr : fa,
@@ -31,6 +31,8 @@ namespace WPFUIControls.Converters
                 IEnumerable e => e.Cast<object>().Any() ? tr : fa,
                 _ => tr
             };
+
+            return parameter is "inverse" ? res == Visibility.Collapsed ? Visibility.Visible : Visibility.Collapsed : res;
         }
 
         public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)

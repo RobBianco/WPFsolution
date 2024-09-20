@@ -461,7 +461,6 @@ public class SolutionPageViewModel : BaseViewModel
     public async Task<bool> OpenSolution(Solution? sln = null, VisualStudioVersion? vsVersion = null)
     {
         sln ??= SelectedSolution;
-
         if (sln == null || String.IsNullOrEmpty(sln.Path))
             return false;
 
@@ -470,7 +469,9 @@ public class SolutionPageViewModel : BaseViewModel
             Arguments = $"\"{sln.Path}\"",
         };
 
-        switch (vsVersion ?? OptionsManager.Instance.Options.VisualStudioSelected)
+        vsVersion ??= sln.DefaultVersion == VisualStudioVersion.None ? OptionsManager.Instance.Options.VisualStudioSelected : sln.DefaultVersion;
+
+        switch (vsVersion)
         {
             case VisualStudioVersion.None:
                 await DialogHost.Show(new VSWarningUC(), "SolutionDialogHost");
@@ -568,4 +569,14 @@ public class SolutionPageViewModel : BaseViewModel
     }
 
     #endregion
+
+    public void SetSetDefaultVS(VisualStudioVersion version)
+    {
+        var sln = SelectedSolution;
+
+        if (sln is null)
+            return;
+
+        sln.DefaultVersion = version;
+    }
 }

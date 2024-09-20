@@ -3,6 +3,7 @@ using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
 using System.Windows;
 using System.Windows.Media;
+using VisualStudioStarter.Utils;
 
 namespace VisualStudioStarter.ObjectModels;
 
@@ -11,9 +12,8 @@ public class Solution : INotifyPropertyChanged
     #region FIELDS
 
     private string _path = "";
-    private FileInfo _fileinfo;
+    private FileInfo? _fileinfo;
     private bool _isPinned;
-    private string _directory;
 
     #endregion
 
@@ -43,6 +43,20 @@ public class Solution : INotifyPropertyChanged
         }
     }
 
+    private VisualStudioVersion _defaultVersion = VisualStudioVersion.None;
+
+    public VisualStudioVersion DefaultVersion
+    {
+        get => _defaultVersion;
+        set
+        {
+            if (SetField(ref _defaultVersion, value))
+            {
+                OnPropertyChanged(nameof(DefaultVSImage));
+            }
+        }
+    }
+
     [JsonIgnore]
     public FileInfo? Fileinfo
     {
@@ -57,10 +71,8 @@ public class Solution : INotifyPropertyChanged
         }
     }
 
-    [JsonIgnore] 
-    public string Directory => System.IO.Path.GetDirectoryName(Fileinfo?.FullName ?? "") ?? "";
-    [JsonIgnore] 
-    public bool DirectoryExist => System.IO.Directory.Exists(Directory);
+    [JsonIgnore] public string Directory => System.IO.Path.GetDirectoryName(Fileinfo?.FullName ?? "") ?? "";
+    [JsonIgnore] public bool DirectoryExist => System.IO.Directory.Exists(Directory);
 
     [JsonIgnore]
     public ImageSource? PinnedImage => IsPinned
@@ -69,21 +81,28 @@ public class Solution : INotifyPropertyChanged
 
     [JsonIgnore]
     public ImageSource? Image =>
-        Fileinfo.Extension switch
+        Fileinfo?.Extension switch
         {
-            ".sln" => Application.Current.FindResource("SlnPNG") as ImageSource,
-            ".csproj" => Application.Current.FindResource("CsProjPNG") as ImageSource,
+            ".sln" => (ImageSource)Application.Current.FindResource("SlnPNG")!,
+            ".csproj" => (ImageSource)Application.Current.FindResource("CsProjPNG")!,
             _ => null
         };
 
-    #endregion
-
-    #region CTOR
-
-    public Solution()
+    [JsonIgnore]
+    public ImageSource? DefaultVSImage
     {
+        get
+        {
+            switch (DefaultVersion)
+            {
+                case VisualStudioVersion.VS2019: return (ImageSource)Application.Current.FindResource("Vs2019PNG")!;
+                case VisualStudioVersion.VS2022: return (ImageSource)Application.Current.FindResource("Vs2022PNG")!;
+                case VisualStudioVersion.VS2022Pre: return (ImageSource)Application.Current.FindResource("Vs2022PrePNG")!;
+                case VisualStudioVersion.None:
+                default: return null;
+            }
+        }
     }
-
     #endregion
 
     #region EVENTS

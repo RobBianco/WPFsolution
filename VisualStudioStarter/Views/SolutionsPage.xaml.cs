@@ -102,44 +102,53 @@ public partial class SolutionsPage
         if (sol is null)
             return;
 
-        OpenDirectoryPinnedMenu.IsEnabled = sol.DirectoryExist;
-        OpenDirectoryUnpinnedMenu.IsEnabled = sol.DirectoryExist;
-        OpenPropertiesPinnedMenu.IsEnabled = sol.DirectoryExist;
-        OpenPropertiesUnpinnedMenu.IsEnabled = sol.DirectoryExist;
+        if (e.Source is ListBox lst)
+        {
 
-        var index = sol.IsPinned ? VM.PinnedSolutions.IndexOf(sol) : VM.Solutions.IndexOf(sol);
-        var max = sol.IsPinned ? VM.PinnedSolutions.Count : VM.Solutions.Count;
+        }
 
-        MoveUpUnpinnedMenu.IsEnabled = index > 0;
-        MoveDownUnpinnedMenu.IsEnabled = index < max - 1;
-        MoveUpPinnedMenu.IsEnabled = index > 0;
-        MoveDownPinnedMenu.IsEnabled = index < max - 1;
+        //OpenDirectoryPinnedMenu.IsEnabled = sol.DirectoryExist;
+        //OpenDirectoryUnpinnedMenu.IsEnabled = sol.DirectoryExist;
+        //OpenPropertiesPinnedMenu.IsEnabled = sol.DirectoryExist;
+        //OpenPropertiesUnpinnedMenu.IsEnabled = sol.DirectoryExist;
+
+        //var index = sol.IsPinned ? VM.PinnedSolutions.IndexOf(sol) : VM.Solutions.IndexOf(sol);
+        //var max = sol.IsPinned ? VM.PinnedSolutions.Count : VM.Solutions.Count;
+
+        //MoveUpUnpinnedMenu.IsEnabled = index > 0;
+        //MoveDownUnpinnedMenu.IsEnabled = index < max - 1;
+        //MoveUpPinnedMenu.IsEnabled = index > 0;
+        //MoveDownPinnedMenu.IsEnabled = index < max - 1;
 
 
-        OpenWith2019Pinned.Visibility = VM.IsVS2019Installed ? Visibility.Visible : Visibility.Collapsed;
-        OpenWith2022Pinned.Visibility = VM.IsVS2022Installed ? Visibility.Visible : Visibility.Collapsed;
-        OpenWith2022PrePinned.Visibility = VM.IsVS2022PreInstalled ? Visibility.Visible : Visibility.Collapsed;
+        //OpenWith2019Pinned.Visibility = VM.IsVS2019Installed ? Visibility.Visible : Visibility.Collapsed;
+        //OpenWith2022Pinned.Visibility = VM.IsVS2022Installed ? Visibility.Visible : Visibility.Collapsed;
+        //OpenWith2022PrePinned.Visibility = VM.IsVS2022PreInstalled ? Visibility.Visible : Visibility.Collapsed;
 
-        OpenWithPinned.Visibility = GetVisibilityBasedOnChildControls(
-            OpenWith2019Pinned.Visibility,
-            OpenWith2022Pinned.Visibility,
-            OpenWith2022PrePinned.Visibility
-        );
+        //OpenWithPinned.Visibility = GetVisibilityBasedOnChildControls(
+        //    OpenWith2019Pinned.Visibility,
+        //    OpenWith2022Pinned.Visibility,
+        //    OpenWith2022PrePinned.Visibility
+        //);
 
-        OpenWith2019Unpinned.Visibility = VM.IsVS2019Installed ? Visibility.Visible : Visibility.Collapsed;
-        OpenWith2022Unpinned.Visibility = VM.IsVS2022Installed ? Visibility.Visible : Visibility.Collapsed;
-        OpenWith2022PreUnpinned.Visibility = VM.IsVS2022PreInstalled ? Visibility.Visible : Visibility.Collapsed;
+        //OpenWith2019Unpinned.Visibility = VM.IsVS2019Installed ? Visibility.Visible : Visibility.Collapsed;
+        //OpenWith2022Unpinned.Visibility = VM.IsVS2022Installed ? Visibility.Visible : Visibility.Collapsed;
+        //OpenWith2022PreUnpinned.Visibility = VM.IsVS2022PreInstalled ? Visibility.Visible : Visibility.Collapsed;
 
-        OpenWithUnpinned.Visibility = GetVisibilityBasedOnChildControls(
-            OpenWith2019Unpinned.Visibility,
-            OpenWith2022Unpinned.Visibility,
-            OpenWith2022PreUnpinned.Visibility
-        );
+        //OpenWithUnpinned.Visibility = GetVisibilityBasedOnChildControls(
+        //    OpenWith2019Unpinned.Visibility,
+        //    OpenWith2022Unpinned.Visibility,
+        //    OpenWith2022PreUnpinned.Visibility
+        //);
+
+        //SetDefaultVsUnpinned.Visibility = sol.DefaultVersion == VisualStudioVersion.None ? Visibility.Visible : Visibility.Collapsed;
+        //RemoveDefaultVsUnpinned.Visibility = sol.DefaultVersion == VisualStudioVersion.None ? Visibility.Collapsed : Visibility.Visible;
+        //SetDefaultVsPinned.Visibility = sol.DefaultVersion == VisualStudioVersion.None ? Visibility.Visible : Visibility.Collapsed;
+        //RemoveDefaultVsPinned.Visibility = sol.DefaultVersion == VisualStudioVersion.None ? Visibility.Collapsed : Visibility.Visible;
     }
 
     private void RemoveAddPinned_OnClick(object sender, RoutedEventArgs e)
     {
-        VM.PinUnPin_Solution();
     }
 
     private void OpenSolutionProperties_OnClick(object sender, RoutedEventArgs e)
@@ -249,4 +258,40 @@ public partial class SolutionsPage
     }
 
     #endregion
+
+    private void SetDefaulVs_OnClick(Object sender, RoutedEventArgs e)
+    {
+
+        //if (ReferenceEquals(sender, ))
+        //{
+        //    VM.SetSetDefaultVS(VisualStudioVersion.VS2019);
+        //}
+        //else if (ReferenceEquals(sender, SetDefault2022))
+        //{
+        //    VM.SetSetDefaultVS(VisualStudioVersion.VS2022);
+        //}
+        //else if (ReferenceEquals(sender, SetDefault2022Pre))
+        //{
+        //    VM.SetSetDefaultVS(VisualStudioVersion.VS2022Pre);
+        //}
+        //else if (ReferenceEquals(sender, RemoveDefaultVs) || ReferenceEquals(sender, RemoveDefaultVsPinned))
+        //{
+        //    VM.SetSetDefaultVS(VisualStudioVersion.None);
+        //}
+    }
+
+    private void RemoveDefaultVsUnpinned_OnClick(Object sender, RoutedEventArgs e)
+    {
+        VM.SetSetDefaultVS(VisualStudioVersion.None);
+    }
+
+    private void AddToPinned_OnClick(Object sender, RoutedEventArgs e)
+    {
+        VM.PinUnPin_Solution();
+    }
+
+    private void RemoveFromPinned_OnClick(Object sender, RoutedEventArgs e)
+    {
+        VM.PinUnPin_Solution();
+    }
 }

@@ -31,6 +31,7 @@
     <None Remove="Images\uparrow.png" />
     <None Remove="Images\VS2019.png" />
     <None Remove="Images\VS2022.png" />
+    <None Remove="Images\VS2022Pre.png" />
     <None Remove="Images\window.png" />
   </ItemGroup>
 
@@ -72,6 +73,7 @@
     <Resource Include="Images\uparrow.png" />
     <Resource Include="Images\VS2019.png" />
     <Resource Include="Images\VS2022.png" />
+    <Resource Include="Images\VS2022Pre.png" />
     <Resource Include="Images\window.png" />
   </ItemGroup>
 

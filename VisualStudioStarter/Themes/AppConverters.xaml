@@ -5,4 +5,5 @@
   xmlns:utils="clr-namespace:VisualStudioStarter.Utils">
   <converters:ObjectToVisibilityConverter x:Key="ObjectToVisibilityConverter" />
   <converters:StringToDoubleConverter x:Key="StringToDoubleConverter" />
+  <utils:DefaultVsToVisibilityConverter x:Key="DefaultVsToVisibilityConverter" />
 </ResourceDictionary>

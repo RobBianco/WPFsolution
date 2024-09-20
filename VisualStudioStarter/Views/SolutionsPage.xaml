@@ -31,6 +31,100 @@
               Height="31"
               Background="Transparent"
               MouseDown="OnSolution_OnMouseDown">
+              <Grid.ContextMenu>
+                <ContextMenu>
+                  <MenuItem Header="{Binding Fileinfo.Name}" />
+                  <MenuItem
+                    Click="OpenSolution_OnClick"
+                    Header="Open"
+                    Icon="{materialDesign:PackIcon Kind=WindowMaximize}" />
+                  <MenuItem Header="Open with" Icon="{materialDesign:PackIcon Kind=WindowMaximize}">
+                    <MenuItem
+                      x:Name="OpenWithCode"
+                      Click="OpenCodeSolution_OnClick"
+                      Foreground="#25b0f3"
+                      Header="Open with CODE"
+                      Icon="{materialDesign:PackIcon Kind=VsCode}" />
+                    <MenuItem
+                      x:Name="OpenWith2019"
+                      Click="OpenWith_OnClick"
+                      Foreground="MediumPurple"
+                      Header="VS 2019"
+                      Icon="{materialDesign:PackIcon Kind=MicrosoftVisualStudio}" />
+                    <MenuItem
+                      x:Name="OpenWith2022"
+                      Click="OpenWith_OnClick"
+                      Foreground="MediumPurple"
+                      Header="VS 2022"
+                      Icon="{materialDesign:PackIcon Kind=MicrosoftVisualStudio}" />
+                    <MenuItem
+                      x:Name="OpenWith2022Pre"
+                      Click="OpenWith_OnClick"
+                      Foreground="MediumPurple"
+                      Header="VS 2022 Preview"
+                      Icon="{materialDesign:PackIcon Kind=MicrosoftVisualStudio}" />
+                  </MenuItem>
+                  <MenuItem
+                    x:Name="RemoveDefaultVs"
+                    Click="SetDefaulVs_OnClick"
+                    Header="Remove Default VS"
+                    Icon="{materialDesign:PackIcon Kind=RemoveBox}" />
+                  <MenuItem
+                    x:Name="SetDefaultVs"
+                    Header="Set Default VS"
+                    Icon="{materialDesign:PackIcon Kind=MicrosoftVisualStudio}">
+                    <MenuItem
+                      x:Name="SetDefault2019"
+                      Click="SetDefaulVs_OnClick"
+                      Foreground="MediumPurple"
+                      Header="VS 2019"
+                      Icon="{materialDesign:PackIcon Kind=MicrosoftVisualStudio}" />
+                    <MenuItem
+                      x:Name="SetDefault2022"
+                      Click="SetDefaulVs_OnClick"
+                      Foreground="MediumPurple"
+                      Header="VS 2022"
+                      Icon="{materialDesign:PackIcon Kind=MicrosoftVisualStudio}" />
+                    <MenuItem
+                      x:Name="SetDefault2022Pre"
+                      Click="SetDefaulVs_OnClick"
+                      Foreground="MediumPurple"
+                      Header="VS 2022 Preview"
+                      Icon="{materialDesign:PackIcon Kind=MicrosoftVisualStudio}" />
+                  </MenuItem>
+                  <MenuItem
+                    x:Name="OpenDirectoryMenu"
+                    Click="OpenSolutionDirectory_OnClick"
+                    Header="Open directory"
+                    Icon="{materialDesign:PackIcon Kind=FolderOpenOutline}" />
+                  <Separator />
+                  <MenuItem
+                    x:Name="MoveUpMenu"
+                    Click="MoveUpMenu_OnClick"
+                    Header="Move Up"
+                    Icon="{materialDesign:PackIcon Kind=ArrowUp}" />
+                  <MenuItem
+                    x:Name="MoveDownMenu"
+                    Click="MoveDownMenu_OnClick"
+                    Header="Move Down"
+                    Icon="{materialDesign:PackIcon Kind=ArrowDown}" />
+                  <Separator />
+                  <MenuItem
+                    Click="AddToPinned_OnClick"
+                    Header="Add to Pinned"
+                    Icon="{materialDesign:PackIcon Kind=PinOutline}" />
+                  <MenuItem
+                    Click="RemoveFromPinned_OnClick"
+                    Header="Remove from Pinned"
+                    Icon="{materialDesign:PackIcon Kind=PinOffOutline}" />
+                  <Separator />
+                  <MenuItem
+                    x:Name="OpenPropertiesPinnedMenu"
+                    Click="OpenSolutionProperties_OnClick"
+                    Header="Properties"
+                    Icon="{materialDesign:PackIcon Kind=WrenchOutline}" />
+                </ContextMenu>
+              </Grid.ContextMenu>
               <Grid.Resources>
                 <Storyboard x:Key="ShowRBButton">
                   <DoubleAnimation
@@ -50,7 +144,8 @@
                 </Storyboard>
               </Grid.Resources>
               <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="30" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition />
                 <ColumnDefinition Width="40" />
               </Grid.ColumnDefinitions>
@@ -60,8 +155,13 @@
                 Opacity="0.8"
                 Source="{Binding Image}"
                 Stretch="Fill" />
-              <TextBlock
+              <Image
                 Grid.Column="1"
+                Width="20"
+                Source="{Binding DefaultVSImage}"
+                Visibility="{Binding DefaultVersion, Converter={StaticResource DefaultVsToVisibilityConverter}}" />
+              <TextBlock
+                Grid.Column="2"
                 Margin="10,0"
                 VerticalAlignment="Center"
                 FontSize="14"
@@ -69,7 +169,7 @@
                 Text="{Binding Fileinfo.Name}" />
               <wpfuiControls:RBButton
                 x:Name="RBButton"
-                Grid.Column="2"
+                Grid.Column="3"
                 Background="Transparent"
                 Click="btnPinned_Click"
                 CornerRadius="0,5,5,0"
@@ -126,75 +226,7 @@
             ContextMenuOpening="FrameworkElement_OnContextMenuOpening"
             ItemContainerStyle="{StaticResource ListBoxSelectedItem}"
             ItemsSource="{Binding PinnedSolutions}"
-            SelectedItem="{Binding SelectedSolution}">
-            <ListBox.ContextMenu>
-              <ContextMenu>
-                <MenuItem
-                  Click="OpenSolution_OnClick"
-                  Header="Open"
-                  Icon="{materialDesign:PackIcon Kind=WindowMaximize}" />
-                <MenuItem
-                  x:Name="OpenWithCodePinned"
-                  Click="OpenCodeSolution_OnClick"
-                  Foreground="#25b0f3"
-                  Header="Open with CODE"
-                  Icon="{materialDesign:PackIcon Kind=VsCode}"
-                  Visibility="{Binding IsVSCODEInstalled, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                <MenuItem
-                  x:Name="OpenWithPinned"
-                  Click="OpenSolution_OnClick"
-                  Header="Open with"
-                  Icon="{materialDesign:PackIcon Kind=WindowMaximize}">
-                  <MenuItem
-                    x:Name="OpenWith2019Pinned"
-                    Click="OpenWith_OnClick"
-                    Foreground="MediumPurple"
-                    Header="VS 2019"
-                    Icon="{materialDesign:PackIcon Kind=MicrosoftVisualStudio}" />
-                  <MenuItem
-                    x:Name="OpenWith2022Pinned"
-                    Click="OpenWith_OnClick"
-                    Foreground="MediumPurple"
-                    Header="VS 2022"
-                    Icon="{materialDesign:PackIcon Kind=MicrosoftVisualStudio}" />
-                  <MenuItem
-                    x:Name="OpenWith2022PrePinned"
-                    Click="OpenWith_OnClick"
-                    Foreground="MediumPurple"
-                    Header="VS 2022 Preview"
-                    Icon="{materialDesign:PackIcon Kind=MicrosoftVisualStudio}" />
-                </MenuItem>
-                <MenuItem
-                  x:Name="OpenDirectoryPinnedMenu"
-                  Click="OpenSolutionDirectory_OnClick"
-                  Header="Open directory"
-                  Icon="{materialDesign:PackIcon Kind=FolderOpenOutline}" />
-                <Separator />
-                <MenuItem
-                  x:Name="MoveUpPinnedMenu"
-                  Click="MoveUpMenu_OnClick"
-                  Header="Move Up"
-                  Icon="{materialDesign:PackIcon Kind=ArrowUp}" />
-                <MenuItem
-                  x:Name="MoveDownPinnedMenu"
-                  Click="MoveDownMenu_OnClick"
-                  Header="Move Down"
-                  Icon="{materialDesign:PackIcon Kind=ArrowDown}" />
-                <Separator />
-                <MenuItem
-                  Click="RemoveAddPinned_OnClick"
-                  Header="Remove from Pinned"
-                  Icon="{materialDesign:PackIcon Kind=PinOffOutline}" />
-                <Separator />
-                <MenuItem
-                  x:Name="OpenPropertiesPinnedMenu"
-                  Click="OpenSolutionProperties_OnClick"
-                  Header="Properties"
-                  Icon="{materialDesign:PackIcon Kind=WrenchOutline}" />
-
-              </ContextMenu>
-            </ListBox.ContextMenu>
-          </ListBox>
+            SelectedItem="{Binding SelectedSolution}" />
         </ScrollViewer>
       </Grid>
       <Grid Grid.Row="{Binding UnPinnedRow}" Visibility="{Binding IsUnPinnedSolutonsVisible, Converter={StaticResource ObjectToVisibilityConverter}, ConverterParameter=true}">
@@ -217,79 +249,7 @@
             ContextMenuOpening="FrameworkElement_OnContextMenuOpening"
             ItemContainerStyle="{StaticResource ListBoxSelectedItem}"
             ItemsSource="{Binding Solutions}"
-            SelectedItem="{Binding SelectedSolution}">
-            <ListBox.ContextMenu>
-              <ContextMenu>
-                <MenuItem
-                  Click="OpenSolution_OnClick"
-                  Header="Open"
-                  Icon="{materialDesign:PackIcon Kind=WindowMaximize}" />
-                <MenuItem
-                  x:Name="OpenWithCodeUnpinned"
-                  Click="OpenCodeSolution_OnClick"
-                  Foreground="#25b0f3"
-                  Header="Open with CODE"
-                  Icon="{materialDesign:PackIcon Kind=VsCode}"
-                  Visibility="{Binding IsVSCODEInstalled, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                <MenuItem
-                  x:Name="OpenWithUnpinned"
-                  Click="OpenSolution_OnClick"
-                  Header="Open with"
-                  Icon="{materialDesign:PackIcon Kind=WindowMaximize}">
-                  <MenuItem
-                    x:Name="OpenWith2019Unpinned"
-                    Click="OpenWith_OnClick"
-                    Foreground="MediumPurple"
-                    Header="VS 2019"
-                    Icon="{materialDesign:PackIcon Kind=MicrosoftVisualStudio}" />
-                  <MenuItem
-                    x:Name="OpenWith2022Unpinned"
-                    Click="OpenWith_OnClick"
-                    Foreground="MediumPurple"
-                    Header="VS 2022"
-                    Icon="{materialDesign:PackIcon Kind=MicrosoftVisualStudio}" />
-                  <MenuItem
-                    x:Name="OpenWith2022PreUnpinned"
-                    Click="OpenWith_OnClick"
-                    Foreground="MediumPurple"
-                    Header="VS 2022 Preview"
-                    Icon="{materialDesign:PackIcon Kind=MicrosoftVisualStudio}" />
-                </MenuItem>
-                <MenuItem
-                  x:Name="OpenDirectoryUnpinnedMenu"
-                  Click="OpenSolutionDirectory_OnClick"
-                  Header="Open directory"
-                  Icon="{materialDesign:PackIcon Kind=FolderOpenOutline}" />
-                <Separator />
-                <MenuItem
-                  x:Name="MoveUpUnpinnedMenu"
-                  Click="MoveUpMenu_OnClick"
-                  Header="Move Up"
-                  Icon="{materialDesign:PackIcon Kind=ArrowUp}" />
-                <MenuItem
-                  x:Name="MoveDownUnpinnedMenu"
-                  Click="MoveDownMenu_OnClick"
-                  Header="Move Down"
-                  Icon="{materialDesign:PackIcon Kind=ArrowDown}" />
-                <Separator />
-                <MenuItem
-                  Click="RemoveAddPinned_OnClick"
-                  Header="Add to Pinned"
-                  Icon="{materialDesign:PackIcon Kind=PinOutline}" />
-                <MenuItem
-                  Click="RemoveSolution_OnClick"
-                  Header="Remove"
-                  Icon="{materialDesign:PackIcon Kind=DeleteOutline}" />
-                <Separator />
-                <MenuItem
-                  x:Name="OpenPropertiesUnpinnedMenu"
-                  Click="OpenSolutionProperties_OnClick"
-                  Header="Properties"
-                  Icon="{materialDesign:PackIcon Kind=WrenchOutline}" />
-
-              </ContextMenu>
-            </ListBox.ContextMenu>
-          </ListBox>
+            SelectedItem="{Binding SelectedSolution}" />
         </ScrollViewer>
       </Grid>
       <TextBlock

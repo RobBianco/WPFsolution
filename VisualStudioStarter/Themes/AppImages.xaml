@@ -3,6 +3,7 @@
    <ImageSource x:Key="ShieldICO">../Images/Shield.ico</ImageSource>
    <ImageSource x:Key="Vs2019PNG">../Images/VS2019.png</ImageSource>
    <ImageSource x:Key="Vs2022PNG">../Images/VS2022.png</ImageSource>
+   <ImageSource x:Key="Vs2022PrePNG">../Images/VS2022Pre.png</ImageSource>
    <ImageSource x:Key="FolderPNG">../Images/folder.png</ImageSource>
    <ImageSource x:Key="SavePNG">../Images/save.png</ImageSource>
    <ImageSource x:Key="TrashPNG">../Images/trash.png</ImageSource>
