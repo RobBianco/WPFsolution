@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
+using VisualStudioStarter.ViewModels;
 
 namespace VisualStudioStarter.Utils
 {
@@ -24,5 +25,29 @@ namespace VisualStudioStarter.Utils
 
         /// <inheritdoc />
         public Object ConvertBack(Object value, Type targetType, Object parameter, CultureInfo culture) => throw new NotImplementedException();
+    }
+
+    internal class PositionToEnableConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is int index && parameter is string direction && Application.Current.MainWindow.DataContext is SolutionPageViewModel vm)
+            {
+                if (direction == "up")
+                {
+                    return index > 0;
+                }
+                else if (direction == "down")
+                {
+                    return index < vm.Solutions.Count - 1;
+                }
+            }
+            return false;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

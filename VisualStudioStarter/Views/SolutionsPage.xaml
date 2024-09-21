@@ -9,6 +9,7 @@
    xmlns:utils="clr-namespace:VisualStudioStarter.Utils"
    xmlns:viewModels="clr-namespace:VisualStudioStarter.ViewModels"
    xmlns:wpfuiControls="clr-namespace:WPFUIControls;assembly=WPFUIControls"
+   x:Name="ThisPage"
    Title="SolutionsPage"
    d:DesignHeight="450"
    d:DesignWidth="800"
@@ -43,22 +44,25 @@
                                  Foreground="#25b0f3"
                                  Header="Open with CODE"
                                  Icon="{materialDesign:PackIcon Kind=VsCode}"
-                                 Visibility="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}, Path=DataContext.IsVSCODEInstalled}" />
+                                 Visibility="{Binding Source={x:Static utils:StaticBinder.IsVsCodeInstalled}, Converter={StaticResource ObjectToVisibilityConverter}}" />
                               <MenuItem
                                  Click="OpenWith_OnClick"
                                  Foreground="MediumPurple"
                                  Header="VS 2019"
-                                 Icon="{materialDesign:PackIcon Kind=MicrosoftVisualStudio}" />
+                                 Icon="{materialDesign:PackIcon Kind=MicrosoftVisualStudio}"
+                                 Visibility="{Binding Source={x:Static utils:StaticBinder.IsVs2019Installed}, Converter={StaticResource ObjectToVisibilityConverter}}" />
                               <MenuItem
                                  Click="OpenWith_OnClick"
                                  Foreground="MediumPurple"
                                  Header="VS 2022"
-                                 Icon="{materialDesign:PackIcon Kind=MicrosoftVisualStudio}" />
+                                 Icon="{materialDesign:PackIcon Kind=MicrosoftVisualStudio}"
+                                 Visibility="{Binding Source={x:Static utils:StaticBinder.IsVs2022Installed}, Converter={StaticResource ObjectToVisibilityConverter}}" />
                               <MenuItem
                                  Click="OpenWith_OnClick"
                                  Foreground="MediumPurple"
                                  Header="VS 2022 Preview"
-                                 Icon="{materialDesign:PackIcon Kind=MicrosoftVisualStudio}" />
+                                 Icon="{materialDesign:PackIcon Kind=MicrosoftVisualStudio}"
+                                 Visibility="{Binding Source={x:Static utils:StaticBinder.IsVs2022PreInstalled}, Converter={StaticResource ObjectToVisibilityConverter}}" />
                            </MenuItem>
                            <MenuItem
                               Click="OpenSolutionDirectory_OnClick"
@@ -68,7 +72,7 @@
                            <MenuItem
                               Click="RenameSolution_OnClick"
                               Header="Rename"
-                              Icon="{materialDesign:PackIcon Kind=FolderOpenOutline}" />
+                              Icon="{materialDesign:PackIcon Kind=Rename}" />
                            <MenuItem
                               Click="SetDefaulVs_OnClick"
                               Header="Remove Default VS"
@@ -86,7 +90,8 @@
                                  Click="SetDefaulVs_OnClick"
                                  Foreground="MediumPurple"
                                  Header="VS 2019"
-                                 Icon="{materialDesign:PackIcon Kind=MicrosoftVisualStudio}">
+                                 Icon="{materialDesign:PackIcon Kind=MicrosoftVisualStudio}"
+                                 Visibility="{Binding Source={x:Static utils:StaticBinder.IsVs2019Installed}, Converter={StaticResource ObjectToVisibilityConverter}}">
                                  <MenuItem.Tag>
                                     <utils:VisualStudioVersion>VS2019</utils:VisualStudioVersion>
                                  </MenuItem.Tag>
@@ -95,7 +100,8 @@
                                  Click="SetDefaulVs_OnClick"
                                  Foreground="MediumPurple"
                                  Header="VS 2022"
-                                 Icon="{materialDesign:PackIcon Kind=MicrosoftVisualStudio}">
+                                 Icon="{materialDesign:PackIcon Kind=MicrosoftVisualStudio}"
+                                 Visibility="{Binding Source={x:Static utils:StaticBinder.IsVs2022Installed}, Converter={StaticResource ObjectToVisibilityConverter}}">
                                  <MenuItem.Tag>
                                     <utils:VisualStudioVersion>VS2022</utils:VisualStudioVersion>
                                  </MenuItem.Tag>
@@ -104,7 +110,8 @@
                                  Click="SetDefaulVs_OnClick"
                                  Foreground="MediumPurple"
                                  Header="VS 2022 Preview"
-                                 Icon="{materialDesign:PackIcon Kind=MicrosoftVisualStudio}">
+                                 Icon="{materialDesign:PackIcon Kind=MicrosoftVisualStudio}"
+                                 Visibility="{Binding Source={x:Static utils:StaticBinder.IsVs2022PreInstalled}, Converter={StaticResource ObjectToVisibilityConverter}}">
                                  <MenuItem.Tag>
                                     <utils:VisualStudioVersion>VS2022Pre</utils:VisualStudioVersion>
                                  </MenuItem.Tag>
@@ -113,10 +120,12 @@
                            <Separator />
                            <MenuItem
                               x:Name="MoveUpMenu"
+                              Click="MoveUpMenu_OnClick"
                               Header="Move Up"
                               Icon="{materialDesign:PackIcon Kind=ArrowUp}" />
                            <MenuItem
                               x:Name="MoveDownMenu"
+                              Click="MoveDownMenu_OnClick"
                               Header="Move Down"
                               Icon="{materialDesign:PackIcon Kind=ArrowDown}" />
                            <Separator />
@@ -184,6 +193,7 @@
                         FontSize="14"
                         Foreground="LightGray"
                         Text="{Binding Name}" />
+
                      <wpfuiControls:RBButton
                         x:Name="RBButton"
                         Grid.Column="3"
@@ -236,8 +246,8 @@
                Text="Pinned" />
             <ScrollViewer
                Grid.Row="1"
-               HorizontalScrollBarVisibility="Disabled"
-               VerticalScrollBarVisibility="Disabled">
+               HorizontalScrollBarVisibility="Hidden"
+               VerticalScrollBarVisibility="Hidden">
                <ListBox
                   x:Name="ListBoxPinned"
                   ItemContainerStyle="{StaticResource ListBoxSelectedItem}"
@@ -258,8 +268,8 @@
                Text="Solutions" />
             <ScrollViewer
                Grid.Row="1"
-               HorizontalScrollBarVisibility="Disabled"
-               VerticalScrollBarVisibility="Disabled">
+               HorizontalScrollBarVisibility="Hidden"
+               VerticalScrollBarVisibility="Hidden">
                <ListBox
                   x:Name="ListBoxUnPinned"
                   ItemContainerStyle="{StaticResource ListBoxSelectedItem}"

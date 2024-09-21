@@ -43,6 +43,7 @@ public class SolutionPageViewModel : BaseViewModel
     private Solution? _selectedSolution;
     private int _pinnedRow;
     private int _unPinnedRow;
+    private bool _isVscodeInstalled;
 
     #endregion
 
@@ -78,6 +79,7 @@ public class SolutionPageViewModel : BaseViewModel
             if (SetField(ref _isVs2022PreInstalled, value))
             {
                 OnPropertyChanged(nameof(Vs2022PreVisibility));
+                StaticBinder.IsVs2022PreInstalled = value;
             }
         }
     }
@@ -90,6 +92,7 @@ public class SolutionPageViewModel : BaseViewModel
             if (SetField(ref _isVs2022Installed, value))
             {
                 OnPropertyChanged(nameof(Vs2022Visibility));
+                StaticBinder.IsVs2022Installed = value;
             }
         }
     }
@@ -102,63 +105,22 @@ public class SolutionPageViewModel : BaseViewModel
             if (SetField(ref _isVs2019Installed, value))
             {
                 OnPropertyChanged(nameof(Vs2019Visibility));
+                StaticBinder.IsVs2019Installed = value;
             }
         }
     }
-    public bool IsVSCODEInstalled { get; set; }
 
-    //public bool IsVisualStudio2022Pre
-    //{
-    //    get => _isVisualStudio2022Pre;
-    //    set
-    //    {
-    //        SetField(ref _isVisualStudio2022Pre, value);
-    //        OnPropertyChanged(nameof(IsVisualStudioSelected));
-    //        if (value)
-    //        {
-    //            IsVisualStudio2022 = false;
-    //            IsVisualStudio2019 = false;
-
-    //            UpdateColumnWidths();
-    //        }
-    //    }
-    //}
-
-    //public bool IsVisualStudio2022
-    //{
-    //    get => _isVisualStudio2022;
-    //    set
-    //    {
-    //        SetField(ref _isVisualStudio2022, value);
-    //        OnPropertyChanged(nameof(IsVisualStudioSelected));
-    //        if (value)
-    //        {
-    //            IsVisualStudio2022Pre = false;
-    //            IsVisualStudio2019 = false;
-
-    //            UpdateColumnWidths();
-    //        }
-    //    }
-    //}
-
-    //public bool IsVisualStudio2019
-    //{
-    //    get => _isVisualStudio2019;
-    //    set
-    //    {
-    //        SetField(ref _isVisualStudio2019, value);
-    //        OnPropertyChanged(nameof(IsVisualStudioSelected));
-    //        if (value)
-    //        {
-    //            IsVisualStudio2022Pre = false;
-    //            IsVisualStudio2022 = false;
-
-    //            UpdateColumnWidths();
-    //        }
-    //    }
-    //}
-
-    //public bool IsVisualStudioSelected => IsVisualStudio2019 || IsVisualStudio2022 || IsVisualStudio2022Pre;
+    public bool IsVSCODEInstalled
+    {
+        get => _isVscodeInstalled;
+        set
+        {
+            if (SetField(ref _isVscodeInstalled, value))
+            {
+                StaticBinder.IsVsCodeInstalled = value;
+            };
+        }
+    }
 
     public Visibility Vs2022PreVisibility => IsVS2022PreInstalled ? Visibility.Visible : Visibility.Collapsed;
     public Visibility Vs2022Visibility => IsVS2022Installed ? Visibility.Visible : Visibility.Collapsed;

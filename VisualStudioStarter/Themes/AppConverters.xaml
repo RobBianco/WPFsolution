@@ -6,4 +6,5 @@
   <converters:ObjectToVisibilityConverter x:Key="ObjectToVisibilityConverter" />
   <converters:StringToDoubleConverter x:Key="StringToDoubleConverter" />
   <utils:DefaultVsToVisibilityConverter x:Key="DefaultVsToVisibilityConverter" />
+   <utils:PositionToEnableConverter x:Key="PositionToEnableConverter" />
 </ResourceDictionary>
