@@ -39,13 +39,28 @@
          FontSize="17"
          Text="Name:"
          TextAlignment="Left" />
-      <TextBox
+      <Grid
          Grid.Row="2"
          Grid.Column="0"
-         Grid.ColumnSpan="2"
-         Height="30"
-         Margin="10,20"
-         Text="{Binding Name, UpdateSourceTrigger=LostFocus}" />
+         Grid.ColumnSpan="2">
+         <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition Width="Auto" />
+         </Grid.ColumnDefinitions>
+         <TextBox
+            x:Name="txtName"
+            Height="30"
+            Margin="10,20"
+            FontSize="15"
+            Text="{Binding NewName, UpdateSourceTrigger=PropertyChanged}" />
+         <Button
+            Grid.Column="1"
+            Margin="10,20"
+            Click="Reset_OnClick"
+            Content="Reset"
+            IsEnabled="{Binding ResetEnable}" />
+      </Grid>
+
       <Button
          Grid.Row="3"
          Grid.Column="0"

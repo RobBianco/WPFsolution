@@ -587,11 +587,11 @@ public class SolutionPageViewModel : BaseViewModel
         if (sln is null)
             return;
 
-        var ucRename = new RenameUC(sln.Path, sln.Name);
+        var ucRename = new RenameUC(sln.Path, sln.Name, Path.GetFileName(sln.Path));
         var res = await DialogHost.Show(ucRename, "SolutionDialogHost");
         if (res is DialogResult.Yes)
         {
-            sln.Name = ucRename.Name;
+            sln.Name = ucRename.NewName;
         }
     }
 }

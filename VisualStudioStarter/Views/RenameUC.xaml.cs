@@ -11,51 +11,68 @@ namespace VisualStudioStarter.Views
     /// </summary>
     public partial class RenameUC : INotifyPropertyChanged
     {
-    private string? _title;
-    private string? _name;
+        private string? _title;
+        private readonly string _resetName;
+        private string _newName;
 
-    public string Title
-    {
-        get => _title ?? "Rename solution";
-        set => SetField(ref _title, value);
-    }
+        public string Title
+        {
+            get => _title ?? "Rename solution";
+            set => SetField(ref _title, value);
+        }
 
-    public new string Name
-    {
-        get => _name ?? "";
-        set => SetField(ref _name, value);
-    }
+        public string NewName
+        {
+            get => _newName;
+            set
+            {
+                if (SetField(ref _newName, value)) 
+                    OnPropertyChanged(nameof(ResetEnable));
+            }
+        }
 
-    public RenameUC(string title, string name)
-    {
-        InitializeComponent();
-        Title = title;
-        Name = name;
-    }
+        public bool ResetEnable => _newName != _resetName;
 
-    private void Confirm_OnClick(object sender, RoutedEventArgs e)
-    {
-        DialogHost.GetDialogSession("SolutionDialogHost")?.Close(DialogResult.Yes);
-    }
+        public RenameUC(string title, string name, string resetName)
+        {
+            _resetName = resetName;
 
-    private void Cancel_OnClick(object sender, RoutedEventArgs e)
-    {
-        DialogHost.GetDialogSession("SolutionDialogHost")?.Close(DialogResult.No);
-    }
+            InitializeComponent();
+            Title = title;
+            NewName = name;
+            
+            txtName.SelectAll();
+        }
 
-    public event PropertyChangedEventHandler? PropertyChanged;
+        private void Confirm_OnClick(object sender, RoutedEventArgs e)
+        {
+            DialogHost.GetDialogSession("SolutionDialogHost")?.Close(DialogResult.Yes);
+        }
 
-    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
+        private void Cancel_OnClick(object sender, RoutedEventArgs e)
+        {
+            DialogHost.GetDialogSession("SolutionDialogHost")?.Close(DialogResult.No);
+        }
 
-    protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
-    {
-        if (EqualityComparer<T>.Default.Equals(field, value)) return false;
-        field = value;
-        OnPropertyChanged(propertyName);
-        return true;
-    }
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
+        {
+            if (EqualityComparer<T>.Default.Equals(field, value)) return false;
+            field = value;
+            OnPropertyChanged(propertyName);
+            return true;
+        }
+
+        private void Reset_OnClick(object sender, RoutedEventArgs e)
+        {
+            NewName = _resetName;
+        }
+
     }
 }
